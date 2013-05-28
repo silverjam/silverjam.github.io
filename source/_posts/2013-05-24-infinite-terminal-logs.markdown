@@ -96,7 +96,8 @@ Then a [terminal emulation library][gate-one] is added:
     $ wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
 ```
 
-Then a script is implemented to emulator a terminal and generate a usable log file:
+Then a script is implemented to emulate a terminal and generate a usable log
+file:
 
 ``` python ~/Logs/stripesc.py
 import sys
@@ -104,7 +105,7 @@ import terminal
 import locale
 
 encoding = locale.getpreferredencoding()
-term = terminal.Terminal(200,200) # bigger than we could possibly need
+term = terminal.Terminal(200,200) # bigger than we could possibly need 
 
 fp = sys.stdin
 
