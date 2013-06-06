@@ -21,7 +21,7 @@ version)-- installing vrapper breaks all kinds of things:
 
 This:
 
-{% img /images/adt-splash-screen.png %}
+{% img /images/adt-splash-screen-1.png %}
 
 Turned in to this:
 
