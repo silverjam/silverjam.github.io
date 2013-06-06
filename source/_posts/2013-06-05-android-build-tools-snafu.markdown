@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Android Build Tools Snafu"
+title: "Android Build Tools SNAFU"
 date: 2013-06-05 16:28
 comments: true
 categories: google android whining android-build-tools android-studio android-development-toolkit adt
