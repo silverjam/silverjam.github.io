@@ -8,10 +8,7 @@ categories: math permutations
 
 {%blockquote%}
 
-Consider the 52 cards of a deck. You generated a random sequence for these
-cards and want to send that sequence to a receiver. You want to minimize the
-communication between you and the receiver, i.e., minimize the number of bits
-required to send the sequence.
+Consider the 52 cards of a deck. You generated a random sequence for these cards and want to send that sequence to a receiver. You want to minimize the communication between you and the receiver, i.e., minimize the number of bits required to send the sequence.
 
 {%endblockquote%}
 
