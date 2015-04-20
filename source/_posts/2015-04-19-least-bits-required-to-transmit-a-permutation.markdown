@@ -15,7 +15,7 @@ Consider the 52 cards of a deck. You generated a random sequence for these cards
 What is the minimum number of bits required to send the sequence?
 
 To arrive at the solution, I'm going to consider a smaller example: What are
-all the permutations of [0,1,2,3]?
+all the permutations of `[0, 1, 2, 3]`?
 
     [0,1,2,3] => perm 00 => binary: 0 0 0 0 0   || [0,3,1,2] => perm 12 => binary: 0 1 1 0 0
     [0,2,1,3] => perm 01 => binary: 0 0 0 0 1   || [0,3,2,1] => perm 13 => binary: 0 1 1 0 1
