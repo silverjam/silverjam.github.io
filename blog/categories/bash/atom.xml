@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: bash | Brain dump in text format]]></title>
+  <link href="http://silverjam.github.io/blog/categories/bash/atom.xml" rel="self"/>
+  <link href="http://silverjam.github.io/"/>
+  <updated>2015-07-03T11:58:47-07:00</updated>
+  <id>http://silverjam.github.io/</id>
+  <author>
+    <name><![CDATA[Jason Mobarak]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Infinite terminal logs]]></title>
+    <link href="http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs/"/>
+    <updated>2013-05-24T23:11:00-07:00</updated>
+    <id>http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs</id>
+    <content type="html"><![CDATA[<h2>The Problem: Unsatisfying Terminal Emulators</h2>
+
+<p>Sometimes when you're hacking on things it's a great resource to be able to
+recall / search everything that you've done in the past so that you can
+reconstruct what's happened in a coherent matter.</p>
+
+<p>This is, a crutch, or a substitute for a structured approach to a problem, but
+I find it useful during "hack and slash" sessions when you don't necessarily
+want or need a structured approach.</p>
+
+<p>Some commercial terminals offer logging (<a href="http://vandyke.com/products/securecrt/index.html">SecureCRT</a> for example).
+Linux, terminals... not so much.  No such option exists in the default Ubuntu
+terminal.  There are two terminals named <em>Terminator</em> one is <a href="http://software.jessies.org/terminator/">Java
+based</a> and does not have a package in the standard Ubuntu
+repositories, and the <a href="http://www.tenshu.net/p/terminator.html">other</a> is present in Ubuntu's
+standard repositories.</p>
+
+<p>You can image this led to some confusion on my part... because both offer some
+functionality that I wanted, but what I really wanted was a combination of the
+two terminals.  It's ironic that SecureCRT offers the best solution for what I wanted.</p>
+
+<p>Java Terminator:</p>
+
+<ul>
+<li>Terminal logging</li>
+<li>Good search, ala OSX Term.app (does not really work though)</li>
+</ul>
+
+
+<p>Tenshu Terminator:</p>
+
+<ul>
+<li>Infinite scrollback (also, does not work very well)</li>
+<li>Tiling</li>
+</ul>
+
+
+<p>So, what is a hacker to do?  Why... hack up something that works... a good
+citizen of the FLOSS world would try to add these features to the terminal
+emulator that they liked, but why bother when you can create a solution that
+solves most of the problem in a few minutes... Really, I ended up not like the
+java based Terminator at all because it was ugly and did not ingrate well with
+Ubuntu, so created my own logging solution seemed like it would solve the
+logging, search and infinite scrollback use cases.</p>
+
+<h2>The Solution: Old Fashioned 'Script' Utility</h2>
+
+<p>The <a href="http://ultra.pr.erau.edu/~jaffem/classes/cs125/script.htm">script</a> tool is a unix utility to record everything that
+passing from the shell to the terminal emulator to control things like cursor
+movements, colors, and the contents of the cells on the terminal device.</p>
+
+<p>This is pretty heavy handed, and allows you to replay your entire terminal
+session (complete with timings) if you so desire.  But this isn't the goal,
+the goal is to get a terminal log, that easily searchable.</p>
+
+<p>So, to start, data is needed first, so as soon as the shell is started,
+everything is recorded:</p>
+
+<p>``` bash shell profile additions</p>
+
+<pre><code>if [ -z "$UNDER_SCRIPT" ]; then
+
+    logdir=$HOME/Logs
+    logname=$(date +%F_%T).$$.script
+
+    logfile=$logdir/.$logname
+    final_logfile=$logdir/$logname
+
+    trap '( mv $logfile $final_logfile )' EXIT
+
+    if [ ! -d $logdir ]; then
+        mkdir $logdir
+    fi
+
+    gzip -q $logdir/*.script &amp;&gt;/dev/null
+
+    export UNDER_SCRIPT=$logfile
+
+    script -e -f -q $logfile
+    exit $?
+fi
+</code></pre>
+
+<p>```</p>
+
+<p>Then a <a href="http://liftoff.github.io/GateOne/Developer/terminal.html">terminal emulation library</a> is added:
+``` bash</p>
+
+<pre><code>$ cd ~/Logs
+$ wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
+</code></pre>
+
+<p>```</p>
+
+<p>Then a script is implemented to emulate a terminal and generate a usable log
+file:</p>
+
+<p>``` python ~/Logs/stripesc.py
+import sys
+import terminal
+import locale</p>
+
+<p>encoding = locale.getpreferredencoding()
+term = terminal.Terminal(200,200) # bigger than we could possibly need</p>
+
+<p>fp = sys.stdin</p>
+
+<p>def process_scrollback(term):</p>
+
+<pre><code>if not term.scrollback_buf:
+    return
+return term.scrollback_buf[-1].tounicode().rstrip().encode(encoding)
+</code></pre>
+
+<p>def make_scroll_up_cb(term):</p>
+
+<pre><code>def _():
+    print process_scrollback(term)
+return _
+</code></pre>
+
+<p>term.add_callback(terminal.CALLBACK_SCROLL_UP, make_scroll_up_cb(term))
+```</p>
+
+<p>Then, as need you'd invoke a shell script to decode a log, and grep for
+something interesting:</p>
+
+<p><code>bash ~/Logs/strip-escape-codes.sh
+cat - | python stripesc.py
+</code></p>
+
+<p>Also periodically, you could throw away the terminal emulation data that's no
+longer needed:</p>
+
+<p>``` bash ~/Logs/strip-all-escape-codes.sh</p>
+
+<h1>!/bin/bash</h1>
+
+<p>for log_file in <code>ls -1 *.script.gz</code>; do</p>
+
+<pre><code>zcat $log_file | python stripesc.py
+    &gt;`echo $log_file | sed -e 's/.script.gz/.log/'`
+</code></pre>
+
+<p>done
+```</p>
+
+<p>Thus, we've solved the problem with minimal effort, and maximum utility
+(albeit a little cumbersome).</p>
+
+<!-- vim: spell:
+-->
+
+]]></content>
+  </entry>
+  
+</feed>

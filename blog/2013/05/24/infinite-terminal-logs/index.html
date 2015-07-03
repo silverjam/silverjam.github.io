@@ -1,0 +1,506 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Infinite terminal logs - Brain dump in text format</title>
+  <meta name="author" content="Jason Mobarak">
+
+  
+  <meta name="description" content="The Problem: Unsatisfying Terminal Emulators Sometimes when you&#8217;re hacking on things it&#8217;s a great resource to be able to
+recall / search &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Brain dump in text format" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-247199-10']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Brain dump in text format</a></h1>
+  
+    <h2>Technology / Software / Hacks by Jason Mobarak</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:silverjam.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Infinite Terminal Logs</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-24T23:11:00-07:00" pubdate data-updated="true">May 24<span>th</span>, 2013</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>The Problem: Unsatisfying Terminal Emulators</h2>
+
+<p>Sometimes when you&#8217;re hacking on things it&#8217;s a great resource to be able to
+recall / search everything that you&#8217;ve done in the past so that you can
+reconstruct what&#8217;s happened in a coherent matter.</p>
+
+<p>This is, a crutch, or a substitute for a structured approach to a problem, but
+I find it useful during &#8220;hack and slash&#8221; sessions when you don&#8217;t necessarily
+want or need a structured approach.</p>
+
+<p>Some commercial terminals offer logging (<a href="http://vandyke.com/products/securecrt/index.html">SecureCRT</a> for example).
+Linux, terminals&#8230; not so much.  No such option exists in the default Ubuntu
+terminal.  There are two terminals named <em>Terminator</em> one is <a href="http://software.jessies.org/terminator/">Java
+based</a> and does not have a package in the standard Ubuntu
+repositories, and the <a href="http://www.tenshu.net/p/terminator.html">other</a> is present in Ubuntu&#8217;s
+standard repositories.</p>
+
+<p>You can image this led to some confusion on my part&#8230; because both offer some
+functionality that I wanted, but what I really wanted was a combination of the
+two terminals.  It&#8217;s ironic that SecureCRT offers the best solution for what I wanted.</p>
+
+<p>Java Terminator:</p>
+
+<ul>
+<li>Terminal logging</li>
+<li>Good search, ala OSX Term.app (does not really work though)</li>
+</ul>
+
+
+<p>Tenshu Terminator:</p>
+
+<ul>
+<li>Infinite scrollback (also, does not work very well)</li>
+<li>Tiling</li>
+</ul>
+
+
+<p>So, what is a hacker to do?  Why&#8230; hack up something that works&#8230; a good
+citizen of the FLOSS world would try to add these features to the terminal
+emulator that they liked, but why bother when you can create a solution that
+solves most of the problem in a few minutes&#8230; Really, I ended up not like the
+java based Terminator at all because it was ugly and did not ingrate well with
+Ubuntu, so created my own logging solution seemed like it would solve the
+logging, search and infinite scrollback use cases.</p>
+
+<h2>The Solution: Old Fashioned &#8216;Script&#8217; Utility</h2>
+
+<p>The <a href="http://ultra.pr.erau.edu/~jaffem/classes/cs125/script.htm">script</a> tool is a unix utility to record everything that
+passing from the shell to the terminal emulator to control things like cursor
+movements, colors, and the contents of the cells on the terminal device.</p>
+
+<p>This is pretty heavy handed, and allows you to replay your entire terminal
+session (complete with timings) if you so desire.  But this isn&#8217;t the goal,
+the goal is to get a terminal log, that easily searchable.</p>
+
+<p>So, to start, data is needed first, so as soon as the shell is started,
+everything is recorded:</p>
+
+<figure class='code'><figcaption><span>shell profile additions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">if</span> <span class="o">[</span> -z <span class="s2">&quot;$UNDER_SCRIPT&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">    </span><span class="nv">logdir</span><span class="o">=</span><span class="nv">$HOME</span>/Logs
+</span><span class='line'>    <span class="nv">logname</span><span class="o">=</span><span class="k">$(</span>date +%F_%T<span class="k">)</span>.<span class="nv">$$</span>.script
+</span><span class='line'>
+</span><span class='line'>    <span class="nv">logfile</span><span class="o">=</span><span class="nv">$logdir</span>/.<span class="nv">$logname</span>
+</span><span class='line'>    <span class="nv">final_logfile</span><span class="o">=</span><span class="nv">$logdir</span>/<span class="nv">$logname</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">trap</span> <span class="s1">&#39;( mv $logfile $final_logfile )&#39;</span> EXIT
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="o">[</span> ! -d <span class="nv">$logdir</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">        </span>mkdir <span class="nv">$logdir</span>
+</span><span class='line'>    <span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">    </span>gzip -q <span class="nv">$logdir</span>/*.script &amp;&gt;/dev/null
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">export </span><span class="nv">UNDER_SCRIPT</span><span class="o">=</span><span class="nv">$logfile</span>
+</span><span class='line'>
+</span><span class='line'>    script -e -f -q <span class="nv">$logfile</span>
+</span><span class='line'>    <span class="nb">exit</span> <span class="nv">$?</span>
+</span><span class='line'><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then a <a href="http://liftoff.github.io/GateOne/Developer/terminal.html">terminal emulation library</a> is added:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span><span class="nb">cd</span> ~/Logs
+</span><span class='line'><span class="nv">$ </span>wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then a script is implemented to emulate a terminal and generate a usable log
+file:</p>
+
+<figure class='code'><figcaption><span>~/Logs/stripesc.py</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">terminal</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">locale</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">encoding</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getpreferredencoding</span><span class="p">()</span>
+</span><span class='line'><span class="n">term</span> <span class="o">=</span> <span class="n">terminal</span><span class="o">.</span><span class="n">Terminal</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">200</span><span class="p">)</span> <span class="c"># bigger than we could possibly need </span>
+</span><span class='line'>
+</span><span class='line'><span class="n">fp</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">process_scrollback</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">if</span> <span class="ow">not</span> <span class="n">term</span><span class="o">.</span><span class="n">scrollback_buf</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">return</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">term</span><span class="o">.</span><span class="n">scrollback_buf</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tounicode</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">def</span> <span class="nf">make_scroll_up_cb</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">_</span><span class="p">():</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">process_scrollback</span><span class="p">(</span><span class="n">term</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">_</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">term</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span><span class="n">terminal</span><span class="o">.</span><span class="n">CALLBACK_SCROLL_UP</span><span class="p">,</span> <span class="n">make_scroll_up_cb</span><span class="p">(</span><span class="n">term</span><span class="p">))</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Then, as need you&#8217;d invoke a shell script to decode a log, and grep for
+something interesting:</p>
+
+<figure class='code'><figcaption><span>~/Logs/strip-escape-codes.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat - | python stripesc.py
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also periodically, you could throw away the terminal emulation data that&#8217;s no
+longer needed:</p>
+
+<figure class='code'><figcaption><span>~/Logs/strip-all-escape-codes.sh</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/bash</span>
+</span><span class='line'><span class="k">for </span>log_file in <span class="sb">`</span>ls -1 *.script.gz<span class="sb">`</span>; <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">    </span>zcat <span class="nv">$log_file</span> | python stripesc.py
+</span><span class='line'>        &gt;<span class="sb">`</span><span class="nb">echo</span> <span class="nv">$log_file</span> | sed -e <span class="s1">&#39;s/.script.gz/.log/&#39;</span><span class="sb">`</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">done</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Thus, we&#8217;ve solved the problem with minimal effort, and maximum utility
+(albeit a little cumbersome).</p>
+
+<!-- vim: spell:
+-->
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jason Mobarak</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-05-24T23:11:00-07:00" pubdate data-updated="true">May 24<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/bash/'>bash</a>, <a class='category' href='/blog/categories/emulation/'>emulation</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/logging/'>logging</a>, <a class='category' href='/blog/categories/script/'>script</a>, <a class='category' href='/blog/categories/terminal/'>terminal</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs/" data-via="silverjam" data-counturl="http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/05/26/google-apps-script-insert-header-numbers/" title="Next Post: Google Apps Script: Insert Header Numbers">Google Apps Script: Insert Header Numbers &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/05/22/prius-total-cost-of-ownership/">Prius Total Cost of Ownership</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/19/least-bits-required-to-transmit-a-permutation/">Least bits to transmit a permutation</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/03/06/cyanogenmod-aosp-and-vim-build-integration/">CyanogenMod (AOSP) and Vim Build Integration</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/05/android-build-tools-snafu/">Android Build Tools SNAFU</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/05/26/google-apps-script-insert-header-numbers/">Google Apps Script: Insert Header Numbers</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/silverjam">@silverjam</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'silverjam',
+            count: 5,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/114165681798006309210?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Jason Mobarak <br/>
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a>, customized with <a href="https://github.com/mjhea0/whiterspace">whiterspace</a>.</span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'braindumpintextformat';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs/';
+        var disqus_url = 'http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

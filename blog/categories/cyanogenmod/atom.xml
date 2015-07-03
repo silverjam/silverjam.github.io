@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: cyanogenmod | Brain dump in text format]]></title>
+  <link href="http://silverjam.github.io/blog/categories/cyanogenmod/atom.xml" rel="self"/>
+  <link href="http://silverjam.github.io/"/>
+  <updated>2015-07-03T11:58:47-07:00</updated>
+  <id>http://silverjam.github.io/</id>
+  <author>
+    <name><![CDATA[Jason Mobarak]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CyanogenMod (AOSP) and Vim Build Integration]]></title>
+    <link href="http://silverjam.github.io/blog/2014/03/06/cyanogenmod-aosp-and-vim-build-integration/"/>
+    <updated>2014-03-06T22:03:00-08:00</updated>
+    <id>http://silverjam.github.io/blog/2014/03/06/cyanogenmod-aosp-and-vim-build-integration</id>
+    <content type="html"><![CDATA[<p>The build system AOSP and CyanogenMod have some interesting shell scripts that
+make it easier to build various parts of the system:</p>
+
+<ul>
+<li><code>breakfast [device]</code> -- selects a particular device for building</li>
+<li><code>brunch [device]</code> -- building the entire image for the device</li>
+<li><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....</li>
+<li><code>mm [make_args]</code> -- builds whatever module you happen to be in, just that
+module</li>
+<li><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just that
+module, and pushes it to the device</li>
+</ul>
+
+
+<p>So... the mm and mmp directives seem like great shortcuts to shorten your
+develop / compile / test cycle, right?  But what about editor completion?  You
+can't invoke mm and mmp in a vim session in order to munch on the compile
+errors?!  Fret not!  Now you can!</p>
+
+<p>The first step is a couple of nifty shell scripts.  They probably represent a
+horrible compromise of your security, so use with care.  But here they are...</p>
+
+<p>The first is a server of sorts, it sits in a open shell session, one that's all
+setup to build Android:</p>
+
+<p>```bash do_over_there_listen.sh</p>
+
+<h1>!/bin/bash</h1>
+
+<p>FIFO_STDINP="/tmp/do_over_there.stdinp.fifo"
+FIFO_STDOUT="/tmp/do_over_there.stdout.fifo"
+FIFO_STDERR="/tmp/do_over_there.stderr.fifo"</p>
+
+<p>do_stuff_here() {</p>
+
+<pre><code>rm -vf $FIFO_STDINP
+rm -vf $FIFO_STDOUT
+rm -vf $FIFO_STDERR
+
+mkfifo $FIFO_STDINP
+mkfifo $FIFO_STDOUT
+mkfifo $FIFO_STDERR
+
+while read line &lt;$FIFO_STDINP ; do
+    echo "Running: $line"
+    eval $line &gt;$FIFO_STDOUT 2&gt;$FIFO_STDERR
+done
+</code></pre>
+
+<p>}
+```</p>
+
+<p>You run this script like so:</p>
+
+<p><code>text run do_stuff_here
+$ . ~/Scripts/do_over_there_listen.sh ; do_stuff_here
+removed `/tmp/do_over_there.stdinp.fifo'
+removed `/tmp/do_over_there.stdout.fifo'
+removed `/tmp/do_over_there.stderr.fifo'
+</code></p>
+
+<p>The next step is a script that takes the place of make in your vim session:</p>
+
+<p>```bash do_over_there</p>
+
+<h1>!/bin/bash</h1>
+
+<p>D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/do_over_there_listen.sh"</p>
+
+<p>echo "mm $@" >$FIFO_STDINP</p>
+
+<p>cat $FIFO_STDOUT &amp;
+cat $FIFO_STDERR >&amp;2 &amp;</p>
+
+<p>wait
+```</p>
+
+<p>Then, the final piece of the puzzle is to tell vim to use the new "make"
+command with (after <code>chmod +x do_over_there</code> of course):</p>
+
+<p><code>text vimrc mods
+set makeprg=~/path/to/do_over_there
+</code></p>
+
+<p>Finally, you'll be able to compile with the AOSP and CyanogenMod build system
+niceties but then suck those error logs into vim.  Like so:</p>
+
+<p><img src="/images/do-over-there.gif"></p>
+]]></content>
+  </entry>
+  
+</feed>

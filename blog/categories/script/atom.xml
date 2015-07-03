@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: script | Brain dump in text format]]></title>
+  <link href="http://silverjam.github.io/blog/categories/script/atom.xml" rel="self"/>
+  <link href="http://silverjam.github.io/"/>
+  <updated>2015-07-03T11:58:47-07:00</updated>
+  <id>http://silverjam.github.io/</id>
+  <author>
+    <name><![CDATA[Jason Mobarak]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Google Apps Script: Insert Header Numbers]]></title>
+    <link href="http://silverjam.github.io/blog/2013/05/26/google-apps-script-insert-header-numbers/"/>
+    <updated>2013-05-26T23:28:00-07:00</updated>
+    <id>http://silverjam.github.io/blog/2013/05/26/google-apps-script-insert-header-numbers</id>
+    <content type="html"><![CDATA[<p>Google <a href="https://developers.google.com/apps-script/"><em>Apps Script</em></a> presents an interesting solution to extend
+the features of Google applications.  The usual way to do this is with client
+side browser extensions, but they are not portable (that is, specific to a
+browser, and specific to the web)-- and cannot run unattended.</p>
+
+<p>Google's apps (and similarly, 99% of other web apps) have long lacked
+scriptability that native applications enjoy. <em>Apps script</em> is a play to
+resolve that deficiency.</p>
+
+<h2>TL;DR</h2>
+
+<p>Jump to <a href="#The_Solution">the solution</a> for the script that adds header numbers.</p>
+
+<h2>The problem</h2>
+
+<p>Google docs has undergone some interesting simplifications in recent times, and
+it'd be interesting to learn why certain features got chopped.</p>
+
+<p>In particular, at one point it was possible to insert numeric headers into a
+Google doc, though it looks like this was a <a href="http://www.youtube.com/watch?v=xaypUbQd6wI">CSS hack</a>.  Since Google
+docs isn't exposing the underlying CSS of the document anymore, this method no
+longer works.  You can also turn your headers
+<a href="http://webapps.stackexchange.com/questions/23861/header-numbering-in-google-docs">into numbered lists</a>
+...  but this is <strong>really</strong> cumbersome.</p>
+
+<p>Why do you need numeric headers?  Well, it's a pretty standard word processor
+feature-- if you're packaging information into a fairly static format (say a
+PDF), it's useful for communication purposes to reference a specific part of
+the document; for example, if you were writing a technical review of someone's
+software.</p>
+
+<h2>Background</h2>
+
+<p>Google offers several different types of scripts:</p>
+
+<p><img src="/images/gapps-script-types.png"></p>
+
+<p>The biggest distinction appears to be if a script is bound to a
+<a href="https://developers.google.com/apps-script/scripts_containers">container</a> or <a href="https://developers.google.com/apps-script/execution_script_editor">not</a> -- that is, whether
+the script lives inside a doc, form, spreadsheet, or if it sits outside one of
+these (sitting in the script editor).  Scripts can also become a standalone
+WebApp.</p>
+
+<p>As first, standalone scripts seemed useful for testing things out, but the
+inability to interact with the user quickly made a standalone scripts
+useless...  I found myself thinking that as I developed useful things with
+standalone scripts (macros!) that it'd be nice to share these, and simply
+insert some silly UI prompts to make the script generic-- it's unclear how to
+do this without making the script specific to a container, then sharing it in
+the <a href="https://developers.google.com/apps-script/publishing_gallery#installing_a_script_from_the_gallery">document specific script gallery</a> -- right now, there's no
+script gallery for text documents.</p>
+
+<h3>Power users, macro sharing, and the apps script gallery</h3>
+
+<p>The apps script gallery seems sadly lacking... why is the script gallery buried
+inside the document?  This hardly seems like the "happening" place to showcase
+cool macros:</p>
+
+<p><img src="/images/gapps-script-gallery.png"></p>
+
+<p>I did manage to find apps script "gallery" at one point, but it was full of
+commercial apps geared at implementing solution on top of Google Apps for
+businesses.  This is great, but if Google wants to crowd source all the crazy
+features that users want by providing power-users with scripting capabilities,
+there should probably be something more like the chrome extensions gallery to
+showcase macros.  That is, something easily accessible from a Google search.</p>
+
+<h2>The solution <a name="The_Solution"></a></h2>
+
+<p>The solution is to simply use the Google apps script API to create your own
+header numbers.  It's somewhat cumbersome, and will probably break in many
+cases, but it works.</p>
+
+<p>There's probably a better way to do this... for example, one improvement would
+be to figure out how to share this to a common repository so it could be
+imported into other documents.</p>
+
+<p>Start by creating a new apps script in the document:</p>
+
+<p><img src="/images/launch-script-editor.png"></p>
+
+<p>Then insert the following script (also maintained <a href="https://gist.github.com/silverjam/5613969">in a gist</a>):</p>
+
+<p>``` javascript</p>
+
+<p>var state = {
+  headerLevel1: 0,
+  headerLevel2: 0,
+  headerLevel3: 0,
+}</p>
+
+<p>var private = {
+  getSectionNumber: function (paragraph)
+  {</p>
+
+<pre><code>if ( paragraph.getHeading() == DocumentApp.ParagraphHeading.HEADING1 )
+{
+  state.headerLevel2 = 0;
+  state.headerLevel3 = 0;
+
+  return (++state.headerLevel1) + " ";
+}
+else if ( paragraph.getHeading() == DocumentApp.ParagraphHeading.HEADING2 )
+{
+  if (state.headerLevel1 == 0)
+    state.headerLevel1 = 1;
+
+  state.headerLevel3 = 0;
+
+  return state.headerLevel1 + "." + (++state.headerLevel2) + " ";
+}
+else if ( paragraph.getHeading() == DocumentApp.ParagraphHeading.HEADING3 )
+{
+  if (state.headerLevel2 == 0)
+    state.headerLevel2 = 1;
+
+  return state.headerLevel1 + "." + state.headerLevel2 + "." + (++state.headerLevel3) + " ";
+}
+
+return "";
+</code></pre>
+
+<p>  },</p>
+
+<p>  isNumber: function (text)
+  {</p>
+
+<pre><code>return !isNaN(text);
+</code></pre>
+
+<p>  },</p>
+
+<p>  removeExistingHeaderNumber: function (text)
+  {</p>
+
+<pre><code>for (var i = 0; i &lt; text.length; i++)
+{
+  if ( private.isNumber(text.charAt(i)) || text.charAt(i) == "." )
+      continue;
+
+  break;
+}
+
+return text.substr(i);
+</code></pre>
+
+<p>  }
+};</p>
+
+<p>function addHeaderNumbers()
+{
+  var doc = DocumentApp.getActiveDocument();
+  var body = doc.getBody()</p>
+
+<p>  for (var i = 0; i &lt; body.getNumChildren(); i++)
+  {</p>
+
+<pre><code>var element = body.getChild(i);
+
+if ( element.getType() != DocumentApp.ElementType.PARAGRAPH )
+  continue;
+
+var paragraph = element.asParagraph();
+
+if ( paragraph.getHeading() != DocumentApp.ParagraphHeading.NORMAL )
+{
+  var sectionNumber = private.getSectionNumber(paragraph);
+  paragraph.setText(sectionNumber + private.removeExistingHeaderNumber(paragraph.getText()))
+}
+</code></pre>
+
+<p>  }</p>
+
+<p>  doc.saveAndClose();
+}
+```</p>
+
+<p>Save the project and return to the document.  Then use the script manager to
+open the list of available functions to run:</p>
+
+<p><img src="/images/gapps-script-manager.png"></p>
+
+<p>Then select the 'addHeaderNumbers' script:</p>
+
+<p><img src="/images/gapps-script-run-script.png"></p>
+
+<p>And magically your document will now have header numbering:</p>
+
+<p><img src="/images/gapps-example-header-numbers.png"></p>
+
+<p>EOT</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Infinite terminal logs]]></title>
+    <link href="http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs/"/>
+    <updated>2013-05-24T23:11:00-07:00</updated>
+    <id>http://silverjam.github.io/blog/2013/05/24/infinite-terminal-logs</id>
+    <content type="html"><![CDATA[<h2>The Problem: Unsatisfying Terminal Emulators</h2>
+
+<p>Sometimes when you're hacking on things it's a great resource to be able to
+recall / search everything that you've done in the past so that you can
+reconstruct what's happened in a coherent matter.</p>
+
+<p>This is, a crutch, or a substitute for a structured approach to a problem, but
+I find it useful during "hack and slash" sessions when you don't necessarily
+want or need a structured approach.</p>
+
+<p>Some commercial terminals offer logging (<a href="http://vandyke.com/products/securecrt/index.html">SecureCRT</a> for example).
+Linux, terminals... not so much.  No such option exists in the default Ubuntu
+terminal.  There are two terminals named <em>Terminator</em> one is <a href="http://software.jessies.org/terminator/">Java
+based</a> and does not have a package in the standard Ubuntu
+repositories, and the <a href="http://www.tenshu.net/p/terminator.html">other</a> is present in Ubuntu's
+standard repositories.</p>
+
+<p>You can image this led to some confusion on my part... because both offer some
+functionality that I wanted, but what I really wanted was a combination of the
+two terminals.  It's ironic that SecureCRT offers the best solution for what I wanted.</p>
+
+<p>Java Terminator:</p>
+
+<ul>
+<li>Terminal logging</li>
+<li>Good search, ala OSX Term.app (does not really work though)</li>
+</ul>
+
+
+<p>Tenshu Terminator:</p>
+
+<ul>
+<li>Infinite scrollback (also, does not work very well)</li>
+<li>Tiling</li>
+</ul>
+
+
+<p>So, what is a hacker to do?  Why... hack up something that works... a good
+citizen of the FLOSS world would try to add these features to the terminal
+emulator that they liked, but why bother when you can create a solution that
+solves most of the problem in a few minutes... Really, I ended up not like the
+java based Terminator at all because it was ugly and did not ingrate well with
+Ubuntu, so created my own logging solution seemed like it would solve the
+logging, search and infinite scrollback use cases.</p>
+
+<h2>The Solution: Old Fashioned 'Script' Utility</h2>
+
+<p>The <a href="http://ultra.pr.erau.edu/~jaffem/classes/cs125/script.htm">script</a> tool is a unix utility to record everything that
+passing from the shell to the terminal emulator to control things like cursor
+movements, colors, and the contents of the cells on the terminal device.</p>
+
+<p>This is pretty heavy handed, and allows you to replay your entire terminal
+session (complete with timings) if you so desire.  But this isn't the goal,
+the goal is to get a terminal log, that easily searchable.</p>
+
+<p>So, to start, data is needed first, so as soon as the shell is started,
+everything is recorded:</p>
+
+<p>``` bash shell profile additions</p>
+
+<pre><code>if [ -z "$UNDER_SCRIPT" ]; then
+
+    logdir=$HOME/Logs
+    logname=$(date +%F_%T).$$.script
+
+    logfile=$logdir/.$logname
+    final_logfile=$logdir/$logname
+
+    trap '( mv $logfile $final_logfile )' EXIT
+
+    if [ ! -d $logdir ]; then
+        mkdir $logdir
+    fi
+
+    gzip -q $logdir/*.script &amp;&gt;/dev/null
+
+    export UNDER_SCRIPT=$logfile
+
+    script -e -f -q $logfile
+    exit $?
+fi
+</code></pre>
+
+<p>```</p>
+
+<p>Then a <a href="http://liftoff.github.io/GateOne/Developer/terminal.html">terminal emulation library</a> is added:
+``` bash</p>
+
+<pre><code>$ cd ~/Logs
+$ wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
+</code></pre>
+
+<p>```</p>
+
+<p>Then a script is implemented to emulate a terminal and generate a usable log
+file:</p>
+
+<p>``` python ~/Logs/stripesc.py
+import sys
+import terminal
+import locale</p>
+
+<p>encoding = locale.getpreferredencoding()
+term = terminal.Terminal(200,200) # bigger than we could possibly need</p>
+
+<p>fp = sys.stdin</p>
+
+<p>def process_scrollback(term):</p>
+
+<pre><code>if not term.scrollback_buf:
+    return
+return term.scrollback_buf[-1].tounicode().rstrip().encode(encoding)
+</code></pre>
+
+<p>def make_scroll_up_cb(term):</p>
+
+<pre><code>def _():
+    print process_scrollback(term)
+return _
+</code></pre>
+
+<p>term.add_callback(terminal.CALLBACK_SCROLL_UP, make_scroll_up_cb(term))
+```</p>
+
+<p>Then, as need you'd invoke a shell script to decode a log, and grep for
+something interesting:</p>
+
+<p><code>bash ~/Logs/strip-escape-codes.sh
+cat - | python stripesc.py
+</code></p>
+
+<p>Also periodically, you could throw away the terminal emulation data that's no
+longer needed:</p>
+
+<p>``` bash ~/Logs/strip-all-escape-codes.sh</p>
+
+<h1>!/bin/bash</h1>
+
+<p>for log_file in <code>ls -1 *.script.gz</code>; do</p>
+
+<pre><code>zcat $log_file | python stripesc.py
+    &gt;`echo $log_file | sed -e 's/.script.gz/.log/'`
+</code></pre>
+
+<p>done
+```</p>
+
+<p>Thus, we've solved the problem with minimal effort, and maximum utility
+(albeit a little cumbersome).</p>
+
+<!-- vim: spell:
+-->
+
+]]></content>
+  </entry>
+  
+</feed>
