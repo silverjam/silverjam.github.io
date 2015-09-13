@@ -62,7 +62,7 @@ be repeated and the that pool of choices shrinks each time.  Since the pool is
            - choose(00) => [0]          [1,2,3]
            - choose(00) => [0,1]        [2,3]
            - choose( 0) => [0,1,2]      [3]
-           - choose( _) => [0,1,2,3]    []
+           - choose( \_) => [0,1,2,3]    []
 
         binary: 000 00 => decimal: 0
 
@@ -74,7 +74,7 @@ be repeated and the that pool of choices shrinks each time.  Since the pool is
            - choose(00) => [0]          [1,2,3]
            - choose(01) => [0,2]        [1,3]
            - choose( 0) => [0,2,1]      [3]
-           - choose( _) => [0,1,2,3]    []
+           - choose( \_) => [0,1,2,3]    []
 
         binary: 00 01 0 => decimal: 2
 
