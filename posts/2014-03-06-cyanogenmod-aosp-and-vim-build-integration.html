@@ -16,6 +16,12 @@
       h1, h2 {
         --typography-spacing-vertical: 1rem;
       }
+      article {
+        margin-top: 1rem !important;
+        padding-top: 1rem !important;
+        margin-bottom: 1rem !important;
+        padding-bottom: 1rem !important;
+      }
       pre code {
         padding: 1em !important;
       }
@@ -44,21 +50,21 @@
                </tr>
             </tbody>
          </table>
-         <hr>
-         <p>The build system AOSP and CyanogenMod have some interesting shell scripts thatmake it easier to build various parts of the system:</p>
-         <p><code>breakfast [device]</code> -- selects a particular device for building
-         </p>
-         <p><code>brunch [device]</code> -- building the entire image for the device
-         </p>
-         <p><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....
-         </p>
-         <p><code>mm [make_args]</code> -- builds whatever module you happen to be in, just thatmodule
-         </p>
-         <p><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just thatmodule, and pushes it to the device
-         </p>
-         <p>So... the mm and mmp directives seem like great shortcuts to shorten yourdevelop / compile / test cycle, right?  But what about editor completion?  Youcan't invoke mm and mmp in a vim session in order to munch on the compileerrors?!  Fret not!  Now you can!</p>
-         <p>The first step is a couple of nifty shell scripts.  They probably represent ahorrible compromise of your security, so use with care.  But here they are...</p>
-         <p>The first is a server of sorts, it sits in a open shell session, one that's allsetup to build Android:</p><pre><code class="language-bash do_over_there_listen.sh">#!/bin/bash
+         <article>
+            <p>The build system AOSP and CyanogenMod have some interesting shell scripts thatmake it easier to build various parts of the system:</p>
+            <p><code>breakfast [device]</code> -- selects a particular device for building
+            </p>
+            <p><code>brunch [device]</code> -- building the entire image for the device
+            </p>
+            <p><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....
+            </p>
+            <p><code>mm [make_args]</code> -- builds whatever module you happen to be in, just thatmodule
+            </p>
+            <p><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just thatmodule, and pushes it to the device
+            </p>
+            <p>So... the mm and mmp directives seem like great shortcuts to shorten yourdevelop / compile / test cycle, right?  But what about editor completion?  Youcan't invoke mm and mmp in a vim session in order to munch on the compileerrors?!  Fret not!  Now you can!</p>
+            <p>The first step is a couple of nifty shell scripts.  They probably represent ahorrible compromise of your security, so use with care.  But here they are...</p>
+            <p>The first is a server of sorts, it sits in a open shell session, one that's allsetup to build Android:</p><pre><code class="language-bash do_over_there_listen.sh">#!/bin/bash
 
 FIFO_STDINP="/tmp/do_over_there.stdinp.fifo"
 FIFO_STDOUT="/tmp/do_over_there.stdout.fifo"
@@ -94,8 +100,9 @@ cat $FIFO_STDERR &gt;&amp;2 &amp;
 
 wait
 </code></pre><p>Then, the final piece of the puzzle is to tell vim to use the new "make"command with (after <code>chmod +x do_over_there</code> of course):
-         </p><pre><code class="language-text vimrc mods">set makeprg=~/path/to/do_over_there
-</code></pre><p>Finally, you'll be able to compile with the AOSP and CyanogenMod build systemniceties but then suck those error logs into vim.  Like so:</p>&lt;img src=images/do-over-there.gif /&gt;
-         
+            </p><pre><code class="language-text vimrc mods">set makeprg=~/path/to/do_over_there
+</code></pre><p>Finally, you'll be able to compile with the AOSP and CyanogenMod build systemniceties but then suck those error logs into vim.  Like so:</p><img src=../images/do-over-there.gif />
+            
+         </article>
       </main><script>hljs.highlightAll();</script></body>
 </html>

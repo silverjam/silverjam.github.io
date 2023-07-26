@@ -87,4 +87,4 @@ set makeprg=~/path/to/do_over_there
 Finally, you'll be able to compile with the AOSP and CyanogenMod build system
 niceties but then suck those error logs into vim.  Like so:
 
-<img src=images/do-over-there.gif />
+<img src=../images/do-over-there.gif />

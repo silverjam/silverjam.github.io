@@ -10,6 +10,9 @@
 
 <xsl:output method="html" encoding="UTF-8" indent="yes" />
 
+<xsl:variable name="title" select="/cm:document/cm:heading[@level=1][1]" />
+<xsl:variable name="start" select="/cm:document/cm:thematic_break[1]" />
+
 <xsl:template match="/cm:document">
   <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;
 </xsl:text>
@@ -17,12 +20,15 @@
     <xsl:call-template name="head">
       <xsl:with-param
         name="title"
-        select='/cm:document/cm:heading[@level=1][1]/cm:text/text()'
+        select='$title/cm:text/text()'
         />
     </xsl:call-template>
     <body>
       <main>
-        <xsl:apply-templates select="*" />
+        <xsl:apply-templates select="$start/preceding-sibling::*" />
+        <article>
+          <xsl:apply-templates select="$start/following-sibling::*" />
+        </article>
       </main>
       <script>hljs.highlightAll();</script>
     </body>
@@ -51,6 +57,10 @@
 
 <xsl:template match="cm:strong">
   <strong><xsl:apply-templates select="*" /></strong>
+</xsl:template>
+
+<xsl:template match="cm:emph">
+  <em><xsl:apply-templates select="*" /></em>
 </xsl:template>
 
 <xsl:template match="cm:text">
@@ -101,6 +111,69 @@
 <xsl:template match="cm:thematic_break">
   <hr/>
 </xsl:template>
+
+<!-- ==================================================================== -->
+<!-- Borrowed from: https://github.com/vieiro/xmark/blob/master/xmark.xsl -->
+<!-- ==================================================================== -->
+
+<!-- custom HTML entries in markdown are processed here -->
+<!--
+     Hack template to generate HTML elements from escaped stuff
+     &gt;/hola> will generate </hola>
+-->
+<xsl:template name='html-end'>
+  <xsl:param name='text' />
+  <xsl:choose>
+    <xsl:when test='contains($text, "&gt;")'>
+      <xsl:value-of select='substring-before($text, "&gt;")' />
+      <xsl:text disable-output-escaping='yes'>&gt;</xsl:text>
+      <xsl:call-template name='html-start'>
+              <xsl:with-param name='text' select='substring-after($text, "&gt;")' />
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name='html-start'>
+        <xsl:with-param name='text' select='$text' />
+      </xsl:call-template>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+<!-- 
+     template function to generate a start element 
+     &myhtml; will generate <myhtml>
+-->
+<xsl:template name='html-start'>
+  <xsl:param name='text' />
+  <xsl:choose>
+    <xsl:when test='contains($text, "&lt;")'>
+      <xsl:value-of select='substring-before($text, "&lt;")' />
+      <xsl:text disable-output-escaping='yes'>&lt;</xsl:text>
+      <xsl:call-template name='html-end'>
+        <xsl:with-param name='text' select='substring-after($text, "&lt;")' />
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select='$text' />
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
+
+<xsl:template match="cm:html_block">
+  <xsl:call-template name='html-start'>
+    <xsl:with-param name='text' select='text()' />
+  </xsl:call-template>
+  <xsl:apply-templates />
+  <!--
+    Commonmark translates escapes HTML stuff in the XML tree, so, for instance
+    <aside> becomes &lt;aside&gt;
+    We would like to replace all &lt; with < and &gt; with > but this is challenging in XSL.
+    Mainly because XSL forbits '<' in attribute values to avoid the resulting XML being
+    malformed.
+  -->
+</xsl:template>
+
+<!-- Presumably this just gobbles up stray text in the markdown doc -->
+<xsl:template match="text()"/>
 
 </xsl:stylesheet>
 
