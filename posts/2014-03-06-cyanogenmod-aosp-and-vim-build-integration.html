@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css"><script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><title>CyanogenMod (AOSP) and Vim Build Integration</title><style>
+      .hljs {
+        font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        font-size: 16px;
+      }
+      :root {
+        --typography-spacing-vertical: 0.75rem;
+      }
+      h1, h2 {
+        --typography-spacing-vertical: 1rem;
+      }
+    </style></head>
+   <body>
+      <main>
+         <h1>CyanogenMod (AOSP) and Vim Build Integration</h1>
+         <table>
+            <thead>
+               <tr>
+                  <td>Metadata</td>
+                  <td>Value</td>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>Date</td>
+                  <td>2014-03-06</td>
+               </tr>
+               <tr>
+                  <td>Categories</td>
+                  <td>android</td>
+               </tr>
+            </tbody>
+         </table>
+         <hr>
+         <p>The build system AOSP and CyanogenMod have some interesting shell scripts thatmake it easier to build various parts of the system:</p>
+         <p><code>breakfast [device]</code> -- selects a particular device for building
+         </p>
+         <p><code>brunch [device]</code> -- building the entire image for the device
+         </p>
+         <p><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....
+         </p>
+         <p><code>mm [make_args]</code> -- builds whatever module you happen to be in, just thatmodule
+         </p>
+         <p><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just thatmodule, and pushes it to the device
+         </p>
+         <p>So... the mm and mmp directives seem like great shortcuts to shorten yourdevelop / compile / test cycle, right?  But what about editor completion?  Youcan't invoke mm and mmp in a vim session in order to munch on the compileerrors?!  Fret not!  Now you can!</p>
+         <p>The first step is a couple of nifty shell scripts.  They probably represent ahorrible compromise of your security, so use with care.  But here they are...</p>
+         <p>The first is a server of sorts, it sits in a open shell session, one that's allsetup to build Android:</p><pre><code class="language-bash do_over_there_listen.sh">#!/bin/bash
+
+FIFO_STDINP="/tmp/do_over_there.stdinp.fifo"
+FIFO_STDOUT="/tmp/do_over_there.stdout.fifo"
+FIFO_STDERR="/tmp/do_over_there.stderr.fifo"
+
+do_stuff_here() {
+    rm -vf $FIFO_STDINP
+    rm -vf $FIFO_STDOUT
+    rm -vf $FIFO_STDERR
+
+    mkfifo $FIFO_STDINP
+    mkfifo $FIFO_STDOUT
+    mkfifo $FIFO_STDERR
+
+    while read line &lt;$FIFO_STDINP ; do
+        echo "Running: $line"
+        eval $line &gt;$FIFO_STDOUT 2&gt;$FIFO_STDERR
+    done
+}
+</code></pre><p>You run this script like so:</p><pre><code class="language-text run do_stuff_here">$ . ~/Scripts/do_over_there_listen.sh ; do_stuff_here
+removed `/tmp/do_over_there.stdinp.fifo'
+removed `/tmp/do_over_there.stdout.fifo'
+removed `/tmp/do_over_there.stderr.fifo'
+</code></pre><p>The next step is a script that takes the place of make in your vim session:</p><pre><code class="language-bash do_over_there">#!/bin/bash
+
+D=$(dirname $(readlink -f ${BASH_SOURCE}))
+source "$D/do_over_there_listen.sh"
+
+echo "mm $@" &gt;$FIFO_STDINP
+
+cat $FIFO_STDOUT &amp;
+cat $FIFO_STDERR &gt;&amp;2 &amp;
+
+wait
+</code></pre><p>Then, the final piece of the puzzle is to tell vim to use the new "make"command with (after <code>chmod +x do_over_there</code> of course):
+         </p><pre><code class="language-text vimrc mods">set makeprg=~/path/to/do_over_there
+</code></pre><p>Finally, you'll be able to compile with the AOSP and CyanogenMod build systemniceties but then suck those error logs into vim.  Like so:</p>&lt;img src=images/do-over-there.gif /&gt;
+         
+      </main><script>hljs.highlightAll();</script></body>
+</html>

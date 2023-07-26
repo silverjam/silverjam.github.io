@@ -1,9 +1,10 @@
----
-layout: post
-title: "CyanogenMod (AOSP) and Vim Build Integration"
-date: 2014-03-06 22:03
-comments: true
-categories: android, aosp, cyanogenmod
+# CyanogenMod (AOSP) and Vim Build Integration
+
+| Metadata   | Value      |
+| ---------- | ---------- |
+| Date       | 2014-03-06 |
+| Categories | android    |
+
 ---
 
 The build system AOSP and CyanogenMod have some interesting shell scripts that
@@ -86,4 +87,4 @@ set makeprg=~/path/to/do_over_there
 Finally, you'll be able to compile with the AOSP and CyanogenMod build system
 niceties but then suck those error logs into vim.  Like so:
 
-{% img /images/do-over-there.gif %}
+<img src=images/do-over-there.gif />

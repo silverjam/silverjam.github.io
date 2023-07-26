@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet
-  version="1.0"
+  version="2.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:cm="http://commonmark.org/xml/1.0"
   exclude-result-prefixes="cm"
 >
+
+<xsl:import href="head.xsl" />
 
 <xsl:output method="html" encoding="UTF-8" indent="yes" />
 
@@ -12,28 +14,12 @@
   <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;
 </xsl:text>
   <html lang="en">
-    <head>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta charset="UTF-8" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css" />
-      <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
-      <title>
-        <xsl:value-of select="/cm:document/cm:heading[@level=1][1]/cm:text/text()" />
-      </title>
-      <style>
-        .hljs {
-          font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-          font-size: 16px;
-        }
-        :root {
-          --typography-spacing-vertical: 0.75rem;
-        }
-        h1, h2 {
-          --typography-spacing-vertical: 1rem;
-        }
-      </style>
-    </head>
+    <xsl:call-template name="head">
+      <xsl:with-param
+        name="title"
+        select='/cm:document/cm:heading[@level=1][1]/cm:text/text()'
+        />
+    </xsl:call-template>
     <body>
       <main>
         <xsl:apply-templates select="*" />

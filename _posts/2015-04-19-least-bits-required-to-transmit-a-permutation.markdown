@@ -1,16 +1,13 @@
+# Least bits to transmit a permutation
+
+| Metadata   | Value            |
+| ---------- | ---------------- |
+| Date       | 2015-04-10       |
+| Categories | math             |
+
 ---
-layout: post
-title: "Least bits to transmit a permutation"
-date: 2015-04-19 23:53
-comments: true
-categories: math permutations
----
 
-{%blockquote%}
-
-Consider the 52 cards of a deck. You generated a random sequence for these cards and want to send that sequence to a receiver. You want to minimize the communication between you and the receiver, i.e., minimize the number of bits required to send the sequence.
-
-{%endblockquote%}
+> Consider the 52 cards of a deck. You generated a random sequence for these cards and want to send that sequence to a receiver. You want to minimize the communication between you and the receiver, i.e., minimize the number of bits required to send the sequence.
 
 What is the minimum number of bits required to send the sequence?
 

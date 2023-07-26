@@ -5,6 +5,8 @@
 | Date       | 2015-05-22 12:44 |
 | Categories | cars             |
 
+---
+
 Disclaimer: I like our Prius Plug-in, but I really don't like our Prius C.  The plug-in version came with a little green sticker that lets you whiz by other people that didn't think to plop down the extra dough for a "range extended" electric (which the Prius Plug-in really is **not** that, but I digress).
 
 First, a question for Prius owners: do you think the $2500-$4000 cost of a replacement batter pack at 9 years would nullify your fuel saving over that time period?
