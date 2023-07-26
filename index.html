@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -5,15 +6,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css">
-<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><style></style>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><title>This is a title of the post</title>
+<style>
+        .hljs {
+          font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+          font-size: 16px;
+        }
+        :root {
+          --typography-spacing-vertical: 0.75rem;
+        }
+        h1, h2 {
+          --typography-spacing-vertical: 1rem;
+        }
+      </style>
 </head>
 <body>
 <main><h1>This is a title of the post</h1>
-<p>This is a text only post.</p>
-<pre><code class="language-plaintext">This is some code.
+<table>
+<thead><tr>
+<td>Metadata</td>
+<td>Value</td>
+</tr></thead>
+<tbody>
+<tr>
+<td>Date</td>
+<td>2023-07-25</td>
+</tr>
+<tr>
+<td>Categories</td>
+<td>test</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>This is not a subheading.</p>
+<hr>
+<h2>This is a subheading</h2>
+<p>This is a text only block:</p>
+<pre><code class="language-plaintext">A plaintext block
 </code></pre>
-<p>This is some more code:</p>
+<p>This is some Python code:</p>
 <pre><code class="language-python">print("Hello world?")
-</code></pre></main><script>hljs.highlightAll();</script>
+</code></pre>
+<p>This is some Rust code:</p>
+<pre><code class="language-rust">fn main() {
+    println!("Hello world?");
+}
+</code></pre>
+<p>This is some <code>inline code</code> (which doesn't look very good yet)?</p></main><script>hljs.highlightAll();</script>
 </body>
 </html>

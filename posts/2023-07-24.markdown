@@ -1,0 +1,36 @@
+# This is a title of the post
+
+| Metadata   | Value            |
+| ---------- | ---------------- |
+| Date       | 2023-07-25       |
+| Categories | test             |
+
+---
+
+This is not a subheading.
+
+---
+
+## This is a subheading
+
+This is a text only block:
+
+```
+A plaintext block
+```
+
+This is some Python code:
+
+```python
+print("Hello world?")
+```
+
+This is some Rust code:
+
+```rust
+fn main() {
+    println!("Hello world?");
+}
+```
+
+This is some `inline code` (which doesn't look very good yet)?
