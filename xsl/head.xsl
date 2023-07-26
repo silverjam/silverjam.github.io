@@ -30,6 +30,12 @@
       h1, h2 {
         --typography-spacing-vertical: 1rem;
       }
+      pre code {
+        padding: 1em !important;
+      }
+      code {
+        padding: 0.1rem 0.2rem !important;
+      }
     </style>
   </head>
 

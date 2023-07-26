@@ -20,7 +20,7 @@ all: html index.html
 _build/%.xml: _posts/%.markdown
 	comrak --gfm -t xml -o $@ $^
 
-posts/%.html: _build/%.xml
+posts/%.html: _build/%.xml | xsl/head.xsl
 	saxonb-xslt -xsl:xsl/post.xsl -s:$^ -o:$@
 
 CM_DTD := commonmark-spec/CommonMark.dtd
@@ -32,12 +32,15 @@ xml: $(POSTS_XML)
 
 html: $(CM_DTD) $(POSTS_HTML)
 
-index.html: $(POSTS_XML)
+index.html: $(POSTS_XML) | xsl/head.xsl xsl/index.xsl
 	echo "<index/>" | saxonb-xslt -s:- -o:index.html -xsl:xsl/index.xsl "files=$(POSTS_INDEX)"
 
-TEST_POST := _posts/2023-07-24.markdown
+TEST_POST_MD := _posts/2023-07-24.markdown
+TEST_POST_XML := _build/2023-07-24.xml
+TEST_POST_HTML := posts/2023-07-24.html
 
 test-render: $(CM_DTD)
-	saxonb-xslt -xsl:xsl/post.xsl $(TEST_POST) >posts/2023-07-24.html
+	comrak --gfm -t xml -o $(TEST_POST_XML) $(TEST_POST_MD)
+	saxonb-xslt -xsl:xsl/post.xsl -s:$(TEST_POST_XML) -o:$(TEST_POST_HTML)
 
 .PHONY: xml html test-render
