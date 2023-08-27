@@ -23,7 +23,7 @@ _build/%.xml: _posts/%.markdown
 	comrak --gfm -t xml -o $@ $^
 
 _build/CommonMark.dtd: $(CM_DTD)
-	cd _build; ln -sf ../$(CM_DTD) ../_build/CommonMark.dtd
+	cd _build; ln -sf ../$(CM_DTD)
 
 posts/%.html: _build/%.xml | xsl/head.xsl xsl/post.xsl _build/CommonMark.dtd
 	saxonb-xslt -xsl:xsl/post.xsl -s:$^ -o:$@
