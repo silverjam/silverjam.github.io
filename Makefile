@@ -17,6 +17,7 @@ POSTS_INDEX = $(subst $(_SPACE),$(_SEMI),$(_POSTS_INDEX))
 POSTS_HTML = $(POSTS_MD:_posts%markdown=posts%html)
 
 all: html index.html
+.PHONY: all
 
 _build/%.xml: _posts/%.markdown
 	comrak --gfm -t xml -o $@ $^
@@ -30,8 +31,10 @@ $(CM_DTD):
 	git submodule update --init commonmark-spec
 
 xml: $(POSTS_XML)
+.PHONY: xml
 
 html: $(CM_DTD) $(POSTS_HTML)
+.PHONY: html
 
 index.html: $(POSTS_XML) | xsl/head.xsl xsl/index.xsl
 	echo "<index/>" | saxonb-xslt -s:- -o:index.html -xsl:xsl/index.xsl "files=$(POSTS_INDEX)"
@@ -44,4 +47,4 @@ test-render: $(CM_DTD)
 	comrak --gfm -t xml -o $(TEST_POST_XML) $(TEST_POST_MD)
 	saxonb-xslt -xsl:xsl/post.xsl -s:$(TEST_POST_XML) -o:$(TEST_POST_HTML)
 
-.PHONY: xml html test-render
+.PHONY: test-render
