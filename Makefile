@@ -22,7 +22,10 @@ all: html index.html
 _build/%.xml: _posts/%.markdown
 	comrak --gfm -t xml -o $@ $^
 
-posts/%.html: _build/%.xml | xsl/head.xsl xsl/post.xsl
+_build/CommonMark.dtd: $(CM_DTD)
+	cd _build; ln -sf ../$(CM_DTD) ../_build/CommonMark.dtd
+
+posts/%.html: _build/%.xml | xsl/head.xsl xsl/post.xsl _build/CommonMark.dtd
 	saxonb-xslt -xsl:xsl/post.xsl -s:$^ -o:$@
 
 CM_DTD := commonmark-spec/CommonMark.dtd
