@@ -34,3 +34,7 @@ fn main() {
 ```
 
 This is some `inline code` (which doesn't look very good yet)?
+
+---
+
+This is a link [Google](google.com).

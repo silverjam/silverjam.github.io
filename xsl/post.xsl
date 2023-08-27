@@ -112,6 +112,15 @@
   <hr/>
 </xsl:template>
 
+<xsl:template match="cm:link">
+  <a>
+    <xsl:attribute name="href">
+      <xsl:value-of select="@destination" />
+    </xsl:attribute>
+    <xsl:apply-templates />
+  </a>
+</xsl:template>
+
 <!-- ==================================================================== -->
 <!-- Borrowed from: https://github.com/vieiro/xmark/blob/master/xmark.xsl -->
 <!-- ==================================================================== -->
@@ -170,6 +179,11 @@
     Mainly because XSL forbits '<' in attribute values to avoid the resulting XML being
     malformed.
   -->
+</xsl:template>
+
+<xsl:template match="cm:softbreak">
+  <xsl:text> 
+</xsl:text>
 </xsl:template>
 
 <!-- Presumably this just gobbles up stray text in the markdown doc -->

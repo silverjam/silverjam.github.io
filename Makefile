@@ -2,7 +2,8 @@ POSTS_MD := \
 	_posts/2023-07-24.markdown \
 	_posts/2015-05-22-prius-total-cost-of-ownership.markdown \
 	_posts/2015-04-19-least-bits-required-to-transmit-a-permutation.markdown \
-	_posts/2014-03-06-cyanogenmod-aosp-and-vim-build-integration.markdown
+	_posts/2014-03-06-cyanogenmod-aosp-and-vim-build-integration.markdown \
+	_posts/2013-06-05-android-build-tools-snafu.markdown
 
 POSTS_XML = $(POSTS_MD:_posts%markdown=_build%xml)
 
@@ -20,7 +21,7 @@ all: html index.html
 _build/%.xml: _posts/%.markdown
 	comrak --gfm -t xml -o $@ $^
 
-posts/%.html: _build/%.xml | xsl/head.xsl
+posts/%.html: _build/%.xml | xsl/head.xsl xsl/post.xsl
 	saxonb-xslt -xsl:xsl/post.xsl -s:$^ -o:$@
 
 CM_DTD := commonmark-spec/CommonMark.dtd

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css"><script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><title>Android Build Tools SNAFU</title><style>
+      .hljs {
+        font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        font-size: 16px;
+      }
+      :root {
+        --typography-spacing-vertical: 0.75rem;
+      }
+      h1, h2 {
+        --typography-spacing-vertical: 1rem;
+      }
+      article {
+        margin-top: 1rem !important;
+        padding-top: 1rem !important;
+        margin-bottom: 1rem !important;
+        padding-bottom: 1rem !important;
+      }
+      pre code {
+        padding: 1em !important;
+      }
+      code {
+        padding: 0.1rem 0.2rem !important;
+      }
+    </style></head>
+   <body>
+      <main>
+         <h1>Android Build Tools SNAFU</h1>
+         <table>
+            <thead>
+               <tr>
+                  <td>Metadata</td>
+                  <td>Value</td>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>Date</td>
+                  <td>2013-06-05</td>
+               </tr>
+               <tr>
+                  <td>Categories</td>
+                  <td>android, google</td>
+               </tr>
+            </tbody>
+         </table>
+         <article>
+            <p>So, I started developing for the Android platform in earnest around April of 
+               2013.  I found that the Android project had release not just a mere plugin for 
+               Eclipse but a rebranded, pre-customized version of Eclipse called ADT or 
+               Android Development Toolkit.
+            </p>
+            <p>This seemed pretty cool, I guess, though it seems better to just release a 
+               plugin so you can slice and dice your dev environment however you want.
+            </p>
+            <h2>Cool, but can it do Vim?</h2>
+            <p>At least for the February release of ADT it did not work so well (the 20130219 
+               version)-- installing vrapper breaks all kinds of things:
+            </p>
+            <p>This:</p><img src=../images/adt-splash-screen-1.png />
+            
+            <p>Turned in to this:</p><img src=../images/juno-splash-screen.png />
+            
+            <p>Afterwards, all of my Android integration pre-packaged in ADT seemed to 
+               disappear.  I had to manually re-install the Android integration that was 
+               previously there.  Not sure why I did... maybe it was user error... but it was 
+               not a good user experience.
+            </p>
+            <h2>Alternate Reality: Android Studio</h2>
+            <p>So far, my experience with trying the Android Studio preview has been great, 
+               but mostly because the of the dark UI, super easy <em>vim installation</em> that didn't 
+               <em>nuke any Android integration</em> ... and because it does stuff like this:
+            </p><img src=../images/astudio-closure-fold.png />
+            
+            <p>Finally, something that can at least make Java not look so stupid.  To quote 
+               the <a href="http://www.cnn.com/2008/POLITICS/09/10/campaign.lipstick/">Sarah Palin jibe</a>, <em>"it's just lipstick on a pig"</em>, but I'll take 
+               it!  Yes sir, uh-huh.
+            </p>
+            <hr>
+            <p>So... this brings me to new version of ADT (version 20130522) -- I'm starting 
+               a new project I figured I'd try to upgrade to the May release of ADT.  Lo and 
+               behold it doesn't come pre-packaged with something called <em>Android Build Tools</em> 
+               and it has a really shitty way to install it, basically it pops up a nag box 
+               and says:
+            </p><pre><code class="language-plaintext">Hey, we couldn't take the time to implement auto download or to auto package
+this new tool we're requiring, so go grab it yourself, good luck!
+
+Yours truly,
+-Asshats
+</code></pre><p>This wasted a good hour as I groped around trying to figure out what was wrong. 
+               Finally the Internet saved me as I discovered that many other developers can't 
+               read either:
+            </p>
+            <p><a href="http://stackoverflow.com/questions/885009/r-cannot-be-resolved-android-error">R cannot be resolved</a> [Stack Overflow]
+            </p>
+            <p><a href="https://groups.google.com/forum/?fromgroups#!topic/android-developers/rCaeT3qckoE">Some else with the R problem</a> [Google Groups]
+            </p>
+            <p><a href="https://groups.google.com/forum/?fromgroups=#!topic/adt-dev/epOfZbKPFdk">Another person, same problem</a> [Google Groups]
+            </p>
+            <p>The thing is, I did read the nag dialog, and I tried to download whatever it 
+               wanted, but for whatever reason (poor up bringing -- loose morals -- just plain 
+               dumb) I didn't succeed.  So, this proves at least one thing: <em>Android 
+                  developers can't read</em>.  Or does it?  Maybe it proves that Google wasted a lot 
+               of people's time with this decision.
+            </p><!-- vim: spell
+            -->
+            
+         </article>
+      </main><script>hljs.highlightAll();</script></body>
+</html>
