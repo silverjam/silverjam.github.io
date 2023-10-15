@@ -34,12 +34,29 @@
                 name="target_html"
                 select="replace($target_xml, '.xml', '.html')"
                 />
+              <!-- Find the 'Metadata' table, then find the 'Date' field within the table -->
+              <xsl:variable
+                name="date"
+                select="
+                  document(.)
+                  //cm:table_cell/cm:text[contains(text(),'Metadata')]
+                  /../../..
+                  //cm:table_cell/cm:text[contains(text(),'Date')]
+                  /..
+                  /following-sibling::*
+                  /cm:text
+                  /text()
+                "
+                />
               <a>
                 <xsl:attribute name="href">
                   <xsl:value-of select="concat('posts/', $target_html)" />
                 </xsl:attribute>
                 <xsl:value-of select="$title" />
               </a>
+              <em>
+                [<xsl:value-of select="$date" />]
+              </em>
             </li>
           </xsl:for-each>
         </ul>
