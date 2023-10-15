@@ -27,7 +27,7 @@
       :root {
         --typography-spacing-vertical: 0.75rem;
       }
-      h1, h2 {
+      h1, h2, h3, h4 {
         --typography-spacing-vertical: 1rem;
       }
       article {

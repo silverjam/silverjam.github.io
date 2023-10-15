@@ -1,17 +1,84 @@
-# This is a title of the post
+---
+tags: ["a", "b", "c"]
+---
+
+# Static site generator (blog) using XSLT and Markdown
 
 | Metadata   | Value            |
 | ---------- | ---------------- |
 | Date       | 2023-07-25       |
-| Categories | test             |
+| Categories | blog, ssg, markdown, xslt, xml |
 
 ---
 
-This is not a subheading.
+<!-- Some summary text -->
+
+*In this post I discuss building a static site generator (blog) with XSLT and
+Markdown.  The goal of the project is build something relatively simple and
+with tools that will work "forever".*
+
+## What's the point of this?
+
+The main purpose of this project is to create a static site generator using
+Markdown (e.g. plain text files with some light formatting) and a selection of
+both old and new technologies to make a somewhat modern blog that will be easy
+to maintain for over a long period of time (many, many years).  The secondary
+goal is to be able to use somewhat modern web technologies in the generated
+output.
+
+### Motivations
+
+In the past I've enjoyed the simplicity of blogs built on static site
+generators like Jekyll, Hugo and Sphinx.  Like most things in tech though,
+these things evolve and age.  Because of this I've often found myself in a
+place where I needed ressurect a very old technology (Jekyll in my case) or
+modernize it.
+
+### Rational
+
+Again, this project is designed to use a bit of old and new tech.  For the
+generation portion of the project, older technologies will be used. The hope or
+intent is that due to their age and muturity they aren't going to change much,
+and due to their ubiqity (for better or worse) aren't going to go anywhere
+either.
+
+These properties should make the generation part of the project work for many
+years to come, with little or no changes necessary to the underlying machinery.
+In the generated output I'm leaving freedom to use whatever flavor of web
+technology is currently relevant and somewhat modern.
+
+More succinctly, I'm driving for the following properties:
+
+- Static site generator: long term, well established tech, minimal maintenance
+- Generated output: whatever the flavor of the month is for web tech
+
+## What are the things this will support?
+
+Below are a selection of elements that the SSG should support:
+
+⬇️  Thematic breaks ⬇️  (And emoji)
 
 ---
 
-## This is a subheading
+*Emphasized text*
+
+**Bold text**
+
+~Strikethrough~
+
+Unorderded lists:
+
+- Bananas
+- Fruit
+- Apples
+
+Ordered lists:
+
+1. First
+2. Second
+3. Third
+
+## Subheadings
 
 This is a text only block:
 
@@ -37,4 +104,4 @@ This is some `inline code` (which doesn't look very good yet)?
 
 ---
 
-This is a link [Google](google.com).
+This is a link [Google](https://google.com).

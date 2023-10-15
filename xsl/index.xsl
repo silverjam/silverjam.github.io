@@ -15,7 +15,7 @@
 <xsl:template match="/index">
   <html lang="en">
     <xsl:call-template name="head">
-      <xsl:with-param name="title" select='"Posts"' />
+      <xsl:with-param name="title" select='"A blog by Jason Mobarak"' />
     </xsl:call-template>
     <body>
       <main>

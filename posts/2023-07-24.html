@@ -5,7 +5,7 @@
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta charset="UTF-8">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css"><script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><title>This is a title of the post</title><style>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css"><script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><title>Static site generator (blog) using XSLT and Markdown</title><style>
       .hljs {
         font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
         font-size: 16px;
@@ -13,7 +13,7 @@
       :root {
         --typography-spacing-vertical: 0.75rem;
       }
-      h1, h2 {
+      h1, h2, h3, h4 {
         --typography-spacing-vertical: 1rem;
       }
       article {
@@ -31,7 +31,7 @@
     </style></head>
    <body>
       <main>
-         <h1>This is a title of the post</h1>
+         <h1>Static site generator (blog) using XSLT and Markdown</h1>
          <table>
             <thead>
                <tr>
@@ -46,14 +46,61 @@
                </tr>
                <tr>
                   <td>Categories</td>
-                  <td>test</td>
+                  <td>blog, ssg, markdown, xslt, xml</td>
                </tr>
             </tbody>
          </table>
-         <article>
-            <p>This is not a subheading.</p>
+         <article><!-- Some summary text -->
+            
+            <p><em>In this post I discuss building a static site generator (blog) with XSLT and 
+                  Markdown.  The goal of the project is build something relatively simple and 
+                  with tools that will work "forever".</em></p>
+            <h2>What's the point of this?</h2>
+            <p>The main purpose of this project is to create a static site generator using 
+               Markdown (e.g. plain text files with some light formatting) and a selection of 
+               both old and new technologies to make a somewhat modern blog that will be easy 
+               to maintain for over a long period of time (many, many years).  The secondary 
+               goal is to be able to use somewhat modern web technologies in the generated 
+               output.
+            </p>
+            <h3>Motivations</h3>
+            <p>In the past I've enjoyed the simplicity of blogs built on static site 
+               generators like Jekyll, Hugo and Sphinx.  Like most things in tech though, 
+               these things evolve and age.  Because of this I've often found myself in a 
+               place where I needed ressurect a very old technology (Jekyll in my case) or 
+               modernize it.
+            </p>
+            <h3>Rational</h3>
+            <p>Again, this project is designed to use a bit of old and new tech.  For the 
+               generation portion of the project, older technologies will be used. The hope or 
+               intent is that due to their age and muturity they aren't going to change much, 
+               and due to their ubiqity (for better or worse) aren't going to go anywhere 
+               either.
+            </p>
+            <p>These properties should make the generation part of the project work for many 
+               years to come, with little or no changes necessary to the underlying machinery. 
+               In the generated output I'm leaving freedom to use whatever flavor of web 
+               technology is currently relevant and somewhat modern.
+            </p>
+            <p>More succinctly, I'm driving for the following properties:</p>
+            <p>Static site generator: long term, well established tech, minimal maintenance</p>
+            <p>Generated output: whatever the flavor of the month is for web tech</p>
+            <h2>What are the things this will support?</h2>
+            <p>Below are a selection of elements that the SSG should support:</p>
+            <p>⬇️  Thematic breaks ⬇️  (And emoji)</p>
             <hr>
-            <h2>This is a subheading</h2>
+            <p><em>Emphasized text</em></p>
+            <p><strong>Bold text</strong></p>
+            <p><s>Strikethrough</s></p>
+            <p>Unorderded lists:</p>
+            <p>Bananas</p>
+            <p>Fruit</p>
+            <p>Apples</p>
+            <p>Ordered lists:</p>
+            <p>First</p>
+            <p>Second</p>
+            <p>Third</p>
+            <h2>Subheadings</h2>
             <p>This is a text only block:</p><pre><code class="language-plaintext">A plaintext block
 </code></pre><p>This is some Python code:</p><pre><code class="language-python">print("Hello world?")
 </code></pre><p>This is some Rust code:</p><pre><code class="language-rust">fn main() {
@@ -62,7 +109,7 @@
 </code></pre><p>This is some <code>inline code</code> (which doesn't look very good yet)?
             </p>
             <hr>
-            <p>This is a link <a href="google.com">Google</a>.
+            <p>This is a link <a href="https://google.com">Google</a>.
             </p>
          </article>
       </main><script>hljs.highlightAll();</script></body>

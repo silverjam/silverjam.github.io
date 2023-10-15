@@ -20,7 +20,7 @@ all: html index.html
 .PHONY: all
 
 _build/%.xml: _posts/%.markdown
-	comrak --gfm -t xml -o $@ $^
+	comrak --front-matter-delimiter="---" --gfm -t xml -o $@ $^
 
 _build/CommonMark.dtd: $(CM_DTD)
 	cd _build; ln -sf ../$(CM_DTD)
@@ -47,7 +47,7 @@ TEST_POST_XML := _build/2023-07-24.xml
 TEST_POST_HTML := posts/2023-07-24.html
 
 test-render: $(CM_DTD)
-	comrak --gfm -t xml -o $(TEST_POST_XML) $(TEST_POST_MD)
+	comrak --front-matter-delimiter="---" --gfm -t xml -o $(TEST_POST_XML) $(TEST_POST_MD)
 	saxonb-xslt -xsl:xsl/post.xsl -s:$(TEST_POST_XML) -o:$(TEST_POST_HTML)
 
 .PHONY: test-render

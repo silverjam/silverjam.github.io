@@ -63,6 +63,10 @@
   <em><xsl:apply-templates select="*" /></em>
 </xsl:template>
 
+<xsl:template match="cm:strikethrough">
+  <s><xsl:apply-templates select="*" /></s>
+</xsl:template>
+
 <xsl:template match="cm:text">
   <xsl:value-of select="text()"/>
 </xsl:template>
