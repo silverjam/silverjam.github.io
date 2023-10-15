@@ -13,19 +13,59 @@
 <xsl:param name="files" />
 
 <xsl:template match="/index">
+
   <html lang="en">
+
     <xsl:call-template name="head">
       <xsl:with-param name="title" select='"A blog by Jason Mobarak"' />
     </xsl:call-template>
+
     <body>
       <main>
         <ul>
           <xsl:for-each select="tokenize($files, ';')">
             <li>
+
+              <xsl:variable
+                name="doc"
+                select="document(.)"
+                />
+
+              <!-- TITLE: the first level 1 heading, is the post title -->
               <xsl:variable
                 name="title"
-                select="document(.)/cm:document/cm:heading[@level=1][1]/cm:text/text()"
+                select="$doc/cm:document/cm:heading[@level=1][1]/cm:text/text()"
                 />
+
+              <!-- DATE: find the 'Metadata' table, then find the 'Date' field within the table -->
+              <xsl:variable
+                name="date"
+                select="
+                  $doc
+                  //cm:table_cell/cm:text[contains(text(),'Metadata')]
+                  /../../..
+                  //cm:table_cell/cm:text[contains(text(),'Date')]
+                  /..
+                  /following-sibling::*
+                  /cm:text/text()
+                "
+                />
+
+              <!-- SUMMARY: find the 'Metadata' table, then find the text block that starts with 'SUMMARY:' immediately following -->
+              <xsl:variable
+                name="summary"
+                select="
+                  $doc
+                  //cm:table_cell/cm:text[contains(text(),'Metadata')]
+                  /../../..
+                  /following-sibling::*
+                  //cm:text[contains(text(),'SUMMARY:')]
+                  /..
+                  //text()
+                "
+                />
+
+              <!-- Build up a path to the generated .html using the .xml filename -->
               <xsl:variable
                 name="target_xml"
                 select="tokenize(., '/')[last()]"
@@ -34,31 +74,31 @@
                 name="target_html"
                 select="replace($target_xml, '.xml', '.html')"
                 />
-              <!-- Find the 'Metadata' table, then find the 'Date' field within the table -->
-              <xsl:variable
-                name="date"
-                select="
-                  document(.)
-                  //cm:table_cell/cm:text[contains(text(),'Metadata')]
-                  /../../..
-                  //cm:table_cell/cm:text[contains(text(),'Date')]
-                  /..
-                  /following-sibling::*
-                  /cm:text
-                  /text()
-                "
-                />
+
               <a>
                 <xsl:attribute name="href">
                   <xsl:value-of select="concat('posts/', $target_html)" />
                 </xsl:attribute>
                 <xsl:value-of select="$title" />
               </a>
+
               <em>
                 [<xsl:value-of select="$date" />]
               </em>
+
+              <xsl:if test="$summary">
+                <ul>
+                  <li>
+                    <xsl:for-each select="$summary">
+                      <span><xsl:value-of select="replace(., 'SUMMARY:', '')" /><xsl:text> </xsl:text></span>
+                    </xsl:for-each>
+                  </li>
+                </ul>
+              </xsl:if>
             </li>
+
           </xsl:for-each>
+
         </ul>
       </main>
     </body>
