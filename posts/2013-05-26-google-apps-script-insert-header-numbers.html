@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css"><script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><title>Apps Script Google Docs Header Numbers</title><style>
+      .hljs {
+        font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        font-size: 16px;
+      }
+      :root {
+        --typography-spacing-vertical: 0.75rem;
+      }
+      h1, h2, h3, h4 {
+        --typography-spacing-vertical: 1rem;
+      }
+      article {
+        margin-top: 1rem !important;
+        padding-top: 1rem !important;
+        margin-bottom: 1rem !important;
+        padding-bottom: 1rem !important;
+      }
+      pre code {
+        padding: 1em !important;
+      }
+      code {
+        padding: 0.1rem 0.2rem !important;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.25rem 0 !important;
+        border-bottom: 1px solid var(--muted-border-color);
+        margin-bottom: 0;
+        --block-spacing-vertical: 0.25rem;
+      }
+      header .logo {
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: var(--primary);
+      }
+      header nav {
+        display: flex;
+        gap: 1rem;
+      }
+      header nav a {
+        text-decoration: none;
+        color: var(--color);
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: background-color 0.2s;
+      }
+      header nav a:hover {
+        background-color: var(--secondary-focus);
+      }
+      body {
+        margin: 0;
+        padding: 0.5rem;
+      }
+      main {
+        margin-top: 0.5rem;
+      }
+    </style></head>
+   <body>
+      <header><a href="../index.html" class="logo">Blog</a><nav><a href="../about.html">About</a><a href="../tags.html">Tags</a></nav>
+      </header>
+      <main>
+         <h1>Apps Script Google Docs Header Numbers</h1>
+         <table>
+            <thead>
+               <tr>
+                  <td>Metadata</td>
+                  <td>Value</td>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>Date</td>
+                  <td>2013-05-26</td>
+               </tr>
+               <tr>
+                  <td>Categories</td>
+                  <td>google, apps, script, archive</td>
+               </tr>
+            </tbody>
+         </table>
+         <article>
+            <p>Google <a href="https://developers.google.com/apps-script/"><em>Apps Script</em></a> presents an interesting solution to extend 
+               the features of Google applications.  The usual way to do this is with client 
+               side browser extensions, but they are not portable (that is, specific to a 
+               browser, and specific to the web)-- and cannot run unattended.
+            </p>
+            <p>Google's apps (and similarly, 99% of other web apps) have long lacked 
+               scriptability that native applications enjoy. <em>Apps script</em> is a play to 
+               resolve that deficiency.
+            </p>
+            <h2>TL;DR</h2>
+            <p>Jump to [the solution][solution] for the script that adds header numbers. 
+               [solution]: #The_Solution
+            </p>
+            <h2>The problem</h2>
+            <p>Google docs has undergone some interesting simplifications in recent times, and 
+               it'd be interesting to learn why certain features got chopped.
+            </p>
+            <p>In particular, at one point it was possible to insert numeric headers into a 
+               Google doc, though it looks like this was a <a href="http://www.youtube.com/watch?v=xaypUbQd6wI">CSS hack</a>.  Since Google 
+               docs isn't exposing the underlying CSS of the document anymore, this method no 
+               longer works.  You can also turn your headers 
+               <a href="http://webapps.stackexchange.com/questions/23861/header-numbering-in-google-docs">into numbered lists</a> 
+               ...  but this is <strong>really</strong> cumbersome.
+            </p>
+            <p>Why do you need numeric headers?  Well, it's a pretty standard word processor 
+               feature-- if you're packaging information into a fairly static format (say a 
+               PDF), it's useful for communication purposes to reference a specific part of 
+               the document; for example, if you were writing a technical review of someone's 
+               software.
+            </p>
+            <h2>Background</h2>
+            <p>Google offers several different types of scripts:</p>
+            <p>{% img /images/gapps-script-types.png %}</p>
+            <p>The biggest distinction appears to be if a script is bound to a 
+               <a href="https://developers.google.com/apps-script/scripts_containers">container</a> or <a href="https://developers.google.com/apps-script/execution_script_editor">not</a> -- that is, whether 
+               the script lives inside a doc, form, spreadsheet, or if it sits outside one of 
+               these (sitting in the script editor).  Scripts can also become a standalone 
+               WebApp.
+            </p>
+            <p>As first, standalone scripts seemed useful for testing things out, but the 
+               inability to interact with the user quickly made a standalone scripts 
+               useless...  I found myself thinking that as I developed useful things with 
+               standalone scripts (macros!) that it'd be nice to share these, and simply 
+               insert some silly UI prompts to make the script generic-- it's unclear how to 
+               do this without making the script specific to a container, then sharing it in 
+               the <a href="https://developers.google.com/apps-script/publishing_gallery#installing_a_script_from_the_gallery">document specific script gallery</a> -- right now, there's no 
+               script gallery for text documents.
+            </p>
+            <h3>Power users, macro sharing, and the apps script gallery</h3>
+            <p>The apps script gallery seems sadly lacking... why is the script gallery buried 
+               inside the document?  This hardly seems like the "happening" place to showcase 
+               cool macros:
+            </p>
+            <p>{% img /images/gapps-script-gallery.png %}</p>
+            <p>I did manage to find apps script "gallery" at one point, but it was full of 
+               commercial apps geared at implementing solution on top of Google Apps for 
+               businesses.  This is great, but if Google wants to crowd source all the crazy 
+               features that users want by providing power-users with scripting capabilities, 
+               there should probably be something more like the chrome extensions gallery to 
+               showcase macros.  That is, something easily accessible from a Google search.
+            </p>
+            <h2>The solution </h2>
+            <p>The solution is to simply use the Google apps script API to create your own 
+               header numbers.  It's somewhat cumbersome, and will probably break in many 
+               cases, but it works.
+            </p>
+            <p>There's probably a better way to do this... for example, one improvement would 
+               be to figure out how to share this to a common repository so it could be 
+               imported into other documents.
+            </p>
+            <p>Start by creating a new apps script in the document:</p>
+            <p>{% img /images/launch-script-editor.png %}</p>
+            <p>Then insert the following script (also maintained <a href="https://gist.github.com/silverjam/5613969">in a gist</a>):
+            </p><pre><code class="language-javascript">
+var state = {
+  headerLevel1: 0,
+  headerLevel2: 0,
+  headerLevel3: 0,
+}
+
+var private = {
+  getSectionNumber: function (paragraph)
+  {
+    if ( paragraph.getHeading() == DocumentApp.ParagraphHeading.HEADING1 )
+    {
+      state.headerLevel2 = 0;
+      state.headerLevel3 = 0;
+      
+      return (++state.headerLevel1) + " ";
+    }
+    else if ( paragraph.getHeading() == DocumentApp.ParagraphHeading.HEADING2 )
+    {
+      if (state.headerLevel1 == 0)
+        state.headerLevel1 = 1;
+      
+      state.headerLevel3 = 0;
+      
+      return state.headerLevel1 + "." + (++state.headerLevel2) + " ";
+    }
+    else if ( paragraph.getHeading() == DocumentApp.ParagraphHeading.HEADING3 )
+    {
+      if (state.headerLevel2 == 0)
+        state.headerLevel2 = 1;
+      
+      return state.headerLevel1 + "." + state.headerLevel2 + "." + (++state.headerLevel3) + " ";
+    }
+    
+    return "";
+  },
+  
+  isNumber: function (text)
+  {
+    return !isNaN(text);
+  },
+
+  removeExistingHeaderNumber: function (text)
+  { 
+    for (var i = 0; i &lt; text.length; i++)
+    {
+      if ( private.isNumber(text.charAt(i)) || text.charAt(i) == "." )
+          continue;
+      
+      break;
+    }
+    
+    return text.substr(i);
+  }
+};
+
+function addHeaderNumbers() 
+{
+  var doc = DocumentApp.getActiveDocument();
+  var body = doc.getBody()
+
+  for (var i = 0; i &lt; body.getNumChildren(); i++)
+  {
+    var element = body.getChild(i);
+    
+    if ( element.getType() != DocumentApp.ElementType.PARAGRAPH )
+      continue;
+    
+    var paragraph = element.asParagraph();
+    
+    if ( paragraph.getHeading() != DocumentApp.ParagraphHeading.NORMAL )
+    {
+      var sectionNumber = private.getSectionNumber(paragraph);
+      paragraph.setText(sectionNumber + private.removeExistingHeaderNumber(paragraph.getText()))
+    }
+  }
+  
+  doc.saveAndClose();
+}
+</code></pre><p>Save the project and return to the document.  Then use the script manager to 
+               open the list of available functions to run:
+            </p>
+            <p>{% img /images/gapps-script-manager.png %}</p>
+            <p>Then select the 'addHeaderNumbers' script:</p>
+            <p>{% img /images/gapps-script-run-script.png %}</p>
+            <p>And magically your document will now have header numbering:</p>
+            <p>{% img /images/gapps-example-header-numbers.png %}</p>
+            <p>EOT</p>
+         </article>
+      </main><script>hljs.highlightAll();</script></body>
+</html>

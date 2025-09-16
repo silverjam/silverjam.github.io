@@ -1,10 +1,9 @@
----
-layout: post
-title: "Infinite terminal logs"
-date: 2013-05-24 23:11
-comments: true
-categories: [bash, linux, logging, script, terminal, emulation]
----
+# Infinite Terminal Logs
+
+| Metadata   | Value           |
+| ---------- | --------------- |
+| Date | 2013-05-24 |
+| Categories | bash, linux, logging, script, terminal, emulation, archive |
 
 ## The Problem: Unsatisfying Terminal Emulators
 
@@ -89,11 +88,11 @@ everything is recorded:
 ```
 
 Then a [terminal emulation library][gate-one] is added:
-[gate-one]: http://liftoff.github.io/GateOne/Developer/terminal.html
+[gate-one]: <http://liftoff.github.io/GateOne/Developer/terminal.html>
 
 ``` bash
-    $ cd ~/Logs
-    $ wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
+    cd ~/Logs
+    wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
 ```
 
 Then a script is implemented to emulate a terminal and generate a usable log

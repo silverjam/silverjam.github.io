@@ -84,43 +84,42 @@
                </tr>
                <tr>
                   <td>Categories</td>
-                  <td>android, google</td>
+                  <td>android, google, archive</td>
                </tr>
             </tbody>
          </table>
+         <p>So, I started developing for the Android platform in earnest around April of 
+            2013.  I found that the Android project had release not just a mere plugin for 
+            Eclipse but a rebranded, pre-customized version of Eclipse called ADT or 
+            Android Development Toolkit.
+         </p>
+         <p>This seemed pretty cool, I guess, though it seems better to just release a 
+            plugin so you can slice and dice your dev environment however you want.
+         </p>
+         <h2>Cool, but can it do Vim?</h2>
+         <p>At least for the February release of ADT it did not work so well (the 20130219 
+            version)-- installing vrapper breaks all kinds of things:
+         </p>
+         <p>This:</p><img src=../images/adt-splash-screen-1.png />
+         
+         <p>Turned in to this:</p><img src=../images/juno-splash-screen.png />
+         
+         <p>Afterwards, all of my Android integration pre-packaged in ADT seemed to 
+            disappear.  I had to manually re-install the Android integration that was 
+            previously there.  Not sure why I did... maybe it was user error... but it was 
+            not a good user experience.
+         </p>
+         <h2>Alternate Reality: Android Studio</h2>
+         <p>So far, my experience with trying the Android Studio preview has been great, 
+            but mostly because the of the dark UI, super easy <em>vim installation</em> that didn't 
+            <em>nuke any Android integration</em> ... and because it does stuff like this:
+         </p><img src=../images/astudio-closure-fold.png />
+         
+         <p>Finally, something that can at least make Java not look so stupid.  To quote 
+            the <a href="http://www.cnn.com/2008/POLITICS/09/10/campaign.lipstick/">Sarah Palin jibe</a>, <em>"it's just lipstick on a pig"</em>, but I'll take 
+            it!  Yes sir, uh-huh.
+         </p>
          <article>
-            <p>So, I started developing for the Android platform in earnest around April of 
-               2013.  I found that the Android project had release not just a mere plugin for 
-               Eclipse but a rebranded, pre-customized version of Eclipse called ADT or 
-               Android Development Toolkit.
-            </p>
-            <p>This seemed pretty cool, I guess, though it seems better to just release a 
-               plugin so you can slice and dice your dev environment however you want.
-            </p>
-            <h2>Cool, but can it do Vim?</h2>
-            <p>At least for the February release of ADT it did not work so well (the 20130219 
-               version)-- installing vrapper breaks all kinds of things:
-            </p>
-            <p>This:</p><img src=../images/adt-splash-screen-1.png />
-            
-            <p>Turned in to this:</p><img src=../images/juno-splash-screen.png />
-            
-            <p>Afterwards, all of my Android integration pre-packaged in ADT seemed to 
-               disappear.  I had to manually re-install the Android integration that was 
-               previously there.  Not sure why I did... maybe it was user error... but it was 
-               not a good user experience.
-            </p>
-            <h2>Alternate Reality: Android Studio</h2>
-            <p>So far, my experience with trying the Android Studio preview has been great, 
-               but mostly because the of the dark UI, super easy <em>vim installation</em> that didn't 
-               <em>nuke any Android integration</em> ... and because it does stuff like this:
-            </p><img src=../images/astudio-closure-fold.png />
-            
-            <p>Finally, something that can at least make Java not look so stupid.  To quote 
-               the <a href="http://www.cnn.com/2008/POLITICS/09/10/campaign.lipstick/">Sarah Palin jibe</a>, <em>"it's just lipstick on a pig"</em>, but I'll take 
-               it!  Yes sir, uh-huh.
-            </p>
-            <hr>
             <p>So... this brings me to new version of ADT (version 20130522) -- I'm starting 
                a new project I figured I'd try to upgrade to the May release of ADT.  Lo and 
                behold it doesn't come pre-packaged with something called <em>Android Build Tools</em> 

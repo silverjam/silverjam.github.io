@@ -3,7 +3,7 @@
 | Metadata   | Value            |
 | ---------- | ---------------- |
 | Date       | 2015-05-22       |
-| Categories | cars             |
+| Categories | cars, archive             |
 
 ---
 
@@ -11,7 +11,7 @@ Disclaimer: I like our Prius Plug-in, but I really don't like our Prius C.  The 
 
 First, a question for Prius owners: do you think the $2500-$4000 cost of a replacement batter pack at 9 years would nullify your fuel saving over that time period?
 
-For us, the answer is mostly no, but it depends on what you drove before (or what you would drive instead).  Versus the 2000 Passport (driving 350 miles a week for commuting), which has a 21 gallon tank (that we usually filled at about 16 gallons).  It would cost about $26k in fuel over 9 years (`16 gallons/week * $3.50/gallon * 52 weeks/year * 9 years`) versus the Prius at about $14k (`8.5 gallons/week * $3.50/gallon * 52 weeks/year * 9 years`).
+For us, the answer is mostly no, but it depends on what you drove before (or what you would drive instead).  Versus the 2000 Passport (driving 350 miles a week for commuting), which has a 21 gallon tank (that we usually filled at about 16 gallons).  It would cost about $26k in fuel over 9 years (`16 gallons/week * $3.50/gallon *52 weeks/year* 9 years`) versus the Prius at about $14k (`8.5 gallons/week *$3.50/gallon* 52 weeks/year * 9 years`).
 
 It does put a dent in the savings though, and when compared to other high mpg cares the "win" isn't as clear.  If you consider something like Ford's EcoBoost which get's good milage and performance from tiny engines, it probably would not win, this is assuming the total cost of ownership for a Ford is similar to the Toyota, but maybe that's a laughable thing to assume...
 

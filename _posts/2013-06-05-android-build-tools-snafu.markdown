@@ -3,9 +3,7 @@
 | Metadata   | Value           |
 | ---------- | --------------- |
 | Date       | 2013-06-05      |
-| Categories | android, google |
-
----
+| Categories | android, google, archive |
 
 So, I started developing for the Android platform in earnest around April of
 2013.  I found that the Android project had release not just a mere plugin for
@@ -77,7 +75,7 @@ read either:
 
 The thing is, I did read the nag dialog, and I tried to download whatever it
 wanted, but for whatever reason (poor up bringing -- loose morals -- just plain
-dumb) I didn't succeed.  So, this proves at least one thing: *Android 
+dumb) I didn't succeed.  So, this proves at least one thing: *Android
 developers can't read*.  Or does it?  Maybe it proves that Google wasted a lot
 of people's time with this decision.
 

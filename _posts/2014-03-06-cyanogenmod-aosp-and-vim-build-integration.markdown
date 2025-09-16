@@ -3,7 +3,7 @@
 | Metadata   | Value      |
 | ---------- | ---------- |
 | Date       | 2014-03-06 |
-| Categories | android    |
+| Categories | android, archive    |
 
 ---
 

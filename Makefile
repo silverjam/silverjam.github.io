@@ -3,7 +3,8 @@ POSTS_MD := \
 	_posts/2015-05-22-prius-total-cost-of-ownership.markdown \
 	_posts/2015-04-19-least-bits-required-to-transmit-a-permutation.markdown \
 	_posts/2014-03-06-cyanogenmod-aosp-and-vim-build-integration.markdown \
-	_posts/2013-06-05-android-build-tools-snafu.markdown
+	_posts/2013-06-05-android-build-tools-snafu.markdown \
+	_posts/2013-05-26-google-apps-script-insert-header-numbers.markdown
 
 POSTS_XML = $(POSTS_MD:_posts%markdown=_build%xml)
 

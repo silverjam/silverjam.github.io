@@ -1,9 +1,10 @@
----
-layout: post
-title: "Google Apps Script: Insert Header Numbers"
-date: 2013-05-26 23:28
-comments: true
-categories: google apps script
+# Apps Script Google Docs Header Numbers
+
+| Metadata   | Value           |
+| ---------- | --------------- |
+| Date | 2013-05-26 |
+| Categories | google, apps, script, archive |
+
 ---
 
 Google [*Apps Script*][apps-script] presents an interesting solution to extend
