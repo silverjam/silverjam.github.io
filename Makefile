@@ -8,7 +8,7 @@ POSTS_MD := \
 POSTS_XML = $(POSTS_MD:_posts%markdown=_build%xml)
 
 _SEMI := ;
-_EMPTY :=
+_EMPTY := 
 _SPACE := $(_EMPTY) $(_EMPTY)
 
 _POSTS_INDEX = $(POSTS_MD:_posts%markdown=../_build%xml)
@@ -16,8 +16,26 @@ POSTS_INDEX = $(subst $(_SPACE),$(_SEMI),$(_POSTS_INDEX))
 
 POSTS_HTML = $(POSTS_MD:_posts%markdown=posts%html)
 
-all: html index.html
+
+install-deps:
+	@if ! command -v comrak >/dev/null 2>&1 || ! comrak --version | grep -q "$(COMRAK_VERSION)"; then \
+		echo "Installing comrak version $(COMRAK_VERSION)..."; \
+		cargo install comrak --version "$(COMRAK_VERSION)"; \
+	else \
+		echo "comrak version $(COMRAK_VERSION) is already installed."; \
+	fi
+	sudo apt-get install -y libsaxonb-java default-jre
+
+
+COMRAK_VERSION := 0.41.1
+
+all: check-comrak-version html index.html
+
 .PHONY: all
+
+check-comrak-version:
+	@comrak --version | grep "$(COMRAK_VERSION)" > /dev/null || (echo "Wrong comrak version. Expected $(COMRAK_VERSION)" && exit 1)
+
 
 _build/%.xml: _posts/%.markdown
 	comrak --front-matter-delimiter="---" --gfm -t xml -o $@ $^
@@ -51,3 +69,4 @@ test-render: $(CM_DTD)
 	saxonb-xslt -xsl:xsl/post.xsl -s:$(TEST_POST_XML) -o:$(TEST_POST_HTML)
 
 .PHONY: test-render
+

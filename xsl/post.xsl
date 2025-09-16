@@ -116,6 +116,29 @@
   <hr/>
 </xsl:template>
 
+<xsl:template match="cm:list[@type='bullet']">
+  <ul>
+    <xsl:apply-templates select="cm:item" />
+  </ul>
+</xsl:template>
+
+<xsl:template match="cm:list[@type='ordered']">
+  <ol>
+    <xsl:if test="@start and @start != '1'">
+      <xsl:attribute name="start">
+        <xsl:value-of select="@start"/>
+      </xsl:attribute>
+    </xsl:if>
+    <xsl:apply-templates select="cm:item" />
+  </ol>
+</xsl:template>
+
+<xsl:template match="cm:item">
+  <li>
+    <xsl:apply-templates select="*" />
+  </li>
+</xsl:template>
+
 <xsl:template match="cm:link">
   <a>
     <xsl:attribute name="href">
@@ -151,6 +174,7 @@
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
+
 <!-- 
      template function to generate a start element 
      &myhtml; will generate <myhtml>

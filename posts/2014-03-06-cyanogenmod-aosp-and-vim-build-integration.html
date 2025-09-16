@@ -13,7 +13,7 @@
       :root {
         --typography-spacing-vertical: 0.75rem;
       }
-      h1, h2 {
+      h1, h2, h3, h4 {
         --typography-spacing-vertical: 1rem;
       }
       article {
@@ -54,18 +54,30 @@
             <p>The build system AOSP and CyanogenMod have some interesting shell scripts that 
                make it easier to build various parts of the system:
             </p>
-            <p><code>breakfast [device]</code> -- selects a particular device for building
-            </p>
-            <p><code>brunch [device]</code> -- building the entire image for the device
-            </p>
-            <p><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....
-            </p>
-            <p><code>mm [make_args]</code> -- builds whatever module you happen to be in, just that 
-               module
-            </p>
-            <p><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just that 
-               module, and pushes it to the device
-            </p>
+            <ul>
+               <li>
+                  <p><code>breakfast [device]</code> -- selects a particular device for building
+                  </p>
+               </li>
+               <li>
+                  <p><code>brunch [device]</code> -- building the entire image for the device
+                  </p>
+               </li>
+               <li>
+                  <p><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....
+                  </p>
+               </li>
+               <li>
+                  <p><code>mm [make_args]</code> -- builds whatever module you happen to be in, just that 
+                     module
+                  </p>
+               </li>
+               <li>
+                  <p><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just that 
+                     module, and pushes it to the device
+                  </p>
+               </li>
+            </ul>
             <p>So... the mm and mmp directives seem like great shortcuts to shorten your 
                develop / compile / test cycle, right?  But what about editor completion?  You 
                can't invoke mm and mmp in a vim session in order to munch on the compile 
