@@ -22,6 +22,7 @@
         name="title"
         select='$title/cm:text/text()'
         />
+      <xsl:with-param name="baseURL" select="'../'" />
     </xsl:call-template>
     <body>
       <xsl:call-template name="header">

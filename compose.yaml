@@ -1,0 +1,14 @@
+services:
+  blog-server:
+    image: nginx:alpine
+    container_name: blog-dev-server
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/usr/share/nginx/html:ro
+    restart: unless-stopped
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    labels:
+      - "description=Local development server for static blog"

@@ -9,6 +9,7 @@
 <xsl:template name="head">
 
   <xsl:param name="title" />
+  <xsl:param name="baseURL" select="''" />
 
   <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"/>
@@ -16,6 +17,7 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css" />
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
+    <link rel="alternate" type="application/rss+xml" title="A blog by Jason Mobarak" href="{$baseURL}rss.xml" />
     <title>
       <xsl:value-of select="$title" />
     </title>
@@ -86,10 +88,11 @@
 <xsl:template name="header">
   <xsl:param name="baseURL" select="''" />
   <header>
-    <a href="{$baseURL}index.html" class="logo">Blog</a>
+    <a href="{if ($baseURL = '') then '/' else $baseURL}" class="logo">Blog</a>
     <nav>
       <a href="{$baseURL}about.html">About</a>
       <a href="{$baseURL}tags.html">Tags</a>
+      <a href="{$baseURL}rss.xml">RSS</a>
     </nav>
   </header>
 </xsl:template>

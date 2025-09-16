@@ -18,6 +18,7 @@
 
     <xsl:call-template name="head">
       <xsl:with-param name="title" select='"Tags - A blog by Jason Mobarak"' />
+      <xsl:with-param name="baseURL" select="''" />
     </xsl:call-template>
 
     <body>

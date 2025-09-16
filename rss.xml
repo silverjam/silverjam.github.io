@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+   <channel>
+      <title>A blog by Jason Mobarak</title>
+      <link>https://silverjam.github.io/</link>
+      <description>Personal blog featuring software development, technology, and various projects</description>
+      <language>en-us</language>
+      <generator>XSLT Static Site Generator</generator>
+      <lastBuildDate>Tue, 16 Sep 2025 23:07:21 GMT</lastBuildDate>
+      <item>
+         <title>Static site generator (blog) using XSLT and Markdown</title>
+         <link>https://silverjam.github.io/posts/2023-07-24.html</link>
+         <guid>https://silverjam.github.io/posts/2023-07-24.html</guid>
+         <pubDate>Tue, 25 Jul 2023 12:00:00 GMT</pubDate>
+         <category>blog</category>
+         <category>ssg</category>
+         <category>markdown</category>
+         <category>xslt</category>
+         <category>xml</category>
+         <description>&lt;![CDATA[ Building a static site generator (blog) with XSLT and Markdown.  The goal: build something relatively simple and with tools that will work "FOREVER". 
+
+&lt;p&gt;&lt;em&gt;SUMMARY: Building a static site generator (blog) with XSLT and Markdown.  The goal: build something relatively simple and with tools that will work "FOREVER".&lt;/em&gt;&lt;/p&gt;&lt;h2&gt;What's the point of this?&lt;/h2&gt;&lt;p&gt;The main purpose of this project is to create a static site generator using Markdown (e.g. plain text files with some light formatting) and a selection of both old and new technologies to make a somewhat modern blog that will be easy to maintain for over a long period of time (many, many years).  The secondary goal is to be able to use somewhat modern web technologies in the generated output.&lt;/p&gt;&lt;h3&gt;Motivations&lt;/h3&gt;&lt;p&gt;In the past I've enjoyed the simplicity of blogs built on static site generators like Jekyll, Hugo and Sphinx.  Like most things in tech though, these things evolve and age.  Because of this I've often found myself in a place where I needed ressurect a very old technology (Jekyll in my case) or modernize it.&lt;/p&gt;&lt;h3&gt;Rational&lt;/h3&gt;&lt;p&gt;Again, this project is designed to use a bit of old and new tech.  For the generation portion of the project, older technologies will be used. The hope or intent is that due to their age and muturity they aren't going to change much, and due to their ubiqity (for better or worse) aren't going to go anywhere either.&lt;/p&gt;&lt;p&gt;These properties should make the generation part of the project work for many years to come, with little or no changes necessary to the underlying machinery. In the generated output I'm leaving freedom to use whatever flavor of web technology is currently relevant and somewhat modern.&lt;/p&gt;&lt;p&gt;More succinctly, I'm driving for the following properties:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Static site generator: long term, well established tech, minimal maintenance&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Generated output: whatever the flavor of the month is for web tech&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;h2&gt;What are the things this will support?&lt;/h2&gt;&lt;p&gt;Below are a selection of elements that the SSG should support:&lt;/p&gt;&lt;p&gt;⬇️  Thematic breaks ⬇️  (And emoji)&lt;/p&gt;&lt;hr/&gt;&lt;p&gt;&lt;em&gt;Emphasized text&lt;/em&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Bold text&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Strikethrough&lt;/p&gt;&lt;p&gt;Unorderded lists:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;p&gt;Bananas&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Fruit&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Apples&lt;/p&gt;&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Ordered lists:&lt;/p&gt;&lt;ol&gt;&lt;li&gt;&lt;p&gt;First&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Second&lt;/p&gt;&lt;/li&gt;&lt;li&gt;&lt;p&gt;Third&lt;/p&gt;&lt;/li&gt;&lt;/ol&gt;&lt;h2&gt;Subheadings&lt;/h2&gt;&lt;p&gt;This is a text only block:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;A plaintext block
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This is some Python code:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;print("Hello world?")
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This is some Rust code:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;fn main() {
+    println!("Hello world?");
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;This is some &lt;code&gt;inline code&lt;/code&gt; (which doesn't look very good yet)?&lt;/p&gt;&lt;hr/&gt;&lt;p&gt;This is a link &lt;a href="https://google.com"&gt;Google&lt;/a&gt;.&lt;/p&gt;]]&gt;</description>
+      </item>
+   </channel>
+</rss>
