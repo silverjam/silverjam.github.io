@@ -115,6 +115,22 @@
   </td>
 </xsl:template>
 
+<!-- Special template for Categories table cell -->
+<xsl:template match="cm:table_cell[preceding-sibling::cm:table_cell/cm:text[contains(text(), 'Categories')]]">
+  <td>
+    <xsl:variable name="categories" select="cm:text/text()" />
+    <xsl:for-each select="tokenize($categories, ',')">
+      <xsl:variable name="category" select="normalize-space(.)" />
+      <xsl:variable name="category-id" select="translate($category, ' ', '-')" />
+
+      <xsl:if test="position() > 1">, </xsl:if>
+      <a href="../tags.html#{$category-id}">
+        <xsl:value-of select="$category" />
+      </a>
+    </xsl:for-each>
+  </td>
+</xsl:template>
+
 <xsl:template match="cm:thematic_break">
   <hr/>
 </xsl:template>
