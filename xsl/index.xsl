@@ -21,6 +21,7 @@
     </xsl:call-template>
 
     <body>
+      <xsl:call-template name="header" />
       <main>
         <ul>
           <xsl:for-each select="tokenize($files, ';')">

@@ -42,9 +42,56 @@
       code {
         padding: 0.1rem 0.2rem !important;
       }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.25rem 0 !important;
+        border-bottom: 1px solid var(--muted-border-color);
+        margin-bottom: 0;
+        --block-spacing-vertical: 0.25rem;
+      }
+      header .logo {
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: var(--primary);
+      }
+      header nav {
+        display: flex;
+        gap: 1rem;
+      }
+      header nav a {
+        text-decoration: none;
+        color: var(--color);
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: background-color 0.2s;
+      }
+      header nav a:hover {
+        background-color: var(--secondary-focus);
+      }
+      body {
+        margin: 0;
+        padding: 0.5rem;
+      }
+      main {
+        margin-top: 0.5rem;
+      }
     </style>
   </head>
 
+</xsl:template>
+
+<xsl:template name="header">
+  <xsl:param name="baseURL" select="''" />
+  <header>
+    <a href="{$baseURL}index.html" class="logo">Blog</a>
+    <nav>
+      <a href="{$baseURL}about.html">About</a>
+      <a href="{$baseURL}tags.html">Tags</a>
+    </nav>
+  </header>
 </xsl:template>
 
 </xsl:stylesheet>

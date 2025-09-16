@@ -14,10 +14,12 @@ This is a static blog generator that transforms Markdown posts into HTML using a
 - `make html` - Generate HTML files from existing XML files
 - `make xml` - Convert markdown posts to XML (intermediate format)
 - `make test-render` - Test rendering of single post (2023-07-24.markdown)
+- `make snapshot` - Create PNG screenshots of all pages using Docker + Chromium
 
 ### Dependency Management
 - `comrak --version` should show v0.41.1 (critical version requirement)
 - Dependencies: `cargo install comrak --version "0.41.1"`, `sudo apt-get install -y libsaxonb-java default-jre`
+- Optional: Docker (required for `make snapshot` to create page screenshots)
 
 ## Architecture
 
