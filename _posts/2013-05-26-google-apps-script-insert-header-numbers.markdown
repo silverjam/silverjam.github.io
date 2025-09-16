@@ -48,7 +48,7 @@ software.
 
 Google offers several different types of scripts:
 
-{% img /images/gapps-script-types.png %}
+<img src=../images/gapps-script-types.png />
 
 The biggest distinction appears to be if a script is bound to a
 [container][script-containers] or [not][standalone-script] -- that is, whether
@@ -76,7 +76,7 @@ The apps script gallery seems sadly lacking... why is the script gallery buried
 inside the document?  This hardly seems like the "happening" place to showcase
 cool macros:
 
-{% img /images/gapps-script-gallery.png %}
+<img src=../images/gapps-script-gallery.png />
 
 I did manage to find apps script "gallery" at one point, but it was full of
 commercial apps geared at implementing solution on top of Google Apps for
@@ -97,7 +97,7 @@ imported into other documents.
 
 Start by creating a new apps script in the document:
 
-{% img /images/launch-script-editor.png %}
+<img src=../images/launch-script-editor.png />
 
 Then insert the following script (also maintained [in a gist][gist]):
 
@@ -188,14 +188,14 @@ function addHeaderNumbers()
 Save the project and return to the document.  Then use the script manager to
 open the list of available functions to run:
 
-{% img /images/gapps-script-manager.png %}
+<img src=../images/gapps-script-manager.png />
 
 Then select the 'addHeaderNumbers' script:
 
-{% img /images/gapps-script-run-script.png %}
+<img src=../images/gapps-script-run-script.png />
 
 And magically your document will now have header numbering:
 
-{% img /images/gapps-example-header-numbers.png %}
+<img src=../images/gapps-example-header-numbers.png />
 
 EOT

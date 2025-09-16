@@ -5,6 +5,8 @@
 | Date | 2013-05-24 |
 | Categories | bash, linux, logging, script, terminal, emulation, archive |
 
+---
+
 ## The Problem: Unsatisfying Terminal Emulators
 
 Sometimes when you're hacking on things it's a great resource to be able to
@@ -63,7 +65,7 @@ the goal is to get a terminal log, that easily searchable.
 So, to start, data is needed first, so as soon as the shell is started,
 everything is recorded:
 
-``` bash shell profile additions
+```bash
     if [ -z "$UNDER_SCRIPT" ]; then
 
         logdir=$HOME/Logs
@@ -90,7 +92,7 @@ everything is recorded:
 Then a [terminal emulation library][gate-one] is added:
 [gate-one]: <http://liftoff.github.io/GateOne/Developer/terminal.html>
 
-``` bash
+```bash
     cd ~/Logs
     wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
 ```
@@ -98,7 +100,7 @@ Then a [terminal emulation library][gate-one] is added:
 Then a script is implemented to emulate a terminal and generate a usable log
 file:
 
-``` python ~/Logs/stripesc.py
+```python
 import sys
 import terminal
 import locale
@@ -124,14 +126,14 @@ term.add_callback(terminal.CALLBACK_SCROLL_UP, make_scroll_up_cb(term))
 Then, as need you'd invoke a shell script to decode a log, and grep for
 something interesting:
 
-``` bash ~/Logs/strip-escape-codes.sh
+```bash
 cat - | python stripesc.py
 ```
 
 Also periodically, you could throw away the terminal emulation data that's no
 longer needed:
 
-``` bash ~/Logs/strip-all-escape-codes.sh
+```bash
 #!/bin/bash
 for log_file in `ls -1 *.script.gz`; do
 
@@ -143,6 +145,3 @@ done
 
 Thus, we've solved the problem with minimal effort, and maximum utility
 (albeit a little cumbersome).
-
-<!-- vim: spell:
--->

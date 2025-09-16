@@ -55,7 +55,11 @@
         <xsl:for-each-group select="$all-categories/category" group-by="@name">
           <xsl:sort select="current-grouping-key()" />
           <xsl:if test="normalize-space(current-grouping-key()) != ''">
-            <h2><xsl:value-of select="current-grouping-key()" /></h2>
+            <xsl:variable name="tag-id" select="translate(current-grouping-key(), ' ', '-')" />
+            <h2 id="{$tag-id}">
+              <xsl:value-of select="current-grouping-key()" />
+              <a href="#{$tag-id}" style="text-decoration: none; color: #999; margin-left: 0.5em; font-size: 0.8em;">#</a>
+            </h2>
             <p><em><xsl:value-of select="count(current-group())" /> post<xsl:if test="count(current-group()) != 1">s</xsl:if></em></p>
 
             <ul>
