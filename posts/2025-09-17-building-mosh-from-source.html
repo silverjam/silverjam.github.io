@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css"><script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+      <link rel="alternate" type="application/atom+xml" title="A blog by Jason Mobarak" href="../atom.xml">
+      <title>Building mosh from source on Ubuntu 24.04</title><style>
+      .hljs {
+        font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        font-size: 16px;
+      }
+      :root {
+        --typography-spacing-vertical: 0.75rem;
+      }
+      h1, h2, h3, h4 {
+        --typography-spacing-vertical: 1rem;
+      }
+      article {
+        margin-top: 1rem !important;
+        padding-top: 1rem !important;
+        margin-bottom: 1rem !important;
+        padding-bottom: 1rem !important;
+      }
+      pre code {
+        padding: 1em !important;
+      }
+      code {
+        padding: 0.1rem 0.2rem !important;
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.25rem 0 !important;
+        border-bottom: 1px solid var(--muted-border-color);
+        margin-bottom: 0;
+        --block-spacing-vertical: 0.25rem;
+      }
+      header .logo {
+        font-weight: bold;
+        font-size: 1.2rem;
+        text-decoration: none;
+        color: var(--primary);
+      }
+      header nav {
+        display: flex;
+        gap: 1rem;
+      }
+      header nav a {
+        text-decoration: none;
+        color: var(--color);
+        padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: background-color 0.2s;
+      }
+      header nav a:hover {
+        background-color: var(--secondary-focus);
+      }
+      body {
+        margin: 0;
+        padding: 0.5rem;
+      }
+      main {
+        margin-top: 0.5rem;
+      }
+      footer {
+        margin-top: 2rem;
+        padding: 1rem 0;
+        border-top: 1px solid var(--muted-border-color);
+        text-align: center;
+        font-size: 0.875rem;
+        color: var(--muted-color);
+      }
+      footer .social-links {
+        margin: 1rem 0;
+      }
+      footer .social-links a {
+        margin: 0 0.5rem;
+        color: var(--muted-color);
+        text-decoration: none;
+        font-size: 1.25rem;
+        transition: color 0.2s;
+      }
+      footer .social-links a:hover {
+        color: var(--primary);
+      }
+      footer .copyright {
+        margin: 0.5rem 0;
+      }
+      footer .license {
+        margin: 0.5rem 0;
+        font-size: 0.8rem;
+      }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
+    </style></head>
+   <body>
+      <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
+      </header>
+      <main>
+         <h1>Building mosh from source on Ubuntu 24.04</h1>
+         <table>
+            <thead>
+               <tr>
+                  <td>Metadata</td>
+                  <td>Value</td>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td>Date</td>
+                  <td>2025-09-17</td>
+               </tr>
+               <tr>
+                  <td>Categories</td>
+                  <td><a href="../tags.html#mosh">mosh</a>, <a href="../tags.html#ssh">ssh</a>, <a href="../tags.html#terminal">terminal</a>, <a href="../tags.html#linux">linux</a>, <a href="../tags.html#ubuntu">ubuntu</a></td>
+               </tr>
+            </tbody>
+         </table>
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <p><em>SUMMARY: How to build Mosh from source on Ubuntu 22.04 or 24.04.</em></p>
+                  <h2 id="why-build-mosh-from-source">Why build Mosh from source</h2>
+                  <p><a href="https://mosh.org">Mosh</a> (or Mobile Shell) is an open source project for using 
+                     terminal emulators on-the-go.  It's especially useful if you want to be mobile 
+                     but also desire your terminal session to stay connected across network 
+                     transitions and seamlessly reconnect when network conditions improve.
+                  </p>
+                  <p>Unfortunately the project seems to have stalled out as of late, and many 
+                     features and bug fixes seem to be stuck on an unreleased version of the code. 
+                     Since the project hasn't seen movement for about 2 years, it's also got some 
+                     bitrot, so it needs some finessing in order to build it on a modern platform 
+                     like Ubuntu 24.04.
+                  </p>
+                  <h2 id="basics">Basics</h2>
+                  <p>Basics needed for building should be something like this:</p><pre><code class="language-sh">sudo apt install build-essential clang cmake git automake autoconf automake libssl-dev
+</code></pre><h2 id="build-and-install-older-protobuf-release">Build and install older protobuf release</h2>
+                  <p>Mosh depends on an older release protobuf, modern versions on Ubuntu will not work. 
+                     First, fetch the source:
+                  </p><pre><code class="language-sh">git clone https://github.com/protocolbuffers/protobuf \
+  --single-branch --branch 25.x --depth 1
+</code></pre><p>Configure it:</p><pre><code class="language-sh">cd protobuf
+git submodule update --init --recursive
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=/opt/protobuf25 \
+  -DCMAKE_BUILD_TYPE=Release -Dprotobuf_BUILD_TESTS=OFF
+</code></pre><p>Finally, build and install:</p><pre><code class="language-sh">cmake --build .. --parallel
+sudo cmake --install ..
+</code></pre><h2 id="build-and-install-mosh">Build and install Mosh</h2>
+                  <p>Fetch Mosh source:</p><pre><code class="language-sh">git clone https://github.com/mobile-shell/mosh --single-branch --depth 1
+</code></pre><p>Configure the build:</p><pre><code class="language-sh">cd mosh
+./autogen.sh
+PKG_CONFIG_PATH=/opt/protobuf25/lib/pkgconfig PATH=/opt/protobuf25/bin:$PATH \
+  ./configure --prefix /opt/mosh \
+    CFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
+    CXXFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
+    LDFLAGS="-L/opt/protobuf25/lib"
+</code></pre><p>Run the build and install:</p><pre><code class="language-sh">make
+sudo make install
+</code></pre><h2 id="conclusion">Conclusion</h2>
+                  <p>Luckily mosh does not seem to dynamically link to anything except system 
+                     libraries (so we don't need to tweak things like the dynamic lib search path):
+                  </p><pre><code class="language-plaintext">❯ ldd /opt/mosh/bin/mosh*
+
+/opt/mosh/bin/mosh:
+ not a dynamic executable
+
+/opt/mosh/bin/mosh-client:
+ linux-vdso.so.1 (0x00007b9763220000)
+ libtinfo.so.6 =&gt; /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007b97631d2000)
+ libcrypto.so.3 =&gt; /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007b9762600000)
+ libz.so.1 =&gt; /lib/x86_64-linux-gnu/libz.so.1 (0x00007b9762be4000)
+ libstdc++.so.6 =&gt; /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007b9762200000)
+ libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007b9762517000)
+ libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007b9762bb6000)
+ libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007b9761e00000)
+ /lib64/ld-linux-x86-64.so.2 (0x00007b9763222000)
+
+/opt/mosh/bin/mosh-server:
+ linux-vdso.so.1 (0x00007aa77a36e000)
+ libtinfo.so.6 =&gt; /lib/x86_64-linux-gnu/libtinfo.so.6 (0x00007aa77a320000)
+ libcrypto.so.3 =&gt; /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007aa779600000)
+ libz.so.1 =&gt; /lib/x86_64-linux-gnu/libz.so.1 (0x00007aa77a304000)
+ libstdc++.so.6 =&gt; /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007aa779200000)
+ libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007aa77a21b000)
+ libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007aa77a1eb000)
+ libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007aa778e00000)
+ /lib64/ld-linux-x86-64.so.2 (0x00007aa77a370000)
+</code></pre><p>After this you should have a functioning <code>mosh-server</code> binary that you can 
+                     use with whatever client you desire:
+                  </p><pre><code class="language-plaintext">❯ /opt/mosh/bin/mosh-server --version
+
+mosh-server (mosh 1.4.0) [build 1105d48]
+Copyright 2012 Keith Winstein &lt;mosh-devel@mit.edu&gt;
+License GPLv3+: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+</code></pre></article>
+            </div>
+            <div class="post-sidebar">
+               <div class="toc">
+                  <h3>Table of Contents</h3>
+                  <ul>
+                     <li><a href="#why-build-mosh-from-source" class="toc-h2">Why build Mosh from source</a></li>
+                     <li><a href="#basics" class="toc-h2">Basics</a></li>
+                     <li><a href="#build-and-install-older-protobuf-release" class="toc-h2">Build and install older protobuf release</a></li>
+                     <li><a href="#build-and-install-mosh" class="toc-h2">Build and install Mosh</a></li>
+                     <li><a href="#conclusion" class="toc-h2">Conclusion</a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </main>
+      <footer>
+         <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>
+         <div class="copyright">
+            © 2025 Jason Mobarak
+            
+         </div>
+         <div class="license"><a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license"><i class="fab fa-creative-commons"></i><i class="fab fa-creative-commons-by"></i><i class="fab fa-creative-commons-sa"></i></a>
+            This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
+            · <a href="sitemap.xml">Sitemap</a></div>
+      </footer><script>hljs.highlightAll();</script></body>
+</html>
