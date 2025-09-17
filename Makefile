@@ -1,11 +1,4 @@
-POSTS_MD := \
-	_posts/2023-07-24.markdown \
-	_posts/2015-05-22-prius-total-cost-of-ownership.markdown \
-	_posts/2015-04-19-least-bits-required-to-transmit-a-permutation.markdown \
-	_posts/2014-03-06-cyanogenmod-aosp-and-vim-build-integration.markdown \
-	_posts/2013-06-05-android-build-tools-snafu.markdown \
-	_posts/2013-05-26-google-apps-script-insert-header-numbers.markdown \
-	_posts/2013-05-24-infinite-terminal-logs.markdown
+POSTS_MD := $(shell yq eval '.posts[]' posts.yaml)
 
 POSTS_XML = $(POSTS_MD:_posts%markdown=_build%xml)
 
@@ -38,8 +31,18 @@ install-comrak:
 install-saxonb:
 	sudo apt-get install -y libsaxonb-java default-jre
 
+.PHONY: install-yq
+install-yq:
+	@if ! command -v yq >/dev/null 2>&1; then \
+		echo "Installing yq..."; \
+		sudo curl -sL -o /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64; \
+		sudo chmod +x /usr/local/bin/yq; \
+	else \
+		echo "yq is already installed."; \
+	fi
+
 .PHONY: install-deps
-install-deps: install-comrak install-saxonb
+install-deps: install-comrak install-saxonb install-yq
 
 .PHONY: check-comrak-version
 check-comrak-version:
@@ -167,3 +170,51 @@ snapshot: snapshot-check html index.html about.html tags.html atom.xml sitemap.x
 		--window-size=1200,800 \
 		--screenshot=snapshots/sample-post.png \
 		file:///workspace/posts/2023-07-24.html
+
+# New post creation
+# Usage: make new-post TITLE="My Post Title" [DATE=YYYY-MM-DD] [TAGS="tag1, tag2, tag3"] [SUMMARY="Brief summary"]
+NEW_POST_TITLE ?= New Blog Post
+NEW_POST_DATE ?= $(shell date +%Y-%m-%d)
+NEW_POST_TAGS ?= blog, draft
+NEW_POST_SUMMARY ?= Brief description of the blog post content.
+
+.PHONY: new-post
+new-post:
+	@if [ -z "$(TITLE)" ]; then \
+		echo "Error: TITLE is required. Usage: make new-post TITLE=\"My Post Title\""; \
+		exit 1; \
+	fi
+	@echo "Creating new blog post..."
+	@NEW_POST_SLUG=$$(echo "$(TITLE)" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$$//g'); \
+	NEW_POST_FILE="_posts/$(if $(DATE),$(DATE),$(NEW_POST_DATE))-$$NEW_POST_SLUG.markdown"; \
+	if [ -f "$$NEW_POST_FILE" ]; then \
+		echo "Error: Post file $$NEW_POST_FILE already exists"; \
+		exit 1; \
+	fi; \
+	mkdir -p templates; \
+	sed -e "s/{{TITLE}}/$(TITLE)/g" \
+		-e "s/{{DATE}}/$(if $(DATE),$(DATE),$(NEW_POST_DATE))/g" \
+		-e "s/{{TAGS}}/$(if $(TAGS),$(TAGS),$(NEW_POST_TAGS))/g" \
+		-e "s/{{SUMMARY}}/$(if $(SUMMARY),$(SUMMARY),$(NEW_POST_SUMMARY))/g" \
+		templates/post-template.markdown > "$$NEW_POST_FILE"; \
+	yq eval '.posts += ["'"$$NEW_POST_FILE"'"]' -i posts.yaml; \
+	echo "Created: $$NEW_POST_FILE"; \
+	echo "Added $$NEW_POST_FILE to posts.yaml"
+
+.PHONY: help-new-post
+help-new-post:
+	@echo "Create a new blog post from template:"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make new-post TITLE=\"My Post Title\" [DATE=YYYY-MM-DD] [TAGS=\"tag1, tag2\"] [SUMMARY=\"Brief summary\"]"
+	@echo ""
+	@echo "Parameters:"
+	@echo "  TITLE    - Required: Title of the blog post"
+	@echo "  DATE     - Optional: Publication date (default: today)"
+	@echo "  TAGS     - Optional: Comma-separated tags (default: \"blog, draft\")"
+	@echo "  SUMMARY  - Optional: Brief post summary (default: generic text)"
+	@echo ""
+	@echo "Examples:"
+	@echo "  make new-post TITLE=\"Getting Started with XSLT\""
+	@echo "  make new-post TITLE=\"Advanced CSS Grid\" DATE=2025-01-15 TAGS=\"css, web, design\""
+	@echo "  make new-post TITLE=\"My New Feature\" SUMMARY=\"How I built this amazing feature\""
