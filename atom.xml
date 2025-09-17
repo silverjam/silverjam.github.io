@@ -4,7 +4,7 @@
    <link href="https://silverjam.github.io/"/>
    <link rel="self" href="https://silverjam.github.io/atom.xml"/>
    <id>https://silverjam.github.io/</id>
-   <updated>2025-09-17T08:26:52Z</updated>
+   <updated>2025-09-17T08:27:39Z</updated>
    <subtitle>Personal blog featuring software development, technology, and various projects</subtitle>
    <generator uri="https://github.com/silverjam/blog" version="1.0">XSLT Static Site Generator</generator>
    <author>
@@ -29,7 +29,8 @@
       <summary type="text"> How to build Mosh from source on Ubuntu 22.04 or 24.04. </summary>
       <content type="html">&lt;![CDATA[ How to build Mosh from source on Ubuntu 22.04 or 24.04. 
 
-&lt;p&gt;&lt;em&gt;SUMMARY: How to build Mosh from source on Ubuntu 22.04 or 24.04.&lt;/em&gt;&lt;/p&gt;&lt;h2&gt;Why build Mosh from source&lt;/h2&gt;&lt;p&gt;&lt;a href="https://mosh.org"&gt;Mosh&lt;/a&gt; (or Mobile Shell) is an open source project for using terminal emulators on-the-go.  It's especially useful if you want to be mobile but also desire your terminal session to stay connected across network transitions and seamlessly reconnect when network conditions improve.&lt;/p&gt;&lt;p&gt;Unfortunately the project seems to have stalled out as of late, and many features and bug fixes seem to be stuck on an unreleased version of the code. Since the project hasn't seen movement for about 2 years, it's also got some bitrot, so it needs some finessing in order to build it on a modern platform like Ubuntu 24.04.&lt;/p&gt;&lt;h2&gt;Basics&lt;/h2&gt;&lt;p&gt;Basics needed for building should be something like this:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;sudo apt install build-essential clang cmake git automake autoconf automake libssl-dev
+&lt;p&gt;&lt;em&gt;SUMMARY: How to build Mosh from source on Ubuntu 22.04 or 24.04.&lt;/em&gt;&lt;/p&gt;&lt;h2&gt;Why build Mosh from source&lt;/h2&gt;&lt;p&gt;&lt;a href="https://mosh.org"&gt;Mosh&lt;/a&gt; (or Mobile Shell) is an open source project for using terminal emulators on-the-go.  It's especially useful if you want to be mobile but also desire your terminal session to stay connected across network transitions and seamlessly reconnect when network conditions improve.&lt;/p&gt;&lt;p&gt;Unfortunately the project seems to have stalled out as of late, and many features and bug fixes seem to be stuck on an unreleased version of the code. Since the project hasn't seen movement for about 2 years, it's also got some bitrot, so it needs some finessing in order to build it on a modern platform like Ubuntu 24.04.&lt;/p&gt;&lt;h2&gt;Basics&lt;/h2&gt;&lt;p&gt;Basics needed for building should be something like this:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;sudo apt install \
+  build-essential clang cmake git automake autoconf automake libssl-dev
 &lt;/code&gt;&lt;/pre&gt;&lt;h2&gt;Build and install older protobuf release&lt;/h2&gt;&lt;p&gt;Mosh depends on an older release protobuf, modern versions on Ubuntu will not work. First, fetch the source:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;git clone https://github.com/protocolbuffers/protobuf \
   --single-branch --branch 25.x --depth 1
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Configure it:&lt;/p&gt;&lt;pre&gt;&lt;code&gt;cd protobuf

@@ -27,7 +27,8 @@ like Ubuntu 24.04.
 Basics needed for building should be something like this:
 
 ```sh
-sudo apt install build-essential clang cmake git automake autoconf automake libssl-dev
+sudo apt install \
+  build-essential clang cmake git automake autoconf automake libssl-dev
 ```
 
 ## Build and install older protobuf release

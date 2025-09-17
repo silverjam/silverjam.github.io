@@ -234,7 +234,8 @@
                      like Ubuntu 24.04.
                   </p>
                   <h2 id="basics">Basics</h2>
-                  <p>Basics needed for building should be something like this:</p><pre><code class="language-sh">sudo apt install build-essential clang cmake git automake autoconf automake libssl-dev
+                  <p>Basics needed for building should be something like this:</p><pre><code class="language-sh">sudo apt install \
+  build-essential clang cmake git automake autoconf automake libssl-dev
 </code></pre><h2 id="build-and-install-older-protobuf-release">Build and install older protobuf release</h2>
                   <p>Mosh depends on an older release protobuf, modern versions on Ubuntu will not work. 
                      First, fetch the source:
