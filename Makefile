@@ -58,10 +58,10 @@ _build/%.xml: _posts/%.markdown
 _build/CommonMark.dtd: $(CM_DTD)
 	cd _build; ln -sf ../$(CM_DTD)
 
-posts/%.html: _build/%.xml | xsl/head.xsl xsl/post.xsl _build/CommonMark.dtd
-	saxonb-xslt -xsl:xsl/post.xsl -s:$^ -o:$@
+posts/%.html: _build/%.xml | _xsl/head.xsl _xsl/post.xsl _build/CommonMark.dtd
+	saxonb-xslt -xsl:_xsl/post.xsl -s:$^ -o:$@
 
-CM_DTD := commonmark-spec/CommonMark.dtd
+CM_DTD := _commonmark_spec/CommonMark.dtd
 
 $(CM_DTD):
 	git submodule update --init commonmark-spec
@@ -72,20 +72,20 @@ xml: $(POSTS_XML)
 .PHONY: html
 html: $(CM_DTD) $(POSTS_HTML)
 
-index.html: $(POSTS_XML) | xsl/head.xsl xsl/index.xsl
-	echo "<index/>" | saxonb-xslt -s:- -o:index.html -xsl:xsl/index.xsl "files=$(POSTS_INDEX)"
+index.html: $(POSTS_XML) | _xsl/head.xsl _xsl/index.xsl
+	echo "<index/>" | saxonb-xslt -s:- -o:index.html -xsl:_xsl/index.xsl "files=$(POSTS_INDEX)"
 
-about.html: _build/about.xml | xsl/head.xsl xsl/root-post.xsl _build/CommonMark.dtd
-	saxonb-xslt -xsl:xsl/root-post.xsl -s:_build/about.xml -o:about.html
+about.html: _build/about.xml | _xsl/head.xsl _xsl/root-post.xsl _build/CommonMark.dtd
+	saxonb-xslt -xsl:_xsl/root-post.xsl -s:_build/about.xml -o:about.html
 
-tags.html: $(POSTS_XML) | xsl/head.xsl xsl/tags.xsl
-	echo "<tags/>" | saxonb-xslt -s:- -o:tags.html -xsl:xsl/tags.xsl "files=$(POSTS_INDEX)"
+tags.html: $(POSTS_XML) | _xsl/head.xsl _xsl/tags.xsl
+	echo "<tags/>" | saxonb-xslt -s:- -o:tags.html -xsl:_xsl/tags.xsl "files=$(POSTS_INDEX)"
 
-atom.xml: $(POSTS_XML) | xsl/atom.xsl
-	echo "<atom/>" | saxonb-xslt -s:- -o:atom.xml -xsl:xsl/atom.xsl "files=$(POSTS_INDEX)" "blogUrl=$(BLOG_URL)"
+atom.xml: $(POSTS_XML) | _xsl/atom.xsl
+	echo "<atom/>" | saxonb-xslt -s:- -o:atom.xml -xsl:_xsl/atom.xsl "files=$(POSTS_INDEX)" "blogUrl=$(BLOG_URL)"
 
-sitemap.xml: $(POSTS_XML) | xsl/sitemap.xsl
-	echo "<sitemap/>" | saxonb-xslt -s:- -o:sitemap.xml -xsl:xsl/sitemap.xsl "baseURL=$(BLOG_URL)/"
+sitemap.xml: $(POSTS_XML) | _xsl/sitemap.xsl
+	echo "<sitemap/>" | saxonb-xslt -s:- -o:sitemap.xml -xsl:_xsl/sitemap.xsl "baseURL=$(BLOG_URL)/"
 
 TEST_POST_MD := _posts/2023-07-24.markdown
 TEST_POST_XML := _build/2023-07-24.xml
@@ -94,21 +94,10 @@ TEST_POST_HTML := posts/2023-07-24.html
 .PHONY: test-render
 test-render: $(CM_DTD)
 	comrak --front-matter-delimiter="---" --gfm -t xml -o $(TEST_POST_XML) $(TEST_POST_MD)
-	saxonb-xslt -xsl:xsl/post.xsl -s:$(TEST_POST_XML) -o:$(TEST_POST_HTML)
-
-.PHONY: snapshot-check
-snapshot-check:
-	@command -v docker >/dev/null 2>&1 || (echo "Error: Docker is required for snapshots. Install Docker first." && exit 1)
-	@echo "Docker found. Ready for snapshots."
-
-.PHONY: serve-check
-serve-check:
-	@command -v docker >/dev/null 2>&1 || (echo "Error: Docker is required for local server. Install Docker first." && exit 1)
-	@docker compose version >/dev/null 2>&1 || (echo "Error: Docker Compose plugin is required for local server. Install Docker Compose plugin first." && exit 1)
-	@echo "Docker and Docker Compose found. Ready to serve."
+	saxonb-xslt -xsl:_xsl/post.xsl -s:$(TEST_POST_XML) -o:$(TEST_POST_HTML)
 
 .PHONY: serve
-serve: serve-check all
+serve: all
 	@echo "Starting local development server..."
 	@echo "Blog will be available at: http://localhost:8080"
 	docker compose up -d
@@ -127,9 +116,8 @@ serve-logs:
 serve-restart: serve-stop serve
 
 .PHONY: snapshot
-snapshot: snapshot-check html index.html about.html tags.html atom.xml sitemap.xml
+snapshot: html index.html about.html tags.html
 	@echo "Creating page snapshots using Docker + Chromium..."
-	@mkdir -p snapshots
 	docker run --rm \
 		-v $(PWD):/workspace \
 		-w /workspace \
@@ -138,7 +126,7 @@ snapshot: snapshot-check html index.html about.html tags.html atom.xml sitemap.x
 		--headless \
 		--disable-gpu \
 		--window-size=1200,800 \
-		--screenshot=snapshots/index.png \
+		--screenshot=_snapshots/index.png \
 		file:///workspace/index.html
 	docker run --rm \
 		-v $(PWD):/workspace \
@@ -148,7 +136,7 @@ snapshot: snapshot-check html index.html about.html tags.html atom.xml sitemap.x
 		--headless \
 		--disable-gpu \
 		--window-size=1200,800 \
-		--screenshot=snapshots/about.png \
+		--screenshot=_snapshots/about.png \
 		file:///workspace/about.html
 	docker run --rm \
 		-v $(PWD):/workspace \
@@ -158,7 +146,7 @@ snapshot: snapshot-check html index.html about.html tags.html atom.xml sitemap.x
 		--headless \
 		--disable-gpu \
 		--window-size=1200,800 \
-		--screenshot=snapshots/tags.png \
+		--screenshot=_snapshots/tags.png \
 		file:///workspace/tags.html
 	docker run --rm \
 		-v $(PWD):/workspace \
@@ -168,7 +156,7 @@ snapshot: snapshot-check html index.html about.html tags.html atom.xml sitemap.x
 		--headless \
 		--disable-gpu \
 		--window-size=1200,800 \
-		--screenshot=snapshots/sample-post.png \
+		--screenshot=_snapshots/sample-post.png \
 		file:///workspace/posts/2023-07-24.html
 
 # New post creation
@@ -191,12 +179,11 @@ new-post:
 		echo "Error: Post file $$NEW_POST_FILE already exists"; \
 		exit 1; \
 	fi; \
-	mkdir -p templates; \
 	sed -e "s/{{TITLE}}/$(TITLE)/g" \
 		-e "s/{{DATE}}/$(if $(DATE),$(DATE),$(NEW_POST_DATE))/g" \
 		-e "s/{{TAGS}}/$(if $(TAGS),$(TAGS),$(NEW_POST_TAGS))/g" \
 		-e "s/{{SUMMARY}}/$(if $(SUMMARY),$(SUMMARY),$(NEW_POST_SUMMARY))/g" \
-		templates/post-template.markdown > "$$NEW_POST_FILE"; \
+		_templates/post-template.markdown > "$$NEW_POST_FILE"; \
 	yq eval '.posts = ["'"$$NEW_POST_FILE"'"] + .posts' -i posts.yaml; \
 	echo "Created: $$NEW_POST_FILE"; \
 	echo "Added $$NEW_POST_FILE to posts.yaml (sorted by date)"
