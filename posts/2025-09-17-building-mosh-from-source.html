@@ -258,7 +258,7 @@ PKG_CONFIG_PATH=/opt/protobuf25/lib/pkgconfig \
     CFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
     CXXFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
     LDFLAGS="-L/opt/protobuf25/lib"
-</code></pre><p>Run the build and install:</p><pre><code class="language-sh">make
+</code></pre><p>Run the build and install:</p><pre><code class="language-sh">make -j `nproc`
 sudo make install
 </code></pre><h2 id="conclusion">Conclusion</h2>
                   <p>Luckily mosh does not seem to dynamically link to anything except system 

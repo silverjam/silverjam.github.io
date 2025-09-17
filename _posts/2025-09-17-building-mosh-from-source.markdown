@@ -82,7 +82,7 @@ PKG_CONFIG_PATH=/opt/protobuf25/lib/pkgconfig \
 Run the build and install:
 
 ```sh
-make
+make -j `nproc`
 sudo make install
 ```
 
