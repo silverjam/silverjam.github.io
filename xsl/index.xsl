@@ -214,6 +214,7 @@
           </xsl:for-each>
         </ul>
       </main>
+      <xsl:call-template name="footer" />
     </body>
   </html>
 </xsl:template>

@@ -95,6 +95,7 @@
         </xsl:for-each-group>
 
       </main>
+      <xsl:call-template name="footer" />
     </body>
   </html>
 </xsl:template>

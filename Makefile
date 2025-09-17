@@ -23,7 +23,7 @@ SAXON_VERSION := 9.1.0.8J
 BLOG_URL := https://silverjam.github.io
 
 .PHONY: all
-all: check-comrak-version check-saxon-version html index.html about.html tags.html rss.xml
+all: check-comrak-version check-saxon-version html index.html about.html tags.html atom.xml
 
 .PHONY: install-comrak
 install-comrak:
@@ -78,8 +78,8 @@ about.html: _build/about.xml | xsl/head.xsl xsl/root-post.xsl _build/CommonMark.
 tags.html: $(POSTS_XML) | xsl/head.xsl xsl/tags.xsl
 	echo "<tags/>" | saxonb-xslt -s:- -o:tags.html -xsl:xsl/tags.xsl "files=$(POSTS_INDEX)"
 
-rss.xml: $(POSTS_XML) | xsl/rss.xsl
-	echo "<rss/>" | saxonb-xslt -s:- -o:rss.xml -xsl:xsl/rss.xsl "files=$(POSTS_INDEX)" "blogUrl=$(BLOG_URL)"
+atom.xml: $(POSTS_XML) | xsl/atom.xsl
+	echo "<atom/>" | saxonb-xslt -s:- -o:atom.xml -xsl:xsl/atom.xsl "files=$(POSTS_INDEX)" "blogUrl=$(BLOG_URL)"
 
 TEST_POST_MD := _posts/2023-07-24.markdown
 TEST_POST_XML := _build/2023-07-24.xml
@@ -121,7 +121,7 @@ serve-logs:
 serve-restart: serve-stop serve
 
 .PHONY: snapshot
-snapshot: snapshot-check html index.html about.html tags.html rss.xml
+snapshot: snapshot-check html index.html about.html tags.html atom.xml
 	@echo "Creating page snapshots using Docker + Chromium..."
 	@mkdir -p snapshots
 	docker run --rm \

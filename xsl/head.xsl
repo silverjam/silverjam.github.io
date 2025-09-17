@@ -17,7 +17,8 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/base16/material-palenight.min.css" />
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
-    <link rel="alternate" type="application/rss+xml" title="A blog by Jason Mobarak" href="{$baseURL}rss.xml" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="alternate" type="application/atom+xml" title="A blog by Jason Mobarak" href="{$baseURL}atom.xml" />
     <title>
       <xsl:value-of select="$title" />
     </title>
@@ -80,6 +81,34 @@
       main {
         margin-top: 0.5rem;
       }
+      footer {
+        margin-top: 2rem;
+        padding: 1rem 0;
+        border-top: 1px solid var(--muted-border-color);
+        text-align: center;
+        font-size: 0.875rem;
+        color: var(--muted-color);
+      }
+      footer .social-links {
+        margin: 1rem 0;
+      }
+      footer .social-links a {
+        margin: 0 0.5rem;
+        color: var(--muted-color);
+        text-decoration: none;
+        font-size: 1.25rem;
+        transition: color 0.2s;
+      }
+      footer .social-links a:hover {
+        color: var(--primary);
+      }
+      footer .copyright {
+        margin: 0.5rem 0;
+      }
+      footer .license {
+        margin: 0.5rem 0;
+        font-size: 0.8rem;
+      }
     </style>
   </head>
 
@@ -88,13 +117,46 @@
 <xsl:template name="header">
   <xsl:param name="baseURL" select="''" />
   <header>
-    <a href="{if ($baseURL = '') then '/' else $baseURL}" class="logo">Blog</a>
+    <a href="{if ($baseURL = '') then '/' else $baseURL}" class="logo">Jason Mobarak - Blog</a>
     <nav>
       <a href="{$baseURL}about.html">About</a>
       <a href="{$baseURL}tags.html">Tags</a>
-      <a href="{$baseURL}rss.xml">RSS</a>
+      <a href="{$baseURL}atom.xml">Feed</a>
     </nav>
   </header>
+</xsl:template>
+
+<xsl:template name="footer">
+  <footer>
+    <div class="social-links">
+      <a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon">
+        <i class="fab fa-mastodon"></i>
+      </a>
+      <a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads">
+        <i class="fa-brands fa-threads"></i>
+      </a>
+      <a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </div>
+    <div class="copyright">
+      © <xsl:value-of select="format-date(current-date(), '[Y]')" /> Jason Mobarak
+    </div>
+    <div class="license">
+      <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">
+        <i class="fab fa-creative-commons"></i>
+        <i class="fab fa-creative-commons-by"></i>
+        <i class="fab fa-creative-commons-sa"></i>
+      </a>
+      This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
+    </div>
+  </footer>
 </xsl:template>
 
 </xsl:stylesheet>

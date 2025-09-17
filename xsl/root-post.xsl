@@ -29,6 +29,7 @@
           <xsl:apply-templates select="$start/following-sibling::*" />
         </article>
       </main>
+      <xsl:call-template name="footer" />
       <script>hljs.highlightAll();</script>
     </body>
   </html>
