@@ -252,7 +252,8 @@ sudo cmake --install ..
                   <p>Fetch Mosh source:</p><pre><code class="language-sh">git clone https://github.com/mobile-shell/mosh --single-branch --depth 1
 </code></pre><p>Configure the build:</p><pre><code class="language-sh">cd mosh
 ./autogen.sh
-PKG_CONFIG_PATH=/opt/protobuf25/lib/pkgconfig PATH=/opt/protobuf25/bin:$PATH \
+PKG_CONFIG_PATH=/opt/protobuf25/lib/pkgconfig \
+  PATH=/opt/protobuf25/bin:$PATH \
   ./configure --prefix /opt/mosh \
     CFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
     CXXFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
@@ -262,7 +263,7 @@ sudo make install
 </code></pre><h2 id="conclusion">Conclusion</h2>
                   <p>Luckily mosh does not seem to dynamically link to anything except system 
                      libraries (so we don't need to tweak things like the dynamic lib search path):
-                  </p><pre><code class="language-plaintext">❯ ldd /opt/mosh/bin/mosh*
+                  </p><pre><code class="language-text">❯ ldd /opt/mosh/bin/mosh*
 
 /opt/mosh/bin/mosh:
  not a dynamic executable
@@ -290,7 +291,7 @@ sudo make install
  /lib64/ld-linux-x86-64.so.2 (0x00007aa77a370000)
 </code></pre><p>After this you should have a functioning <code>mosh-server</code> binary that you can 
                      use with whatever client you desire:
-                  </p><pre><code class="language-plaintext">❯ /opt/mosh/bin/mosh-server --version
+                  </p><pre><code class="language-text">❯ /opt/mosh/bin/mosh-server --version
 
 mosh-server (mosh 1.4.0) [build 1105d48]
 Copyright 2012 Keith Winstein &lt;mosh-devel@mit.edu&gt;

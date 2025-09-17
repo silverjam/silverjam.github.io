@@ -71,7 +71,8 @@ Configure the build:
 ```sh
 cd mosh
 ./autogen.sh
-PKG_CONFIG_PATH=/opt/protobuf25/lib/pkgconfig PATH=/opt/protobuf25/bin:$PATH \
+PKG_CONFIG_PATH=/opt/protobuf25/lib/pkgconfig \
+  PATH=/opt/protobuf25/bin:$PATH \
   ./configure --prefix /opt/mosh \
     CFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
     CXXFLAGS="-I/opt/protobuf25/include -L/opt/protobuf25/lib" \
@@ -90,7 +91,7 @@ sudo make install
 Luckily mosh does not seem to dynamically link to anything except system
 libraries (so we don't need to tweak things like the dynamic lib search path):
 
-```
+```text
 ❯ ldd /opt/mosh/bin/mosh*
 
 /opt/mosh/bin/mosh:
@@ -122,7 +123,7 @@ libraries (so we don't need to tweak things like the dynamic lib search path):
 After this you should have a functioning `mosh-server` binary that you can
 use with whatever client you desire:
 
-```
+```text
 ❯ /opt/mosh/bin/mosh-server --version
 
 mosh-server (mosh 1.4.0) [build 1105d48]
@@ -131,4 +132,3 @@ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 ```
-
