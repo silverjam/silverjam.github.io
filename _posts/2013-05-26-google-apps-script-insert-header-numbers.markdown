@@ -20,8 +20,7 @@ resolve that deficiency.
 
 ## TL;DR
 
-Jump to [the solution][solution] for the script that adds header numbers.
-[solution]: #The_Solution
+Jump to [the solution](#the-solution) for the script that adds header numbers.
 
 ## The problem
 

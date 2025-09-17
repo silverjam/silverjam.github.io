@@ -94,6 +94,105 @@
         margin: 0.5rem 0;
         font-size: 0.8rem;
       }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
     </style></head>
    <body>
       <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
@@ -118,89 +217,105 @@
                </tr>
             </tbody>
          </table>
-         <article>
-            <p><em>SUMMARY: Building a static site generator (blog) with XSLT and Markdown.  The 
-                  goal: build something relatively simple and with tools that will work 
-                  "FOREVER".</em></p>
-            <h2>What's the point of this?</h2>
-            <p>The main purpose of this project is to create a static site generator using 
-               Markdown (e.g. plain text files with some light formatting) and a selection of 
-               both old and new technologies to make a somewhat modern blog that will be easy 
-               to maintain for over a long period of time (many, many years).  The secondary 
-               goal is to be able to use somewhat modern web technologies in the generated 
-               output.
-            </p>
-            <h3>Motivations</h3>
-            <p>In the past I've enjoyed the simplicity of blogs built on static site 
-               generators like Jekyll, Hugo and Sphinx.  Like most things in tech though, 
-               these things evolve and age.  Because of this I've often found myself in a 
-               place where I needed ressurect a very old technology (Jekyll in my case) or 
-               modernize it.
-            </p>
-            <h3>Rational</h3>
-            <p>Again, this project is designed to use a bit of old and new tech.  For the 
-               generation portion of the project, older technologies will be used. The hope or 
-               intent is that due to their age and muturity they aren't going to change much, 
-               and due to their ubiqity (for better or worse) aren't going to go anywhere 
-               either.
-            </p>
-            <p>These properties should make the generation part of the project work for many 
-               years to come, with little or no changes necessary to the underlying machinery. 
-               In the generated output I'm leaving freedom to use whatever flavor of web 
-               technology is currently relevant and somewhat modern.
-            </p>
-            <p>More succinctly, I'm driving for the following properties:</p>
-            <ul>
-               <li>
-                  <p>Static site generator: long term, well established tech, minimal maintenance</p>
-               </li>
-               <li>
-                  <p>Generated output: whatever the flavor of the month is for web tech</p>
-               </li>
-            </ul>
-            <h2>What are the things this will support?</h2>
-            <p>Below are a selection of elements that the SSG should support:</p>
-            <p>⬇️  Thematic breaks ⬇️  (And emoji)</p>
-            <hr>
-            <p><em>Emphasized text</em></p>
-            <p><strong>Bold text</strong></p>
-            <p><s>Strikethrough</s></p>
-            <p>Unorderded lists:</p>
-            <ul>
-               <li>
-                  <p>Bananas</p>
-               </li>
-               <li>
-                  <p>Fruit</p>
-               </li>
-               <li>
-                  <p>Apples</p>
-               </li>
-            </ul>
-            <p>Ordered lists:</p>
-            <ol>
-               <li>
-                  <p>First</p>
-               </li>
-               <li>
-                  <p>Second</p>
-               </li>
-               <li>
-                  <p>Third</p>
-               </li>
-            </ol>
-            <h2>Subheadings</h2>
-            <p>This is a text only block:</p><pre><code class="language-plaintext">A plaintext block
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <p><em>SUMMARY: Building a static site generator (blog) with XSLT and Markdown.  The 
+                        goal: build something relatively simple and with tools that will work 
+                        "FOREVER".</em></p>
+                  <h2 id="what's-the-point-of-this">What's the point of this?</h2>
+                  <p>The main purpose of this project is to create a static site generator using 
+                     Markdown (e.g. plain text files with some light formatting) and a selection of 
+                     both old and new technologies to make a somewhat modern blog that will be easy 
+                     to maintain for over a long period of time (many, many years).  The secondary 
+                     goal is to be able to use somewhat modern web technologies in the generated 
+                     output.
+                  </p>
+                  <h3 id="motivations">Motivations</h3>
+                  <p>In the past I've enjoyed the simplicity of blogs built on static site 
+                     generators like Jekyll, Hugo and Sphinx.  Like most things in tech though, 
+                     these things evolve and age.  Because of this I've often found myself in a 
+                     place where I needed ressurect a very old technology (Jekyll in my case) or 
+                     modernize it.
+                  </p>
+                  <h3 id="rational">Rational</h3>
+                  <p>Again, this project is designed to use a bit of old and new tech.  For the 
+                     generation portion of the project, older technologies will be used. The hope or 
+                     intent is that due to their age and muturity they aren't going to change much, 
+                     and due to their ubiqity (for better or worse) aren't going to go anywhere 
+                     either.
+                  </p>
+                  <p>These properties should make the generation part of the project work for many 
+                     years to come, with little or no changes necessary to the underlying machinery. 
+                     In the generated output I'm leaving freedom to use whatever flavor of web 
+                     technology is currently relevant and somewhat modern.
+                  </p>
+                  <p>More succinctly, I'm driving for the following properties:</p>
+                  <ul>
+                     <li>
+                        <p>Static site generator: long term, well established tech, minimal maintenance</p>
+                     </li>
+                     <li>
+                        <p>Generated output: whatever the flavor of the month is for web tech</p>
+                     </li>
+                  </ul>
+                  <h2 id="what-are-the-things-this-will-support">What are the things this will support?</h2>
+                  <p>Below are a selection of elements that the SSG should support:</p>
+                  <p>⬇️  Thematic breaks ⬇️  (And emoji)</p>
+                  <hr>
+                  <p><em>Emphasized text</em></p>
+                  <p><strong>Bold text</strong></p>
+                  <p><s>Strikethrough</s></p>
+                  <p>Unorderded lists:</p>
+                  <ul>
+                     <li>
+                        <p>Bananas</p>
+                     </li>
+                     <li>
+                        <p>Fruit</p>
+                     </li>
+                     <li>
+                        <p>Apples</p>
+                     </li>
+                  </ul>
+                  <p>Ordered lists:</p>
+                  <ol>
+                     <li>
+                        <p>First</p>
+                     </li>
+                     <li>
+                        <p>Second</p>
+                     </li>
+                     <li>
+                        <p>Third</p>
+                     </li>
+                  </ol>
+                  <h2 id="subheadings">Subheadings</h2>
+                  <p>This is a text only block:</p><pre><code class="language-plaintext">A plaintext block
 </code></pre><p>This is some Python code:</p><pre><code class="language-python">print("Hello world?")
 </code></pre><p>This is some Rust code:</p><pre><code class="language-rust">fn main() {
     println!("Hello world?");
 }
 </code></pre><p>This is some <code>inline code</code> (which doesn't look very good yet)?
-            </p>
-            <hr>
-            <p>This is a link <a href="https://google.com">Google</a>.
-            </p>
-         </article>
+                  </p>
+                  <hr>
+                  <p>This is a link <a href="https://google.com">Google</a>.
+                  </p>
+               </article>
+            </div>
+            <div class="post-sidebar">
+               <div class="toc">
+                  <h3>Table of Contents</h3>
+                  <ul>
+                     <li><a href="#what's-the-point-of-this" class="toc-h2">What's the point of this?</a></li>
+                     <li><a href="#motivations" class="toc-h3">Motivations</a></li>
+                     <li><a href="#rational" class="toc-h3">Rational</a></li>
+                     <li><a href="#what-are-the-things-this-will-support" class="toc-h2">What are the things this will support?</a></li>
+                     <li><a href="#subheadings" class="toc-h2">Subheadings</a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
       </main>
       <footer>
          <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>

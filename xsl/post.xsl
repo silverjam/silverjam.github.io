@@ -3,7 +3,9 @@
   version="2.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:cm="http://commonmark.org/xml/1.0"
-  exclude-result-prefixes="cm"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:local="http://local.functions"
+  exclude-result-prefixes="cm xs local"
 >
 
 <xsl:import href="head.xsl" />
@@ -12,6 +14,12 @@
 
 <xsl:variable name="title" select="/cm:document/cm:heading[@level=1][1]" />
 <xsl:variable name="start" select="/cm:document/cm:thematic_break[1]" />
+
+<!-- Function to generate URL-safe IDs from heading text -->
+<xsl:function name="local:generate-id" as="xs:string">
+  <xsl:param name="text" as="xs:string"/>
+  <xsl:value-of select="translate(lower-case(normalize-space($text)), ' .,!?;:()', '----')"/>
+</xsl:function>
 
 <xsl:template match="/cm:document">
   <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;
@@ -30,9 +38,18 @@
       </xsl:call-template>
       <main>
         <xsl:apply-templates select="$start/preceding-sibling::*" />
-        <article>
-          <xsl:apply-templates select="$start/following-sibling::*" />
-        </article>
+
+        <div class="post-layout">
+          <div class="post-content">
+            <article>
+              <xsl:apply-templates select="$start/following-sibling::*" />
+            </article>
+          </div>
+
+          <div class="post-sidebar">
+            <xsl:call-template name="table-of-contents" />
+          </div>
+        </div>
       </main>
       <xsl:call-template name="footer" />
       <script>hljs.highlightAll();</script>
@@ -40,20 +57,53 @@
   </html>
 </xsl:template>
 
+<!-- Template to generate table of contents -->
+<xsl:template name="table-of-contents">
+  <xsl:variable name="headings" select="$start/following-sibling::cm:heading[@level &gt;= 2 and @level &lt;= 4]" />
+
+  <xsl:if test="$headings">
+    <div class="toc">
+      <h3>Table of Contents</h3>
+      <ul>
+        <xsl:for-each select="$headings">
+          <xsl:variable name="heading-text" select="cm:text/text()" />
+          <xsl:variable name="heading-id" select="local:generate-id($heading-text)" />
+          <xsl:variable name="level" select="@level" />
+
+          <li>
+            <a href="#{$heading-id}" class="toc-h{$level}">
+              <xsl:value-of select="$heading-text" />
+            </a>
+          </li>
+        </xsl:for-each>
+      </ul>
+    </div>
+  </xsl:if>
+</xsl:template>
+
 <xsl:template match="cm:heading[@level=1]">
   <h1><xsl:value-of select="cm:text/text()" /></h1>
 </xsl:template>
 
 <xsl:template match="cm:heading[@level=2]">
-  <h2><xsl:value-of select="cm:text/text()" /></h2>
+  <xsl:variable name="heading-text" select="cm:text/text()" />
+  <h2 id="{local:generate-id($heading-text)}">
+    <xsl:value-of select="$heading-text" />
+  </h2>
 </xsl:template>
 
 <xsl:template match="cm:heading[@level=3]">
-  <h3><xsl:value-of select="cm:text/text()" /></h3>
+  <xsl:variable name="heading-text" select="cm:text/text()" />
+  <h3 id="{local:generate-id($heading-text)}">
+    <xsl:value-of select="$heading-text" />
+  </h3>
 </xsl:template>
 
 <xsl:template match="cm:heading[@level=4]">
-  <h4><xsl:value-of select="cm:text/text()" /></h4>
+  <xsl:variable name="heading-text" select="cm:text/text()" />
+  <h4 id="{local:generate-id($heading-text)}">
+    <xsl:value-of select="$heading-text" />
+  </h4>
 </xsl:template>
 
 <xsl:template match="cm:paragraph">

@@ -94,6 +94,105 @@
         margin: 0.5rem 0;
         font-size: 0.8rem;
       }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
     </style></head>
    <body>
       <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
@@ -118,27 +217,32 @@
                </tr>
             </tbody>
          </table>
-         <article>
-            <p>Disclaimer: I like our Prius Plug-in, but I really don't like our Prius C.  The plug-in version came with a little green sticker
-               that lets you whiz by other people that didn't think to plop down the extra dough for a "range extended" electric (which the
-               Prius Plug-in really is <strong>not</strong> that, but I digress).
-            </p>
-            <p>First, a question for Prius owners: do you think the $2500-$4000 cost of a replacement batter pack at 9 years would nullify
-               your fuel saving over that time period?
-            </p>
-            <p>For us, the answer is mostly no, but it depends on what you drove before (or what you would drive instead).  Versus the 2000
-               Passport (driving 350 miles a week for commuting), which has a 21 gallon tank (that we usually filled at about 16 gallons).
-               It would cost about $26k in fuel over 9 years (<code>16 gallons/week * $3.50/gallon *52 weeks/year* 9 years</code>) versus the Prius at about $14k (<code>8.5 gallons/week *$3.50/gallon* 52 weeks/year * 9 years</code>).
-            </p>
-            <p>It does put a dent in the savings though, and when compared to other high mpg cares the "win" isn't as clear.  If you consider
-               something like Ford's EcoBoost which get's good milage and performance from tiny engines, it probably would not win, this
-               is assuming the total cost of ownership for a Ford is similar to the Toyota, but maybe that's a laughable thing to assume...
-            </p>
-            <p>If you compare it to a Camry, the Prius doesn't seem to win.  Camry is a Toyota, so you're safer in assuming the platform's
-               reliability and TCO are similar.  For me the Camry would be about $35 a week in gas, or $16k over a 9 year period, which clearly
-               does not win over the Prius plus replacing it's battery pack.
-            </p>
-         </article>
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <p>Disclaimer: I like our Prius Plug-in, but I really don't like our Prius C.  The plug-in version came with a little green sticker
+                     that lets you whiz by other people that didn't think to plop down the extra dough for a "range extended" electric (which the
+                     Prius Plug-in really is <strong>not</strong> that, but I digress).
+                  </p>
+                  <p>First, a question for Prius owners: do you think the $2500-$4000 cost of a replacement batter pack at 9 years would nullify
+                     your fuel saving over that time period?
+                  </p>
+                  <p>For us, the answer is mostly no, but it depends on what you drove before (or what you would drive instead).  Versus the 2000
+                     Passport (driving 350 miles a week for commuting), which has a 21 gallon tank (that we usually filled at about 16 gallons).
+                     It would cost about $26k in fuel over 9 years (<code>16 gallons/week * $3.50/gallon *52 weeks/year* 9 years</code>) versus the Prius at about $14k (<code>8.5 gallons/week *$3.50/gallon* 52 weeks/year * 9 years</code>).
+                  </p>
+                  <p>It does put a dent in the savings though, and when compared to other high mpg cares the "win" isn't as clear.  If you consider
+                     something like Ford's EcoBoost which get's good milage and performance from tiny engines, it probably would not win, this
+                     is assuming the total cost of ownership for a Ford is similar to the Toyota, but maybe that's a laughable thing to assume...
+                  </p>
+                  <p>If you compare it to a Camry, the Prius doesn't seem to win.  Camry is a Toyota, so you're safer in assuming the platform's
+                     reliability and TCO are similar.  For me the Camry would be about $35 a week in gas, or $16k over a 9 year period, which clearly
+                     does not win over the Prius plus replacing it's battery pack.
+                  </p>
+               </article>
+            </div>
+            <div class="post-sidebar"></div>
+         </div>
       </main>
       <footer>
          <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>

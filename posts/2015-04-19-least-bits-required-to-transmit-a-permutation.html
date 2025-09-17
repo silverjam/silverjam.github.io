@@ -94,6 +94,105 @@
         margin: 0.5rem 0;
         font-size: 0.8rem;
       }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
     </style></head>
    <body>
       <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
@@ -118,15 +217,17 @@
                </tr>
             </tbody>
          </table>
-         <article>
-            <p>Consider the 52 cards of a deck. You generated a random sequence for these cards and want to send that sequence to a receiver.
-               You want to minimize the communication between you and the receiver, i.e., minimize the number of bits required to send the
-               sequence.
-            </p>
-            <p>What is the minimum number of bits required to send the sequence?</p>
-            <p>To arrive at the solution, I'm going to consider a smaller example: What are 
-               all the permutations of <code>[0, 1, 2, 3]</code>?
-            </p><pre><code class="language-plaintext">[0,1,2,3] =&gt; perm 00 =&gt; binary: 0 0 0 0 0   || [0,3,1,2] =&gt; perm 12 =&gt; binary: 0 1 1 0 0
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <p>Consider the 52 cards of a deck. You generated a random sequence for these cards and want to send that sequence to a receiver.
+                     You want to minimize the communication between you and the receiver, i.e., minimize the number of bits required to send the
+                     sequence.
+                  </p>
+                  <p>What is the minimum number of bits required to send the sequence?</p>
+                  <p>To arrive at the solution, I'm going to consider a smaller example: What are 
+                     all the permutations of <code>[0, 1, 2, 3]</code>?
+                  </p><pre><code class="language-plaintext">[0,1,2,3] =&gt; perm 00 =&gt; binary: 0 0 0 0 0   || [0,3,1,2] =&gt; perm 12 =&gt; binary: 0 1 1 0 0
 [0,2,1,3] =&gt; perm 01 =&gt; binary: 0 0 0 0 1   || [0,3,2,1] =&gt; perm 13 =&gt; binary: 0 1 1 0 1
 [1,0,2,3] =&gt; perm 02 =&gt; binary: 0 0 0 1 0   || [1,3,0,2] =&gt; perm 14 =&gt; binary: 0 1 1 1 0
 [1,2,0,3] =&gt; perm 03 =&gt; binary: 0 0 0 1 1   || [1,3,2,0] =&gt; perm 15 =&gt; binary: 0 1 1 1 1
@@ -139,24 +240,24 @@
 [2,0,3,1] =&gt; perm 10 =&gt; binary: 0 1 0 1 0   || [3,2,0,1] =&gt; perm 22 =&gt; binary: 1 0 1 1 0
 [2,1,3,0] =&gt; perm 11 =&gt; binary: 0 1 0 1 1   || [3,2,1,0] =&gt; perm 23 =&gt; binary: 1 0 1 1 1
 </code></pre><p>How many bits do you need to represent a number in general?  Another way of 
-               phrasing: how many digits do I need to represent this number?  Take a base 10 
-               number, say 123, written as a function combination of it's bases: <code>(10^2 * 1) + (10^1 * 2) + (10^0 * 3) = 100 + 20 + 3</code>.  So, the largest component is <code>100</code>, and 
-               we need at least <code>3</code> digits (or 1 + the power of largest component).
-            </p>
-            <p>So, 10^N = X, we want to know what N is, thus, log_10(X) = N.  This holds for 
-               base 2 numbers, thus:
-            </p><pre><code class="language-plaintext">log_2(X) = N
+                     phrasing: how many digits do I need to represent this number?  Take a base 10 
+                     number, say 123, written as a function combination of it's bases: <code>(10^2 * 1) + (10^1 * 2) + (10^0 * 3) = 100 + 20 + 3</code>.  So, the largest component is <code>100</code>, and 
+                     we need at least <code>3</code> digits (or 1 + the power of largest component).
+                  </p>
+                  <p>So, 10^N = X, we want to know what N is, thus, log_10(X) = N.  This holds for 
+                     base 2 numbers, thus:
+                  </p><pre><code class="language-plaintext">log_2(X) = N
 </code></pre><p>So, if we have 24 permutations (4 factorial), we need this many bits:</p><pre><code class="language-plaintext">log_2(24) = 4.58; ceil(4.58) = 5
 </code></pre><p>Since we can't have partial bits we round up... and arrive at 5.</p>
-            <p>If we need only 5-bits to number each sequence, we could just store a lookup 
-               table... but for larger inputs, you cannot just transmit a sequence number and 
-               have the remote end look-up which permutation to use in a lookup table, this 
-               would use too much memory...
-            </p>
-            <p>However, what if we choose to map these as choices, noting that choices cannot 
-               be repeated and the that pool of choices shrinks each time.  Since the pool is 
-               <code>[0, 1, 2, 3]</code>, the choices would be for example:
-            </p><pre><code class="language-plaintext">                       Sequence     Choices
+                  <p>If we need only 5-bits to number each sequence, we could just store a lookup 
+                     table... but for larger inputs, you cannot just transmit a sequence number and 
+                     have the remote end look-up which permutation to use in a lookup table, this 
+                     would use too much memory...
+                  </p>
+                  <p>However, what if we choose to map these as choices, noting that choices cannot 
+                     be repeated and the that pool of choices shrinks each time.  Since the pool is 
+                     <code>[0, 1, 2, 3]</code>, the choices would be for example:
+                  </p><pre><code class="language-plaintext">                       Sequence     Choices
                        --------     -------
 Perm 1 -                            [0,1,2,3]
        - choose(00) =&gt; [0]          [1,2,3]
@@ -192,10 +293,10 @@ Perm 2 -                            [0,1,2,3]
 [2,0,1,|]     [C,A,B,D]  |  [0,0,1,|]     [A,B,C,D]
 [2,0,0,|]     [C,A,D,B]  |  [0,0,0,|]     [A,B,D,C]
 </code></pre><p>Writing it this way, a pattern emerges... the first column is never greater 
-               than <code>3</code>, the second is never great than <code>2</code>, the third is only every <code>1</code> or 
-               <code>0</code>.
-            </p>
-            <p>We can map these choices into a number that uses only 5-bits by noticing:</p><pre><code class="language-plaintext">Always 0-3 for most significant
+                     than <code>3</code>, the second is never great than <code>2</code>, the third is only every <code>1</code> or 
+                     <code>0</code>.
+                  </p>
+                  <p>We can map these choices into a number that uses only 5-bits by noticing:</p><pre><code class="language-plaintext">Always 0-3 for most significant
   [00, 01, 10, 11] =&gt; [0, 1, 2, 3]
 
 Then always 0-2 for next bits
@@ -207,17 +308,17 @@ Then only 1 or 0 left:
 So, the bit pattern is roughly:
   ZZ YY X (Z = first choice, Y = second choice, X = final choice)
 </code></pre><p>The "bit pattern" idea isn't really a good model of the general idea, since 
-               we'll be spreading <code>ZZ</code> portion into the coded sequence number.  Let <code>max = 3</code>, 
-               to prepare the first choice to be mapped we multiply the choice by max, then we 
-               can use integer division to recover the number:
-            </p><pre><code class="language-plaintext">b000 * 3 =&gt; b0000 (0)
+                     we'll be spreading <code>ZZ</code> portion into the coded sequence number.  Let <code>max = 3</code>, 
+                     to prepare the first choice to be mapped we multiply the choice by max, then we 
+                     can use integer division to recover the number:
+                  </p><pre><code class="language-plaintext">b000 * 3 =&gt; b0000 (0)
 b001 * 3 =&gt; b0011 (3)
 b010 * 3 =&gt; b0110 (6)
 b011 * 3 =&gt; b1001 (9)
 </code></pre><p>Now, we can add the second choice to this number, if we mod by <code>3</code>, we'll get 
-               back the second choice, if we use integer division by <code>3</code>, we'll get back the 
-               first choice:
-            </p><pre><code class="language-plaintext">(b0000 + b00) =&gt; b0000 ( 0) | mod 3 =&gt; 0 | div 3 =&gt; 0
+                     back the second choice, if we use integer division by <code>3</code>, we'll get back the 
+                     first choice:
+                  </p><pre><code class="language-plaintext">(b0000 + b00) =&gt; b0000 ( 0) | mod 3 =&gt; 0 | div 3 =&gt; 0
 (b0000 + b01) =&gt; b0001 ( 1) | mod 3 =&gt; 1 | div 3 =&gt; 0
 (b0000 + b10) =&gt; b0010 ( 2) | mod 3 =&gt; 2 | div 3 =&gt; 0
 
@@ -233,8 +334,8 @@ b011 * 3 =&gt; b1001 (9)
 (b1001 + b01) =&gt; b1010 (10) | mod 3 =&gt; 1 | div 3 =&gt; 3
 (b1001 + b10) =&gt; b1011 (11) | mod 3 =&gt; 2 | div 3 =&gt; 3
 </code></pre><p>To map the final choice into this number we multiply each of these numbers by 
-               <code>max-1 = 2</code>, and add in the final choice:
-            </p><pre><code class="language-plaintext">(b0000 * 2) + 0 =&gt; b0000 00 ( 0) | (b0110 * 2) + 0 =&gt; b0001 10 (12)
+                     <code>max-1 = 2</code>, and add in the final choice:
+                  </p><pre><code class="language-plaintext">(b0000 * 2) + 0 =&gt; b0000 00 ( 0) | (b0110 * 2) + 0 =&gt; b0001 10 (12)
 (b0000 * 2) + 1 =&gt; b0000 01 ( 1) | (b0110 * 2) + 1 =&gt; b0001 11 (13)
 
 (b0001 * 2) + 0 =&gt; b0000 10 ( 2) | (b0111 * 2) + 0 =&gt; b0011 10 (14)
@@ -252,9 +353,12 @@ b011 * 3 =&gt; b1001 (9)
 (b0101 * 2) + 0 =&gt; b0010 10 (10) | (b1011 * 2) + 0 =&gt; b0101 10 (22)
 (b0101 * 2) + 1 =&gt; b0010 11 (11) | (b1011 * 2) + 1 =&gt; b0101 11 (23)
 </code></pre><p>Each number from the above table can be divided by <code>2</code> (integer division) to 
-               recovery the 2nd choice, or modulo by <code>2</code> to recover the last choice.
-            </p>
-         </article>
+                     recovery the 2nd choice, or modulo by <code>2</code> to recover the last choice.
+                  </p>
+               </article>
+            </div>
+            <div class="post-sidebar"></div>
+         </div>
       </main>
       <footer>
          <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>

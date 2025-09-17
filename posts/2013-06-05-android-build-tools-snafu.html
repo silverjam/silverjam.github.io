@@ -94,6 +94,105 @@
         margin: 0.5rem 0;
         font-size: 0.8rem;
       }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
     </style></head>
    <body>
       <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
@@ -126,7 +225,7 @@
          <p>This seemed pretty cool, I guess, though it seems better to just release a 
             plugin so you can slice and dice your dev environment however you want.
          </p>
-         <h2>Cool, but can it do Vim?</h2>
+         <h2 id="cool--but-can-it-do-vim">Cool, but can it do Vim?</h2>
          <p>At least for the February release of ADT it did not work so well (the 20130219 
             version)-- installing vrapper breaks all kinds of things:
          </p>
@@ -139,7 +238,7 @@
             previously there.  Not sure why I did... maybe it was user error... but it was 
             not a good user experience.
          </p>
-         <h2>Alternate Reality: Android Studio</h2>
+         <h2 id="alternate-reality-android-studio">Alternate Reality: Android Studio</h2>
          <p>So far, my experience with trying the Android Studio preview has been great, 
             but mostly because the of the dark UI, super easy <em>vim installation</em> that didn't 
             <em>nuke any Android integration</em> ... and because it does stuff like this:
@@ -149,44 +248,49 @@
             the <a href="http://www.cnn.com/2008/POLITICS/09/10/campaign.lipstick/">Sarah Palin jibe</a>, <em>"it's just lipstick on a pig"</em>, but I'll take 
             it!  Yes sir, uh-huh.
          </p>
-         <article>
-            <p>So... this brings me to new version of ADT (version 20130522) -- I'm starting 
-               a new project I figured I'd try to upgrade to the May release of ADT.  Lo and 
-               behold it doesn't come pre-packaged with something called <em>Android Build Tools</em> 
-               and it has a really shitty way to install it, basically it pops up a nag box 
-               and says:
-            </p><pre><code class="language-plaintext">Hey, we couldn't take the time to implement auto download or to auto package
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <p>So... this brings me to new version of ADT (version 20130522) -- I'm starting 
+                     a new project I figured I'd try to upgrade to the May release of ADT.  Lo and 
+                     behold it doesn't come pre-packaged with something called <em>Android Build Tools</em> 
+                     and it has a really shitty way to install it, basically it pops up a nag box 
+                     and says:
+                  </p><pre><code class="language-plaintext">Hey, we couldn't take the time to implement auto download or to auto package
 this new tool we're requiring, so go grab it yourself, good luck!
 
 Yours truly,
 -Asshats
 </code></pre><p>This wasted a good hour as I groped around trying to figure out what was wrong. 
-               Finally the Internet saved me as I discovered that many other developers can't 
-               read either:
-            </p>
-            <ul>
-               <li>
-                  <p><a href="http://stackoverflow.com/questions/885009/r-cannot-be-resolved-android-error">R cannot be resolved</a> [Stack Overflow]
+                     Finally the Internet saved me as I discovered that many other developers can't 
+                     read either:
                   </p>
-               </li>
-               <li>
-                  <p><a href="https://groups.google.com/forum/?fromgroups#!topic/android-developers/rCaeT3qckoE">Some else with the R problem</a> [Google Groups]
-                  </p>
-               </li>
-               <li>
-                  <p><a href="https://groups.google.com/forum/?fromgroups=#!topic/adt-dev/epOfZbKPFdk">Another person, same problem</a> [Google Groups]
-                  </p>
-               </li>
-            </ul>
-            <p>The thing is, I did read the nag dialog, and I tried to download whatever it 
-               wanted, but for whatever reason (poor up bringing -- loose morals -- just plain 
-               dumb) I didn't succeed.  So, this proves at least one thing: <em>Android 
-                  developers can't read</em>.  Or does it?  Maybe it proves that Google wasted a lot 
-               of people's time with this decision.
-            </p><!-- vim: spell
-            -->
-            
-         </article>
+                  <ul>
+                     <li>
+                        <p><a href="http://stackoverflow.com/questions/885009/r-cannot-be-resolved-android-error">R cannot be resolved</a> [Stack Overflow]
+                        </p>
+                     </li>
+                     <li>
+                        <p><a href="https://groups.google.com/forum/?fromgroups#!topic/android-developers/rCaeT3qckoE">Some else with the R problem</a> [Google Groups]
+                        </p>
+                     </li>
+                     <li>
+                        <p><a href="https://groups.google.com/forum/?fromgroups=#!topic/adt-dev/epOfZbKPFdk">Another person, same problem</a> [Google Groups]
+                        </p>
+                     </li>
+                  </ul>
+                  <p>The thing is, I did read the nag dialog, and I tried to download whatever it 
+                     wanted, but for whatever reason (poor up bringing -- loose morals -- just plain 
+                     dumb) I didn't succeed.  So, this proves at least one thing: <em>Android 
+                        developers can't read</em>.  Or does it?  Maybe it proves that Google wasted a lot 
+                     of people's time with this decision.
+                  </p><!-- vim: spell
+                  -->
+                  
+               </article>
+            </div>
+            <div class="post-sidebar"></div>
+         </div>
       </main>
       <footer>
          <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>

@@ -94,6 +94,105 @@
         margin: 0.5rem 0;
         font-size: 0.8rem;
       }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
     </style></head>
    <body>
       <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
@@ -118,45 +217,47 @@
                </tr>
             </tbody>
          </table>
-         <article>
-            <p>The build system AOSP and CyanogenMod have some interesting shell scripts that 
-               make it easier to build various parts of the system:
-            </p>
-            <ul>
-               <li>
-                  <p><code>breakfast [device]</code> -- selects a particular device for building
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <p>The build system AOSP and CyanogenMod have some interesting shell scripts that 
+                     make it easier to build various parts of the system:
                   </p>
-               </li>
-               <li>
-                  <p><code>brunch [device]</code> -- building the entire image for the device
+                  <ul>
+                     <li>
+                        <p><code>breakfast [device]</code> -- selects a particular device for building
+                        </p>
+                     </li>
+                     <li>
+                        <p><code>brunch [device]</code> -- building the entire image for the device
+                        </p>
+                     </li>
+                     <li>
+                        <p><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....
+                        </p>
+                     </li>
+                     <li>
+                        <p><code>mm [make_args]</code> -- builds whatever module you happen to be in, just that 
+                           module
+                        </p>
+                     </li>
+                     <li>
+                        <p><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just that 
+                           module, and pushes it to the device
+                        </p>
+                     </li>
+                  </ul>
+                  <p>So... the mm and mmp directives seem like great shortcuts to shorten your 
+                     develop / compile / test cycle, right?  But what about editor completion?  You 
+                     can't invoke mm and mmp in a vim session in order to munch on the compile 
+                     errors?!  Fret not!  Now you can!
                   </p>
-               </li>
-               <li>
-                  <p><code>mka bacon</code> -- almost the same as <code>brunch</code>, but, mmm.... bacon....
+                  <p>The first step is a couple of nifty shell scripts.  They probably represent a 
+                     horrible compromise of your security, so use with care.  But here they are...
                   </p>
-               </li>
-               <li>
-                  <p><code>mm [make_args]</code> -- builds whatever module you happen to be in, just that 
-                     module
-                  </p>
-               </li>
-               <li>
-                  <p><code>mmp [make_args]</code> -- builds whatever module you happen to be in, just that 
-                     module, and pushes it to the device
-                  </p>
-               </li>
-            </ul>
-            <p>So... the mm and mmp directives seem like great shortcuts to shorten your 
-               develop / compile / test cycle, right?  But what about editor completion?  You 
-               can't invoke mm and mmp in a vim session in order to munch on the compile 
-               errors?!  Fret not!  Now you can!
-            </p>
-            <p>The first step is a couple of nifty shell scripts.  They probably represent a 
-               horrible compromise of your security, so use with care.  But here they are...
-            </p>
-            <p>The first is a server of sorts, it sits in a open shell session, one that's all 
-               setup to build Android:
-            </p><pre><code class="language-bash do_over_there_listen.sh">#!/bin/bash
+                  <p>The first is a server of sorts, it sits in a open shell session, one that's all 
+                     setup to build Android:
+                  </p><pre><code class="language-bash do_over_there_listen.sh">#!/bin/bash
 
 FIFO_STDINP="/tmp/do_over_there.stdinp.fifo"
 FIFO_STDOUT="/tmp/do_over_there.stdout.fifo"
@@ -192,13 +293,16 @@ cat $FIFO_STDERR &gt;&amp;2 &amp;
 
 wait
 </code></pre><p>Then, the final piece of the puzzle is to tell vim to use the new "make" 
-               command with (after <code>chmod +x do_over_there</code> of course):
-            </p><pre><code class="language-text vimrc mods">set makeprg=~/path/to/do_over_there
+                     command with (after <code>chmod +x do_over_there</code> of course):
+                  </p><pre><code class="language-text vimrc mods">set makeprg=~/path/to/do_over_there
 </code></pre><p>Finally, you'll be able to compile with the AOSP and CyanogenMod build system 
-               niceties but then suck those error logs into vim.  Like so:
-            </p><img src=../images/do-over-there.gif />
-            
-         </article>
+                     niceties but then suck those error logs into vim.  Like so:
+                  </p><img src=../images/do-over-there.gif />
+                  
+               </article>
+            </div>
+            <div class="post-sidebar"></div>
+         </div>
       </main>
       <footer>
          <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>

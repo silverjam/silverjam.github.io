@@ -94,6 +94,105 @@
         margin: 0.5rem 0;
         font-size: 0.8rem;
       }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
     </style></head>
    <body>
       <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
@@ -118,65 +217,67 @@
                </tr>
             </tbody>
          </table>
-         <article>
-            <h2>The Problem: Unsatisfying Terminal Emulators</h2>
-            <p>Sometimes when you're hacking on things it's a great resource to be able to 
-               recall / search everything that you've done in the past so that you can 
-               reconstruct what's happened in a coherent matter.
-            </p>
-            <p>This is, a crutch, or a substitute for a structured approach to a problem, but 
-               I find it useful during "hack and slash" sessions when you don't necessarily 
-               want or need a structured approach.
-            </p>
-            <p>Some commercial terminals offer logging (<a href="http://vandyke.com/products/securecrt/index.html">SecureCRT</a> for example). 
-               Linux, terminals... not so much.  No such option exists in the default Ubuntu 
-               terminal.  There are two terminals named <em>Terminator</em> one is <a href="http://software.jessies.org/terminator/">Java 
-                  based</a> and does not have a package in the standard Ubuntu 
-               repositories, and the <a href="http://www.tenshu.net/p/terminator.html">other</a> is present in Ubuntu's 
-               standard repositories.
-            </p>
-            <p>You can image this led to some confusion on my part... because both offer some 
-               functionality that I wanted, but what I really wanted was a combination of the 
-               two terminals.  It's ironic that SecureCRT offers the best solution for what I wanted.
-            </p>
-            <p>Java Terminator:</p>
-            <ul>
-               <li>
-                  <p>Terminal logging</p>
-               </li>
-               <li>
-                  <p>Good search, ala OSX Term.app (does not really work though)</p>
-               </li>
-            </ul>
-            <p>Tenshu Terminator:</p>
-            <ul>
-               <li>
-                  <p>Infinite scrollback (also, does not work very well)</p>
-               </li>
-               <li>
-                  <p>Tiling</p>
-               </li>
-            </ul>
-            <p>So, what is a hacker to do?  Why... hack up something that works... a good 
-               citizen of the FLOSS world would try to add these features to the terminal 
-               emulator that they liked, but why bother when you can create a solution that 
-               solves most of the problem in a few minutes... Really, I ended up not like the 
-               java based Terminator at all because it was ugly and did not ingrate well with 
-               Ubuntu, so created my own logging solution seemed like it would solve the 
-               logging, search and infinite scrollback use cases.
-            </p>
-            <h2>The Solution: Old Fashioned 'Script' Utility</h2>
-            <p>The <a href="http://ultra.pr.erau.edu/~jaffem/classes/cs125/script.htm">script</a> tool is a unix utility to record everything that 
-               passing from the shell to the terminal emulator to control things like cursor 
-               movements, colors, and the contents of the cells on the terminal device.
-            </p>
-            <p>This is pretty heavy handed, and allows you to replay your entire terminal 
-               session (complete with timings) if you so desire.  But this isn't the goal, 
-               the goal is to get a terminal log, that easily searchable.
-            </p>
-            <p>So, to start, data is needed first, so as soon as the shell is started, 
-               everything is recorded:
-            </p><pre><code class="language-bash">    if [ -z "$UNDER_SCRIPT" ]; then
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <h2 id="the-problem-unsatisfying-terminal-emulators">The Problem: Unsatisfying Terminal Emulators</h2>
+                  <p>Sometimes when you're hacking on things it's a great resource to be able to 
+                     recall / search everything that you've done in the past so that you can 
+                     reconstruct what's happened in a coherent matter.
+                  </p>
+                  <p>This is, a crutch, or a substitute for a structured approach to a problem, but 
+                     I find it useful during "hack and slash" sessions when you don't necessarily 
+                     want or need a structured approach.
+                  </p>
+                  <p>Some commercial terminals offer logging (<a href="http://vandyke.com/products/securecrt/index.html">SecureCRT</a> for example). 
+                     Linux, terminals... not so much.  No such option exists in the default Ubuntu 
+                     terminal.  There are two terminals named <em>Terminator</em> one is <a href="http://software.jessies.org/terminator/">Java 
+                        based</a> and does not have a package in the standard Ubuntu 
+                     repositories, and the <a href="http://www.tenshu.net/p/terminator.html">other</a> is present in Ubuntu's 
+                     standard repositories.
+                  </p>
+                  <p>You can image this led to some confusion on my part... because both offer some 
+                     functionality that I wanted, but what I really wanted was a combination of the 
+                     two terminals.  It's ironic that SecureCRT offers the best solution for what I wanted.
+                  </p>
+                  <p>Java Terminator:</p>
+                  <ul>
+                     <li>
+                        <p>Terminal logging</p>
+                     </li>
+                     <li>
+                        <p>Good search, ala OSX Term.app (does not really work though)</p>
+                     </li>
+                  </ul>
+                  <p>Tenshu Terminator:</p>
+                  <ul>
+                     <li>
+                        <p>Infinite scrollback (also, does not work very well)</p>
+                     </li>
+                     <li>
+                        <p>Tiling</p>
+                     </li>
+                  </ul>
+                  <p>So, what is a hacker to do?  Why... hack up something that works... a good 
+                     citizen of the FLOSS world would try to add these features to the terminal 
+                     emulator that they liked, but why bother when you can create a solution that 
+                     solves most of the problem in a few minutes... Really, I ended up not like the 
+                     java based Terminator at all because it was ugly and did not ingrate well with 
+                     Ubuntu, so created my own logging solution seemed like it would solve the 
+                     logging, search and infinite scrollback use cases.
+                  </p>
+                  <h2 id="the-solution-old-fashioned-'script'-utility">The Solution: Old Fashioned 'Script' Utility</h2>
+                  <p>The <a href="http://ultra.pr.erau.edu/~jaffem/classes/cs125/script.htm">script</a> tool is a unix utility to record everything that 
+                     passing from the shell to the terminal emulator to control things like cursor 
+                     movements, colors, and the contents of the cells on the terminal device.
+                  </p>
+                  <p>This is pretty heavy handed, and allows you to replay your entire terminal 
+                     session (complete with timings) if you so desire.  But this isn't the goal, 
+                     the goal is to get a terminal log, that easily searchable.
+                  </p>
+                  <p>So, to start, data is needed first, so as soon as the shell is started, 
+                     everything is recorded:
+                  </p><pre><code class="language-bash">    if [ -z "$UNDER_SCRIPT" ]; then
 
         logdir=$HOME/Logs
         logname=$(date +%F_%T).$$.script
@@ -198,11 +299,11 @@
         exit $?
     fi
 </code></pre><p>Then a [terminal emulation library][gate-one] is added: 
-               [gate-one]: <a href="http://liftoff.github.io/GateOne/Developer/terminal.html">http://liftoff.github.io/GateOne/Developer/terminal.html</a></p><pre><code class="language-bash">    cd ~/Logs
+                     [gate-one]: <a href="http://liftoff.github.io/GateOne/Developer/terminal.html">http://liftoff.github.io/GateOne/Developer/terminal.html</a></p><pre><code class="language-bash">    cd ~/Logs
     wget https://raw.github.com/liftoff/GateOne/master/terminal/terminal.py
 </code></pre><p>Then a script is implemented to emulate a terminal and generate a usable log 
-               file:
-            </p><pre><code class="language-python">import sys
+                     file:
+                  </p><pre><code class="language-python">import sys
 import terminal
 import locale
 
@@ -223,11 +324,11 @@ def make_scroll_up_cb(term):
 
 term.add_callback(terminal.CALLBACK_SCROLL_UP, make_scroll_up_cb(term))
 </code></pre><p>Then, as need you'd invoke a shell script to decode a log, and grep for 
-               something interesting:
-            </p><pre><code class="language-bash">cat - | python stripesc.py
+                     something interesting:
+                  </p><pre><code class="language-bash">cat - | python stripesc.py
 </code></pre><p>Also periodically, you could throw away the terminal emulation data that's no 
-               longer needed:
-            </p><pre><code class="language-bash">#!/bin/bash
+                     longer needed:
+                  </p><pre><code class="language-bash">#!/bin/bash
 for log_file in `ls -1 *.script.gz`; do
 
     zcat $log_file | python stripesc.py
@@ -235,9 +336,20 @@ for log_file in `ls -1 *.script.gz`; do
 
 done
 </code></pre><p>Thus, we've solved the problem with minimal effort, and maximum utility 
-               (albeit a little cumbersome).
-            </p>
-         </article>
+                     (albeit a little cumbersome).
+                  </p>
+               </article>
+            </div>
+            <div class="post-sidebar">
+               <div class="toc">
+                  <h3>Table of Contents</h3>
+                  <ul>
+                     <li><a href="#the-problem-unsatisfying-terminal-emulators" class="toc-h2">The Problem: Unsatisfying Terminal Emulators</a></li>
+                     <li><a href="#the-solution-old-fashioned-'script'-utility" class="toc-h2">The Solution: Old Fashioned 'Script' Utility</a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
       </main>
       <footer>
          <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>

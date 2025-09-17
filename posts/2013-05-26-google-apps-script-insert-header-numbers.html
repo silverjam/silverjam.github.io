@@ -94,6 +94,105 @@
         margin: 0.5rem 0;
         font-size: 0.8rem;
       }
+
+      /* Sidebar layout for posts */
+      .post-layout {
+        display: grid;
+        grid-template-columns: 1fr 250px;
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .post-content {
+        min-width: 0; /* Prevents grid overflow */
+      }
+
+      .post-sidebar {
+        position: sticky;
+        top: 1rem;
+        height: fit-content;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+      }
+
+      .toc {
+        background-color: var(--card-background-color);
+        border: 1px solid var(--card-border-color);
+        border-radius: var(--border-radius);
+        padding: 1rem;
+      }
+
+      .toc h3 {
+        margin: 0 0 0.75rem 0;
+        font-size: 1rem;
+        color: var(--color);
+      }
+
+      .toc ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toc li {
+        margin: 0.25rem 0;
+      }
+
+      .toc a {
+        text-decoration: none;
+        color: var(--muted-color);
+        font-size: 0.875rem;
+        display: block;
+        padding: 0.25rem 0;
+        transition: color 0.2s;
+      }
+
+      .toc a:hover {
+        color: var(--primary);
+      }
+
+      .toc .toc-h2 {
+        font-weight: 500;
+      }
+
+      .toc .toc-h3 {
+        padding-left: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .toc .toc-h4 {
+        padding-left: 2rem;
+        font-size: 0.75rem;
+      }
+
+      /* Responsive behavior */
+      @media (max-width: 768px) {
+        .post-layout {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+
+        .post-sidebar {
+          position: static;
+          order: -1;
+          max-height: none;
+        }
+
+        .toc {
+          margin-bottom: 1rem;
+        }
+      }
+
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Heading anchor styling */
+      h2[id], h3[id], h4[id] {
+        scroll-margin-top: 1rem;
+      }
     </style></head>
    <body>
       <header><a href="../" class="logo">Jason Mobarak - Weblog</a><nav><a href="../about.html"><i class="fas fa-user"></i> About</a><a href="../tags.html"><i class="fas fa-tags"></i> Tags</a><a href="../atom.xml"><i class="fas fa-rss"></i> Feed</a><a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a></nav>
@@ -118,81 +217,82 @@
                </tr>
             </tbody>
          </table>
-         <article>
-            <p>Google <a href="https://developers.google.com/apps-script/"><em>Apps Script</em></a> presents an interesting solution to extend 
-               the features of Google applications.  The usual way to do this is with client 
-               side browser extensions, but they are not portable (that is, specific to a 
-               browser, and specific to the web)-- and cannot run unattended.
-            </p>
-            <p>Google's apps (and similarly, 99% of other web apps) have long lacked 
-               scriptability that native applications enjoy. <em>Apps script</em> is a play to 
-               resolve that deficiency.
-            </p>
-            <h2>TL;DR</h2>
-            <p>Jump to [the solution][solution] for the script that adds header numbers. 
-               [solution]: #The_Solution
-            </p>
-            <h2>The problem</h2>
-            <p>Google docs has undergone some interesting simplifications in recent times, and 
-               it'd be interesting to learn why certain features got chopped.
-            </p>
-            <p>In particular, at one point it was possible to insert numeric headers into a 
-               Google doc, though it looks like this was a <a href="http://www.youtube.com/watch?v=xaypUbQd6wI">CSS hack</a>.  Since Google 
-               docs isn't exposing the underlying CSS of the document anymore, this method no 
-               longer works.  You can also turn your headers 
-               <a href="http://webapps.stackexchange.com/questions/23861/header-numbering-in-google-docs">into numbered lists</a> 
-               ...  but this is <strong>really</strong> cumbersome.
-            </p>
-            <p>Why do you need numeric headers?  Well, it's a pretty standard word processor 
-               feature-- if you're packaging information into a fairly static format (say a 
-               PDF), it's useful for communication purposes to reference a specific part of 
-               the document; for example, if you were writing a technical review of someone's 
-               software.
-            </p>
-            <h2>Background</h2>
-            <p>Google offers several different types of scripts:</p><img src=../images/gapps-script-types.png />
-            
-            <p>The biggest distinction appears to be if a script is bound to a 
-               <a href="https://developers.google.com/apps-script/scripts_containers">container</a> or <a href="https://developers.google.com/apps-script/execution_script_editor">not</a> -- that is, whether 
-               the script lives inside a doc, form, spreadsheet, or if it sits outside one of 
-               these (sitting in the script editor).  Scripts can also become a standalone 
-               WebApp.
-            </p>
-            <p>As first, standalone scripts seemed useful for testing things out, but the 
-               inability to interact with the user quickly made a standalone scripts 
-               useless...  I found myself thinking that as I developed useful things with 
-               standalone scripts (macros!) that it'd be nice to share these, and simply 
-               insert some silly UI prompts to make the script generic-- it's unclear how to 
-               do this without making the script specific to a container, then sharing it in 
-               the <a href="https://developers.google.com/apps-script/publishing_gallery#installing_a_script_from_the_gallery">document specific script gallery</a> -- right now, there's no 
-               script gallery for text documents.
-            </p>
-            <h3>Power users, macro sharing, and the apps script gallery</h3>
-            <p>The apps script gallery seems sadly lacking... why is the script gallery buried 
-               inside the document?  This hardly seems like the "happening" place to showcase 
-               cool macros:
-            </p><img src=../images/gapps-script-gallery.png />
-            
-            <p>I did manage to find apps script "gallery" at one point, but it was full of 
-               commercial apps geared at implementing solution on top of Google Apps for 
-               businesses.  This is great, but if Google wants to crowd source all the crazy 
-               features that users want by providing power-users with scripting capabilities, 
-               there should probably be something more like the chrome extensions gallery to 
-               showcase macros.  That is, something easily accessible from a Google search.
-            </p>
-            <h2>The solution </h2>
-            <p>The solution is to simply use the Google apps script API to create your own 
-               header numbers.  It's somewhat cumbersome, and will probably break in many 
-               cases, but it works.
-            </p>
-            <p>There's probably a better way to do this... for example, one improvement would 
-               be to figure out how to share this to a common repository so it could be 
-               imported into other documents.
-            </p>
-            <p>Start by creating a new apps script in the document:</p><img src=../images/launch-script-editor.png />
-            
-            <p>Then insert the following script (also maintained <a href="https://gist.github.com/silverjam/5613969">in a gist</a>):
-            </p><pre><code class="language-javascript">
+         <div class="post-layout">
+            <div class="post-content">
+               <article>
+                  <p>Google <a href="https://developers.google.com/apps-script/"><em>Apps Script</em></a> presents an interesting solution to extend 
+                     the features of Google applications.  The usual way to do this is with client 
+                     side browser extensions, but they are not portable (that is, specific to a 
+                     browser, and specific to the web)-- and cannot run unattended.
+                  </p>
+                  <p>Google's apps (and similarly, 99% of other web apps) have long lacked 
+                     scriptability that native applications enjoy. <em>Apps script</em> is a play to 
+                     resolve that deficiency.
+                  </p>
+                  <h2 id="tldr">TL;DR</h2>
+                  <p>Jump to <a href="#the-solution">the solution</a> for the script that adds header numbers.
+                  </p>
+                  <h2 id="the-problem">The problem</h2>
+                  <p>Google docs has undergone some interesting simplifications in recent times, and 
+                     it'd be interesting to learn why certain features got chopped.
+                  </p>
+                  <p>In particular, at one point it was possible to insert numeric headers into a 
+                     Google doc, though it looks like this was a <a href="http://www.youtube.com/watch?v=xaypUbQd6wI">CSS hack</a>.  Since Google 
+                     docs isn't exposing the underlying CSS of the document anymore, this method no 
+                     longer works.  You can also turn your headers 
+                     <a href="http://webapps.stackexchange.com/questions/23861/header-numbering-in-google-docs">into numbered lists</a> 
+                     ...  but this is <strong>really</strong> cumbersome.
+                  </p>
+                  <p>Why do you need numeric headers?  Well, it's a pretty standard word processor 
+                     feature-- if you're packaging information into a fairly static format (say a 
+                     PDF), it's useful for communication purposes to reference a specific part of 
+                     the document; for example, if you were writing a technical review of someone's 
+                     software.
+                  </p>
+                  <h2 id="background">Background</h2>
+                  <p>Google offers several different types of scripts:</p><img src=../images/gapps-script-types.png />
+                  
+                  <p>The biggest distinction appears to be if a script is bound to a 
+                     <a href="https://developers.google.com/apps-script/scripts_containers">container</a> or <a href="https://developers.google.com/apps-script/execution_script_editor">not</a> -- that is, whether 
+                     the script lives inside a doc, form, spreadsheet, or if it sits outside one of 
+                     these (sitting in the script editor).  Scripts can also become a standalone 
+                     WebApp.
+                  </p>
+                  <p>As first, standalone scripts seemed useful for testing things out, but the 
+                     inability to interact with the user quickly made a standalone scripts 
+                     useless...  I found myself thinking that as I developed useful things with 
+                     standalone scripts (macros!) that it'd be nice to share these, and simply 
+                     insert some silly UI prompts to make the script generic-- it's unclear how to 
+                     do this without making the script specific to a container, then sharing it in 
+                     the <a href="https://developers.google.com/apps-script/publishing_gallery#installing_a_script_from_the_gallery">document specific script gallery</a> -- right now, there's no 
+                     script gallery for text documents.
+                  </p>
+                  <h3 id="power-users--macro-sharing--and-the-apps-script-gallery">Power users, macro sharing, and the apps script gallery</h3>
+                  <p>The apps script gallery seems sadly lacking... why is the script gallery buried 
+                     inside the document?  This hardly seems like the "happening" place to showcase 
+                     cool macros:
+                  </p><img src=../images/gapps-script-gallery.png />
+                  
+                  <p>I did manage to find apps script "gallery" at one point, but it was full of 
+                     commercial apps geared at implementing solution on top of Google Apps for 
+                     businesses.  This is great, but if Google wants to crowd source all the crazy 
+                     features that users want by providing power-users with scripting capabilities, 
+                     there should probably be something more like the chrome extensions gallery to 
+                     showcase macros.  That is, something easily accessible from a Google search.
+                  </p>
+                  <h2 id="the-solution">The solution </h2>
+                  <p>The solution is to simply use the Google apps script API to create your own 
+                     header numbers.  It's somewhat cumbersome, and will probably break in many 
+                     cases, but it works.
+                  </p>
+                  <p>There's probably a better way to do this... for example, one improvement would 
+                     be to figure out how to share this to a common repository so it could be 
+                     imported into other documents.
+                  </p>
+                  <p>Start by creating a new apps script in the document:</p><img src=../images/launch-script-editor.png />
+                  
+                  <p>Then insert the following script (also maintained <a href="https://gist.github.com/silverjam/5613969">in a gist</a>):
+                  </p><pre><code class="language-javascript">
 var state = {
   headerLevel1: 0,
   headerLevel2: 0,
@@ -272,15 +372,29 @@ function addHeaderNumbers()
   doc.saveAndClose();
 }
 </code></pre><p>Save the project and return to the document.  Then use the script manager to 
-               open the list of available functions to run:
-            </p><img src=../images/gapps-script-manager.png />
-            
-            <p>Then select the 'addHeaderNumbers' script:</p><img src=../images/gapps-script-run-script.png />
-            
-            <p>And magically your document will now have header numbering:</p><img src=../images/gapps-example-header-numbers.png />
-            
-            <p>EOT</p>
-         </article>
+                     open the list of available functions to run:
+                  </p><img src=../images/gapps-script-manager.png />
+                  
+                  <p>Then select the 'addHeaderNumbers' script:</p><img src=../images/gapps-script-run-script.png />
+                  
+                  <p>And magically your document will now have header numbering:</p><img src=../images/gapps-example-header-numbers.png />
+                  
+                  <p>EOT</p>
+               </article>
+            </div>
+            <div class="post-sidebar">
+               <div class="toc">
+                  <h3>Table of Contents</h3>
+                  <ul>
+                     <li><a href="#tldr" class="toc-h2">TL;DR</a></li>
+                     <li><a href="#the-problem" class="toc-h2">The problem</a></li>
+                     <li><a href="#background" class="toc-h2">Background</a></li>
+                     <li><a href="#power-users--macro-sharing--and-the-apps-script-gallery" class="toc-h3">Power users, macro sharing, and the apps script gallery</a></li>
+                     <li><a href="#the-solution" class="toc-h2">The solution </a></li>
+                  </ul>
+               </div>
+            </div>
+         </div>
       </main>
       <footer>
          <div class="social-links"><a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a><a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon"><i class="fab fa-mastodon"></i></a><a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads"><i class="fa-brands fa-threads"></i></a><a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a></div>
