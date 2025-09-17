@@ -197,9 +197,9 @@ new-post:
 		-e "s/{{TAGS}}/$(if $(TAGS),$(TAGS),$(NEW_POST_TAGS))/g" \
 		-e "s/{{SUMMARY}}/$(if $(SUMMARY),$(SUMMARY),$(NEW_POST_SUMMARY))/g" \
 		templates/post-template.markdown > "$$NEW_POST_FILE"; \
-	yq eval '.posts += ["'"$$NEW_POST_FILE"'"]' -i posts.yaml; \
+	yq eval '.posts = ["'"$$NEW_POST_FILE"'"] + .posts' -i posts.yaml; \
 	echo "Created: $$NEW_POST_FILE"; \
-	echo "Added $$NEW_POST_FILE to posts.yaml"
+	echo "Added $$NEW_POST_FILE to posts.yaml (sorted by date)"
 
 .PHONY: help-new-post
 help-new-post:
