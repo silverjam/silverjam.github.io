@@ -118,7 +118,7 @@ serve-restart: serve-stop serve
 .PHONY: snapshot
 snapshot: html index.html about.html tags.html
 	@echo "Creating page snapshots using Docker + Chromium..."
-	docker run --rm \
+	@docker run --rm \
 		-v $(PWD):/workspace \
 		-w /workspace \
 		zenika/alpine-chrome:latest \
@@ -128,7 +128,7 @@ snapshot: html index.html about.html tags.html
 		--window-size=1200,800 \
 		--screenshot=_snapshots/index.png \
 		file:///workspace/index.html
-	docker run --rm \
+	@docker run --rm \
 		-v $(PWD):/workspace \
 		-w /workspace \
 		zenika/alpine-chrome:latest \
@@ -138,7 +138,7 @@ snapshot: html index.html about.html tags.html
 		--window-size=1200,800 \
 		--screenshot=_snapshots/about.png \
 		file:///workspace/about.html
-	docker run --rm \
+	@docker run --rm \
 		-v $(PWD):/workspace \
 		-w /workspace \
 		zenika/alpine-chrome:latest \
@@ -148,7 +148,7 @@ snapshot: html index.html about.html tags.html
 		--window-size=1200,800 \
 		--screenshot=_snapshots/tags.png \
 		file:///workspace/tags.html
-	docker run --rm \
+	@docker run --rm \
 		-v $(PWD):/workspace \
 		-w /workspace \
 		zenika/alpine-chrome:latest \
