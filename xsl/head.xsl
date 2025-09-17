@@ -117,7 +117,7 @@
 <xsl:template name="header">
   <xsl:param name="baseURL" select="''" />
   <header>
-    <a href="{if ($baseURL = '') then '/' else $baseURL}" class="logo">Jason Mobarak - Blog</a>
+    <a href="{if ($baseURL = '') then '/' else $baseURL}" class="logo">Jason Mobarak - Weblog</a>
     <nav>
       <a href="{$baseURL}about.html">About</a>
       <a href="{$baseURL}tags.html">Tags</a>
@@ -155,6 +155,7 @@
         <i class="fab fa-creative-commons-sa"></i>
       </a>
       This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
+      · <a href="sitemap.xml">Sitemap</a>
     </div>
   </footer>
 </xsl:template>

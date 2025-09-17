@@ -1,7 +1,3 @@
----
-layout: post
----
-
 # About
 
 | Metadata   | Value      |
@@ -24,6 +20,7 @@ I'm Jason Mobarak, a software engineer interested in build systems, developer to
 ## Technical Details
 
 This site uses:
+
 - **Markdown** for content authoring
 - **CommonMark XML** as an intermediate format
 - **XSLT** for HTML transformation
@@ -31,3 +28,4 @@ This site uses:
 - **highlight.js** for syntax highlighting
 
 The entire build process is managed by a simple Makefile, ensuring reproducible builds and minimal dependencies.
+
