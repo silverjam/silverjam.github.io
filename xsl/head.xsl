@@ -119,9 +119,10 @@
   <header>
     <a href="{if ($baseURL = '') then '/' else $baseURL}" class="logo">Jason Mobarak - Weblog</a>
     <nav>
-      <a href="{$baseURL}about.html">About</a>
-      <a href="{$baseURL}tags.html">Tags</a>
-      <a href="{$baseURL}atom.xml">Feed</a>
+      <a href="{$baseURL}about.html"><i class="fas fa-user"></i> About</a>
+      <a href="{$baseURL}tags.html"><i class="fas fa-tags"></i> Tags</a>
+      <a href="{$baseURL}atom.xml"><i class="fas fa-rss"></i> Feed</a>
+      <a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a>
     </nav>
   </header>
 </xsl:template>
