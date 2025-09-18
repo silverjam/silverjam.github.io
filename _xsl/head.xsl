@@ -227,6 +227,7 @@
 </xsl:template>
 
 <xsl:template name="footer">
+  <xsl:param name="baseURL" select="''" />
   <footer>
     <div class="social-links">
       <a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub">
@@ -255,7 +256,7 @@
         <i class="fab fa-creative-commons-sa"></i>
       </a>
       This work is licensed under a Creative Commons Attribution-ShareAlike 4.0 International License
-      · <a href="sitemap.xml">Sitemap</a>
+      · <a href="{$baseURL}sitemap.xml">Sitemap</a>
     </div>
   </footer>
 </xsl:template>

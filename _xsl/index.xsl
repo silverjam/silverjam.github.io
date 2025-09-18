@@ -214,7 +214,9 @@
           </xsl:for-each>
         </ul>
       </main>
-      <xsl:call-template name="footer" />
+      <xsl:call-template name="footer">
+        <xsl:with-param name="baseURL" select="''" />
+      </xsl:call-template>
     </body>
   </html>
 </xsl:template>

@@ -51,7 +51,9 @@
           </div>
         </div>
       </main>
-      <xsl:call-template name="footer" />
+      <xsl:call-template name="footer">
+        <xsl:with-param name="baseURL" select="'../'" />
+      </xsl:call-template>
       <script>hljs.highlightAll();</script>
     </body>
   </html>
