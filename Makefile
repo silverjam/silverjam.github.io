@@ -16,7 +16,7 @@ SAXON_VERSION := 9.1.0.8J
 BLOG_URL := https://silverjam.github.io
 
 .PHONY: all
-all: check-comrak-version check-saxon-version html index.html about.html tags.html atom.xml sitemap.xml
+all: check-comrak-version check-saxon-version html index.html about.html tags.html drafts.html atom.xml sitemap.xml
 
 .PHONY: install-comrak
 install-comrak:
@@ -80,6 +80,9 @@ about.html: _build/about.xml | _xsl/head.xsl _xsl/root-post.xsl _build/CommonMar
 
 tags.html: $(POSTS_XML) | _xsl/head.xsl _xsl/tags.xsl
 	echo "<tags/>" | saxonb-xslt -s:- -o:tags.html -xsl:_xsl/tags.xsl "files=$(POSTS_INDEX)"
+
+drafts.html: $(POSTS_XML) | _xsl/head.xsl _xsl/drafts.xsl
+	echo "<drafts/>" | saxonb-xslt -s:- -o:drafts.html -xsl:_xsl/drafts.xsl "files=$(POSTS_INDEX)"
 
 atom.xml: $(POSTS_XML) | _xsl/atom.xsl
 	echo "<atom/>" | saxonb-xslt -s:- -o:atom.xml -xsl:_xsl/atom.xsl "files=$(POSTS_INDEX)" "blogUrl=$(BLOG_URL)"
@@ -188,6 +191,57 @@ new-post:
 	echo "Created: $$NEW_POST_FILE"; \
 	echo "Added $$NEW_POST_FILE to posts.yaml (sorted by date)"
 
+# Publish a draft post (remove draft category)
+# Usage: make publish-post POST="filename.markdown" or POST="Post Title"
+.PHONY: publish-post
+publish-post:
+	@if [ -z "$(POST)" ]; then \
+		echo "Error: POST is required. Usage: make publish-post POST=\"filename.markdown\" or POST=\"Post Title\""; \
+		exit 1; \
+	fi
+	@echo "Publishing post: $(POST)"
+	@if [ -f "_posts/$(POST)" ]; then \
+		POST_FILE="_posts/$(POST)"; \
+	elif [ -f "$(POST)" ]; then \
+		POST_FILE="$(POST)"; \
+	else \
+		POST_SLUG=$$(echo "$(POST)" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-\|-$$//g'); \
+		POST_FILE=$$(find _posts -name "*$$POST_SLUG.markdown" | head -1); \
+		if [ -z "$$POST_FILE" ]; then \
+			echo "Error: Could not find post matching '$(POST)'"; \
+			echo "Available drafts:"; \
+			grep -l "draft" _posts/*.markdown 2>/dev/null | while read file; do \
+				title=$$(grep "^# " "$$file" | head -1 | sed 's/^# //'); \
+				echo "  - $$file: $$title"; \
+			done || echo "  No draft posts found"; \
+			exit 1; \
+		fi; \
+	fi; \
+	if ! grep -q "draft" "$$POST_FILE"; then \
+		echo "Warning: Post $$POST_FILE does not contain 'draft' category"; \
+		echo "Post may already be published"; \
+		exit 1; \
+	fi; \
+	echo "Removing 'draft' category from $$POST_FILE"; \
+	sed -i.bak -E 's/^(\| Categories[[:space:]]*\|[[:space:]]*)([^|]*),?[[:space:]]*draft[[:space:]]*,?([^|]*)[[:space:]]*\|/\1\2\3 \|/' "$$POST_FILE"; \
+	sed -i.bak -E 's/^(\| Categories[[:space:]]*\|[[:space:]]*)draft[[:space:]]*,?[[:space:]]*([^|]*)[[:space:]]*\|/\1\2 \|/' "$$POST_FILE"; \
+	sed -i.bak -E 's/^(\| Categories[[:space:]]*\|[[:space:]]*)[[:space:]]*,+[[:space:]]*([^|]*[[:space:]]*\|)/\1\2/' "$$POST_FILE"; \
+	sed -i.bak -E 's/^(\| Categories[[:space:]]*\|[[:space:]]*)([^|]*)[[:space:]]*,+[[:space:]]*\|/\1\2 \|/' "$$POST_FILE"; \
+	rm "$$POST_FILE.bak"; \
+	echo "Published: $$POST_FILE"; \
+	echo "Rebuilding site..."; \
+	$(MAKE) all
+
+# List all draft posts
+.PHONY: list-drafts
+list-drafts:
+	@echo "Draft posts:"
+	@grep -l "| Categories.*draft" _posts/*.markdown 2>/dev/null | while read file; do \
+		title=$$(grep "^# " "$$file" | head -1 | sed 's/^# //'); \
+		date=$$(grep "| Date" "$$file" | sed 's/.*| Date[[:space:]]*|[[:space:]]*//' | sed 's/[[:space:]]*|.*//'); \
+		echo "  - $$file: $$title [$$date]"; \
+	done || echo "  No draft posts found"
+
 .PHONY: help-new-post
 help-new-post:
 	@echo "Create a new blog post from template:"
@@ -205,3 +259,24 @@ help-new-post:
 	@echo "  make new-post TITLE=\"Getting Started with XSLT\""
 	@echo "  make new-post TITLE=\"Advanced CSS Grid\" DATE=2025-01-15 TAGS=\"css, web, design\""
 	@echo "  make new-post TITLE=\"My New Feature\" SUMMARY=\"How I built this amazing feature\""
+	@echo ""
+	@echo "Draft workflow:"
+	@echo "  1. Create post with 'make new-post' (includes 'draft' tag by default)"
+	@echo "  2. Edit the post in _posts/"
+	@echo "  3. Publish with 'make publish-post POST=\"filename\" or POST=\"Post Title\"'"
+	@echo "  4. Use 'make list-drafts' to see all current drafts"
+
+.PHONY: help-publish-post
+help-publish-post:
+	@echo "Publish a draft post (remove draft category):"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make publish-post POST=\"filename.markdown\""
+	@echo "  make publish-post POST=\"Post Title\""
+	@echo ""
+	@echo "Examples:"
+	@echo "  make publish-post POST=\"2025-09-20-my-post.markdown\""
+	@echo "  make publish-post POST=\"My Post Title\""
+	@echo ""
+	@echo "Related commands:"
+	@echo "  make list-drafts    - Show all current draft posts"

@@ -40,8 +40,8 @@
               /cm:text/text()
             " />
 
-            <!-- Split categories by comma and create category elements -->
-            <xsl:if test="$categories">
+            <!-- Only include posts that don't contain 'draft' in categories -->
+            <xsl:if test="$categories and not(contains($categories, 'draft'))">
               <xsl:for-each select="tokenize($categories, ',')">
                 <category>
                   <xsl:attribute name="name" select="normalize-space(.)" />

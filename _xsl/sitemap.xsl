@@ -42,13 +42,17 @@
         <xsl:sort select="//cm:text[parent::cm:table_cell[preceding-sibling::cm:table_cell/cm:text[contains(text(), 'Date')]]]" order="descending"/>
         <xsl:variable name="filename" select="replace(tokenize(document-uri(.), '/')[last()], '.xml$', '.html')"/>
         <xsl:variable name="date" select="//cm:text[parent::cm:table_cell[preceding-sibling::cm:table_cell/cm:text[contains(text(), 'Date')]]]"/>
+        <xsl:variable name="categories" select="//cm:text[parent::cm:table_cell[preceding-sibling::cm:table_cell/cm:text[contains(text(), 'Categories')]]]"/>
 
-        <url>
-          <loc><xsl:value-of select="$baseURL"/>posts/<xsl:value-of select="$filename"/></loc>
-          <lastmod><xsl:value-of select="$date"/></lastmod>
-          <changefreq>yearly</changefreq>
-          <priority>0.6</priority>
-        </url>
+        <!-- Only include non-draft posts -->
+        <xsl:if test="not(contains($categories, 'draft'))">
+          <url>
+            <loc><xsl:value-of select="$baseURL"/>posts/<xsl:value-of select="$filename"/></loc>
+            <lastmod><xsl:value-of select="$date"/></lastmod>
+            <changefreq>yearly</changefreq>
+            <priority>0.6</priority>
+          </url>
+        </xsl:if>
       </xsl:for-each>
     </urlset>
   </xsl:template>
