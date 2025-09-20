@@ -3,8 +3,9 @@ POSTS_MD := $(shell yq eval '.posts[]' posts.yaml)
 POSTS_XML = $(POSTS_MD:_posts%markdown=_build%xml)
 
 _SEMI := ;
-_EMPTY := 
+_EMPTY :=
 _SPACE := $(_EMPTY) $(_EMPTY)
+comma := ,
 
 _POSTS_INDEX = $(POSTS_MD:_posts%markdown=../_build%xml)
 POSTS_INDEX = $(subst $(_SPACE),$(_SEMI),$(_POSTS_INDEX))
@@ -182,9 +183,10 @@ new-post:
 		echo "Error: Post file $$NEW_POST_FILE already exists"; \
 		exit 1; \
 	fi; \
+	FINAL_TAGS="$(if $(TAGS),$(TAGS)$(if $(findstring draft,$(TAGS)),,$(comma) draft),$(NEW_POST_TAGS))"; \
 	sed -e "s/{{TITLE}}/$(TITLE)/g" \
 		-e "s/{{DATE}}/$(if $(DATE),$(DATE),$(NEW_POST_DATE))/g" \
-		-e "s/{{TAGS}}/$(if $(TAGS),$(TAGS),$(NEW_POST_TAGS))/g" \
+		-e "s/{{TAGS}}/$$FINAL_TAGS/g" \
 		-e "s/{{SUMMARY}}/$(if $(SUMMARY),$(SUMMARY),$(NEW_POST_SUMMARY))/g" \
 		_templates/post-template.markdown > "$$NEW_POST_FILE"; \
 	yq eval '.posts = ["'"$$NEW_POST_FILE"'"] + .posts' -i posts.yaml; \
