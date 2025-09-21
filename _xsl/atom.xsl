@@ -110,24 +110,14 @@
           </xsl:if>
 
           <!-- Content -->
-          <content type="html">
-            <xsl:text>&lt;![CDATA[</xsl:text>
-
+          <content type="text">
             <!-- Add summary if available -->
             <xsl:if test="$summary">
               <xsl:for-each select="$summary">
                 <xsl:value-of select="replace(., 'SUMMARY:', '')" />
                 <xsl:text> </xsl:text>
               </xsl:for-each>
-              <xsl:text>
-
-</xsl:text>
             </xsl:if>
-
-            <!-- Add full post content -->
-            <xsl:apply-templates select="$doc/cm:document/cm:thematic_break[1]/following-sibling::*" mode="atom-content" />
-
-            <xsl:text>]]&gt;</xsl:text>
           </content>
         </entry>
       </xsl:if>
@@ -135,95 +125,6 @@
   </feed>
 </xsl:template>
 
-<!-- Templates for converting CommonMark XML to HTML in Atom content -->
-<xsl:template match="cm:heading[@level=2]" mode="atom-content">
-  <xsl:text>&lt;h2&gt;</xsl:text>
-  <xsl:value-of select="cm:text/text()" />
-  <xsl:text>&lt;/h2&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:heading[@level=3]" mode="atom-content">
-  <xsl:text>&lt;h3&gt;</xsl:text>
-  <xsl:value-of select="cm:text/text()" />
-  <xsl:text>&lt;/h3&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:heading[@level=4]" mode="atom-content">
-  <xsl:text>&lt;h4&gt;</xsl:text>
-  <xsl:value-of select="cm:text/text()" />
-  <xsl:text>&lt;/h4&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:paragraph" mode="atom-content">
-  <xsl:text>&lt;p&gt;</xsl:text>
-  <xsl:apply-templates select="*" mode="atom-content" />
-  <xsl:text>&lt;/p&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:strong" mode="atom-content">
-  <xsl:text>&lt;strong&gt;</xsl:text>
-  <xsl:apply-templates select="*" mode="atom-content" />
-  <xsl:text>&lt;/strong&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:emph" mode="atom-content">
-  <xsl:text>&lt;em&gt;</xsl:text>
-  <xsl:apply-templates select="*" mode="atom-content" />
-  <xsl:text>&lt;/em&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:text" mode="atom-content">
-  <xsl:value-of select="text()"/>
-</xsl:template>
-
-<xsl:template match="cm:code" mode="atom-content">
-  <xsl:text>&lt;code&gt;</xsl:text>
-  <xsl:value-of select="text()"/>
-  <xsl:text>&lt;/code&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:code_block" mode="atom-content">
-  <xsl:text>&lt;pre&gt;&lt;code&gt;</xsl:text>
-  <xsl:value-of select="text()" />
-  <xsl:text>&lt;/code&gt;&lt;/pre&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:list[@type='bullet']" mode="atom-content">
-  <xsl:text>&lt;ul&gt;</xsl:text>
-  <xsl:apply-templates select="cm:item" mode="atom-content" />
-  <xsl:text>&lt;/ul&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:list[@type='ordered']" mode="atom-content">
-  <xsl:text>&lt;ol&gt;</xsl:text>
-  <xsl:apply-templates select="cm:item" mode="atom-content" />
-  <xsl:text>&lt;/ol&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:item" mode="atom-content">
-  <xsl:text>&lt;li&gt;</xsl:text>
-  <xsl:apply-templates select="*" mode="atom-content" />
-  <xsl:text>&lt;/li&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:link" mode="atom-content">
-  <xsl:text>&lt;a href="</xsl:text>
-  <xsl:value-of select="@destination" />
-  <xsl:text>"&gt;</xsl:text>
-  <xsl:apply-templates mode="atom-content" />
-  <xsl:text>&lt;/a&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:thematic_break" mode="atom-content">
-  <xsl:text>&lt;hr/&gt;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cm:softbreak" mode="atom-content">
-  <xsl:text> </xsl:text>
-</xsl:template>
-
-<!-- Ignore other elements in Atom content mode -->
-<xsl:template match="text()" mode="atom-content"/>
 
 </xsl:stylesheet>
 
