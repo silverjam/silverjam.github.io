@@ -230,19 +230,19 @@
   <xsl:param name="baseURL" select="''" />
   <footer>
     <div class="social-links">
-      <a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub">
+      <a href="https://github.com/silverjam" title="GitHub" aria-label="GitHub" rel="me">
         <i class="fab fa-github"></i>
       </a>
-      <a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon">
+      <a href="https://hachyderm.io/@silverjam" title="Mastodon" aria-label="Mastodon" rel="me">
         <i class="fab fa-mastodon"></i>
       </a>
-      <a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads">
+      <a href="https://www.threads.com/@silv3rjam" title="Threads" aria-label="Threads" rel="me">
         <i class="fa-brands fa-threads"></i>
       </a>
-      <a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram">
+      <a href="https://www.instagram.com/silv3rjam/" title="Instagram" aria-label="Instagram" rel="me">
         <i class="fab fa-instagram"></i>
       </a>
-      <a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn">
+      <a href="https://www.linkedin.com/in/silverjam" title="LinkedIn" aria-label="LinkedIn" rel="me">
         <i class="fab fa-linkedin"></i>
       </a>
     </div>
