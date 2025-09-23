@@ -33,7 +33,7 @@ This is a static blog generator that transforms Markdown posts into HTML using a
 - `_build/` - Intermediate XML files + CommonMark.dtd symlink
 - `posts/` - Generated HTML files
 - `xsl/` - XSLT templates (head.xsl, post.xsl, index.xsl)
-- `commonmark-spec/` - Git submodule providing CommonMark DTD for XML validation
+- `.CommonMark.dtd` - Hidden DTD file for XML validation (auto-downloaded)
 
 ### XSL Template Hierarchy
 - `head.xsl` - Common HTML head template with Pico.css + highlight.js
@@ -70,10 +70,11 @@ some_frontmatter: "value"
 
 ## Development Notes
 
-### Git Submodule
-- `commonmark-spec` submodule required for CommonMark DTD
-- Auto-initialized via `git submodule update --init commonmark-spec` in Makefile
+### CommonMark DTD
+- `.CommonMark.dtd` file automatically downloaded via curl from official CommonMark spec repository
+- Auto-fetched via `curl -sSLo .CommonMark.dtd https://raw.githubusercontent.com/commonmark/commonmark-spec/refs/heads/master/CommonMark.dtd` in Makefile
 - Provides XML validation for markdown conversion
+- Hidden file (dotfile) to keep directory listing clean
 
 ### Styling Customization
 - Modify `xsl/head.xsl` for global styles, CSS CDN links, or JavaScript

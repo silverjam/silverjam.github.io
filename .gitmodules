@@ -1,3 +1,0 @@
-[submodule "commonmark-spec"]
-	path = _commonmark_spec
-	url = https://github.com/commonmark/commonmark-spec.git

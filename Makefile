@@ -62,10 +62,10 @@ _build/CommonMark.dtd: $(CM_DTD)
 posts/%.html: _build/%.xml | _xsl/head.xsl _xsl/post.xsl _build/CommonMark.dtd
 	saxonb-xslt -xsl:_xsl/post.xsl -s:$^ -o:$@
 
-CM_DTD := _commonmark_spec/CommonMark.dtd
+CM_DTD := .CommonMark.dtd
 
 $(CM_DTD):
-	git submodule update --init commonmark-spec
+	curl -sSLo .CommonMark.dtd https://raw.githubusercontent.com/commonmark/commonmark-spec/refs/heads/master/CommonMark.dtd
 
 .PHONY: xml
 xml: $(POSTS_XML)
