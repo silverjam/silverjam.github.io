@@ -103,7 +103,7 @@ test-render: $(CM_DTD)
 .PHONY: serve
 serve: all
 	@echo "Starting local development server..."
-	@echo "Blog will be available at: http://localhost:8080"
+	@echo "Blog will be available at: http://localhost:8888"
 	docker compose up -d
 	@echo "Server started! Use 'make serve-stop' to stop the server."
 
