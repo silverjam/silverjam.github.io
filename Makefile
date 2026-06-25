@@ -12,7 +12,7 @@ POSTS_INDEX = $(subst $(_SPACE),$(_SEMI),$(_POSTS_INDEX))
 
 POSTS_HTML = $(POSTS_MD:_posts%markdown=posts%html)
 
-COMRAK_VERSION := 0.41.1
+COMRAK_VERSION := 0.52.0
 SAXON_VERSION := 9.1.0.8J
 BLOG_URL := https://silverjam.github.io
 
@@ -57,7 +57,7 @@ _build/%.xml: _posts/%.markdown
 	comrak --front-matter-delimiter="---" --gfm -t xml -o $@ $^
 
 _build/CommonMark.dtd: $(CM_DTD)
-	cd _build; ln -sf ../$(CM_DTD)
+	cd _build; ln -sf ../$(CM_DTD) CommonMark.dtd
 
 posts/%.html: _build/%.xml | _xsl/head.xsl _xsl/post.xsl _build/CommonMark.dtd
 	saxonb-xslt -xsl:_xsl/post.xsl -s:$^ -o:$@
