@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="sitemap-pretty.xsl" type="text/xsl"?>
+<?xml-stylesheet href="sitemap-pretty.xsl?v=3" type="text/xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:cm="http://commonmark.org/xml/1.0">
    <url>
       <loc>https://silverjam.github.io/</loc>
-      <lastmod>2026-06-23</lastmod>
+      <lastmod>2026-06-30</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
    </url>
    <url>
       <loc>https://silverjam.github.io/about.html</loc>
-      <lastmod>2026-06-23</lastmod>
+      <lastmod>2026-06-30</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://silverjam.github.io/tags.html</loc>
-      <lastmod>2026-06-23</lastmod>
+      <lastmod>2026-06-30</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.7</priority>
    </url>
@@ -30,18 +30,6 @@
    <url>
       <loc>https://silverjam.github.io/posts/2023-07-24.html</loc>
       <lastmod>2023-07-25</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-   <url>
-      <loc>https://silverjam.github.io/posts/2015-05-22-prius-total-cost-of-ownership.html</loc>
-      <lastmod>2015-05-22</lastmod>
-      <changefreq>yearly</changefreq>
-      <priority>0.6</priority>
-   </url>
-   <url>
-      <loc>https://silverjam.github.io/posts/2015-04-19-least-bits-required-to-transmit-a-permutation.html</loc>
-      <lastmod>2015-04-10</lastmod>
       <changefreq>yearly</changefreq>
       <priority>0.6</priority>
    </url>

@@ -9,7 +9,7 @@
   <xsl:param name="baseURL" select="'https://silverjam.github.io/'"/>
 
   <xsl:template match="/">
-    <xsl:processing-instruction name="xml-stylesheet">href="sitemap-pretty.xsl" type="text/xsl"</xsl:processing-instruction>
+    <xsl:processing-instruction name="xml-stylesheet">href="sitemap-pretty.xsl?v=3" type="text/xsl"</xsl:processing-instruction>
     <xsl:text>
 </xsl:text>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -44,8 +44,8 @@
         <xsl:variable name="date" select="//cm:text[parent::cm:table_cell[preceding-sibling::cm:table_cell/cm:text[contains(text(), 'Date')]]]"/>
         <xsl:variable name="categories" select="//cm:text[parent::cm:table_cell[preceding-sibling::cm:table_cell/cm:text[contains(text(), 'Categories')]]]"/>
 
-        <!-- Only include non-draft posts -->
-        <xsl:if test="not(contains($categories, 'draft'))">
+        <!-- Only include posts that aren't hidden from public listings -->
+        <xsl:if test="not(contains($categories, 'draft')) and not(contains($categories, 'hidden'))">
           <url>
             <loc><xsl:value-of select="$baseURL"/>posts/<xsl:value-of select="$filename"/></loc>
             <lastmod><xsl:value-of select="$date"/></lastmod>

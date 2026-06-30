@@ -47,8 +47,8 @@
               "
               />
 
-            <!-- Only show posts that don't contain 'archive' or 'draft' in categories -->
-            <xsl:if test="not(contains($categories, 'archive')) and not(contains($categories, 'draft'))">
+            <!-- Only show posts that aren't hidden from public listings -->
+            <xsl:if test="not(contains($categories, 'archive')) and not(contains($categories, 'draft')) and not(contains($categories, 'hidden'))">
               <li>
                 <!-- TITLE: the first level 1 heading, is the post title -->
                 <xsl:variable
@@ -142,8 +142,8 @@
               "
               />
 
-            <!-- Only show posts that contain 'archive' in categories -->
-            <xsl:if test="contains($categories, 'archive')">
+            <!-- Only show posts that contain 'archive' and aren't hidden -->
+            <xsl:if test="contains($categories, 'archive') and not(contains($categories, 'hidden'))">
               <li>
                 <!-- TITLE: the first level 1 heading, is the post title -->
                 <xsl:variable

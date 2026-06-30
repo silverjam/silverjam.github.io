@@ -3,7 +3,7 @@
 | Metadata   | Value            |
 | ---------- | ---------------- |
 | Date       | 2015-04-10       |
-| Categories | math, archive             |
+| Categories | math, hidden              |
 
 ---
 

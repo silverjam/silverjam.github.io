@@ -59,8 +59,8 @@ _build/%.xml: _posts/%.markdown
 _build/CommonMark.dtd: $(CM_DTD)
 	cd _build; ln -sf ../$(CM_DTD) CommonMark.dtd
 
-posts/%.html: _build/%.xml | _xsl/head.xsl _xsl/post.xsl _build/CommonMark.dtd
-	saxonb-xslt -xsl:_xsl/post.xsl -s:$^ -o:$@
+posts/%.html: _build/%.xml _xsl/head.xsl _xsl/post.xsl _build/CommonMark.dtd
+	saxonb-xslt -xsl:_xsl/post.xsl -s:$< -o:$@
 
 CM_DTD := .CommonMark.dtd
 
@@ -73,16 +73,16 @@ xml: $(POSTS_XML)
 .PHONY: html
 html: $(CM_DTD) $(POSTS_HTML)
 
-index.html: $(POSTS_XML) | _xsl/head.xsl _xsl/index.xsl
+index.html: $(POSTS_XML) _xsl/head.xsl _xsl/index.xsl
 	echo "<index/>" | saxonb-xslt -s:- -o:index.html -xsl:_xsl/index.xsl "files=$(POSTS_INDEX)"
 
-about.html: _build/about.xml | _xsl/head.xsl _xsl/root-post.xsl _build/CommonMark.dtd
+about.html: _build/about.xml _xsl/head.xsl _xsl/root-post.xsl _build/CommonMark.dtd
 	saxonb-xslt -xsl:_xsl/root-post.xsl -s:_build/about.xml -o:about.html
 
-tags.html: $(POSTS_XML) | _xsl/head.xsl _xsl/tags.xsl
+tags.html: $(POSTS_XML) _xsl/head.xsl _xsl/tags.xsl
 	echo "<tags/>" | saxonb-xslt -s:- -o:tags.html -xsl:_xsl/tags.xsl "files=$(POSTS_INDEX)"
 
-drafts.html: $(POSTS_XML) | _xsl/head.xsl _xsl/drafts.xsl
+drafts.html: $(POSTS_XML) _xsl/head.xsl _xsl/drafts.xsl
 	echo "<drafts/>" | saxonb-xslt -s:- -o:drafts.html -xsl:_xsl/drafts.xsl "files=$(POSTS_INDEX)"
 
 atom.xml: $(POSTS_XML) | _xsl/atom.xsl

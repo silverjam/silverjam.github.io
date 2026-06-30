@@ -39,8 +39,8 @@
         /cm:text/text()
       " />
 
-      <!-- Only include non-archive and non-draft posts -->
-      <xsl:if test="not(contains($categories, 'archive')) and not(contains($categories, 'draft'))">
+      <!-- Only include posts that aren't hidden from public listings -->
+      <xsl:if test="not(contains($categories, 'archive')) and not(contains($categories, 'draft')) and not(contains($categories, 'hidden'))">
 
         <!-- Extract post metadata -->
         <xsl:variable name="title" select="$doc/cm:document/cm:heading[@level=1][1]/cm:text/text()" />

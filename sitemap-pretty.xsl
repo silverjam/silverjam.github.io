@@ -14,21 +14,75 @@
         <meta charset="UTF-8"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"/>
         <style>
+          :root {
+            --font-size: 17px;
+            --typography-spacing-vertical: 0.75rem;
+          }
+          html {
+            font-size: 15px;
+            scroll-behavior: smooth;
+          }
           body {
             margin: 0;
             padding: 0.5rem;
           }
+          h1, h2, h3, h4 {
+            --typography-spacing-vertical: 1rem;
+          }
+          h1 {
+            font-size: 1.8rem;
+            line-height: 1.2;
+          }
+          h2 {
+            font-size: 1.5rem;
+            line-height: 1.25;
+          }
+          h3 {
+            font-size: 1.25rem;
+            line-height: 1.3;
+          }
+          h4 {
+            font-size: 1.1rem;
+            line-height: 1.35;
+          }
           main {
-            margin-top: 0.5rem;
+            max-width: 1200px;
+            margin: 0.5rem auto 0;
+          }
+          header {
+            border-bottom: 1px solid var(--muted-border-color);
+            margin-bottom: 1.5rem;
+            padding: 0.25rem 0 0.75rem;
+          }
+          header h1 {
+            margin-bottom: 0.35rem;
+          }
+          header p {
+            margin: 0;
+            color: var(--muted-color);
+          }
+          section {
+            margin-top: 1rem;
           }
           table {
             width: 100%;
             margin-top: 1rem;
+            font-size: 0.95rem;
+          }
+          th,
+          td {
+            vertical-align: top;
+          }
+          a {
+            text-decoration: none;
+          }
+          a:hover {
+            text-decoration: underline;
           }
           .url-column {
             font-family: monospace;
             word-break: break-all;
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             color: var(--muted-color);
           }
           .priority-high { color: var(--primary); font-weight: bold; }

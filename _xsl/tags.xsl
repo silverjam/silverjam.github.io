@@ -40,8 +40,8 @@
               /cm:text/text()
             " />
 
-            <!-- Only include posts that don't contain 'draft' in categories -->
-            <xsl:if test="$categories and not(contains($categories, 'draft'))">
+            <!-- Only include posts that aren't hidden from public listings -->
+            <xsl:if test="$categories and not(contains($categories, 'draft')) and not(contains($categories, 'hidden'))">
               <xsl:for-each select="tokenize($categories, ',')">
                 <category>
                   <xsl:attribute name="name" select="normalize-space(.)" />

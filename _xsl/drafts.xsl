@@ -47,8 +47,8 @@
               "
               />
 
-            <!-- Only show posts that contain 'draft' in categories -->
-            <xsl:if test="contains($categories, 'draft')">
+            <!-- Only show posts that are intentionally hidden from public listings -->
+            <xsl:if test="contains($categories, 'draft') or contains($categories, 'hidden')">
               <li>
                 <!-- TITLE: the first level 1 heading, is the post title -->
                 <xsl:variable

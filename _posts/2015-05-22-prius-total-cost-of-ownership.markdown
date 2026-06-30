@@ -3,7 +3,7 @@
 | Metadata   | Value            |
 | ---------- | ---------------- |
 | Date       | 2015-05-22       |
-| Categories | cars, archive             |
+| Categories | cars, hidden              |
 
 ---
 
