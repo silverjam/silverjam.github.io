@@ -1,0 +1,70 @@
+<p>
+ A while ago I heard about something called <a style="font-style: italic;" href="http://en.wikipedia.org/wiki/Parallax_scrolling">parallax scrolling</a> [<a href="#csjam-footnote-1">1</a>] being used on Google's <a href="http://en.wikipedia.org/wiki/Google_Android">Android</a> platform (specifically on the <a href="http://en.wikipedia.org/wiki/HTC_Dream">G1</a>). I had just gotten the G1 at that point and hadn't noticed that it was doing something special when scrolling between the three screens in the "home" application.
+</p>
+<p>
+ The idea is pretty simple, you have two surfaces that scroll at two different speeds, one is bigger or father away, depending on how you look at it.
+</p>
+<p>
+ On the G1 it allows the background of the home screen to be smaller than the total "viewable area" that the three home screens cover. This is useful since the size of the home screen areas can change drastically when the phone is flipped open.  It also creates the illusion of depth.
+</p>
+<p>
+ Below is my implementation using <a href="http://www.processing.org/">Proce55ing</a><span id="parallax-instructions"> (click and drag the light purple square).</span>
+</p>
+<div id="content">
+ <div id="parallax_container">
+  <!--[if !IE]> -->
+  <object classid="java:parallax.class" type="application/x-java-applet" archive="http://www.cs.unm.edu/~jmob/blogger/parallax_applet/parallax.jar" standby="Loading Processing software..." width="400" height="400">
+  <param name="archive" value="http://www.cs.unm.edu/~jmob/blogger/parallax_applet/parallax.jar">
+  <param name="mayscript" value="true">
+  <param name="scriptable" value="true">
+  <param name="image" value="http://www.cs.unm.edu/~jmob/blogger/parallax_applet/loading.gif">
+  <param name="boxmessage" value="Loading Processing software...">
+  <param name="boxbgcolor" value="#FFFFFF">
+  <param name="test_string" value="outer">
+  <!--<![endif]-->
+  <object classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93" codebase="http://java.sun.com/update/1.5.0/jinstall-1_5_0_15-windows-i586.cab" standby="Loading Processing software..." width="400" height="400">
+  <param name="code" value="parallax">
+  <param name="archive" value="http://www.cs.unm.edu/~jmob/blogger/parallax_applet/parallax.jar">
+  <param name="mayscript" value="true">
+  <param name="scriptable" value="true">
+  <param name="image" value="http://www.cs.unm.edu/~jmob/blogger/parallax_applet/loading.gif">
+  <param name="boxmessage" value="Loading Processing software...">
+  <param name="boxbgcolor" value="#FFFFFF"><param name="test_string" value="inner">
+  <!--[if !IE]> -->
+   <object>
+  <!--<![endif]-->
+    <embed src="http://blip.tv/play/AevhKZPlCw" 
+           type="application/x-shockwave-flash" 
+           width="400" height="430" 
+           allowscriptaccess="always" 
+           allowfullscreen="true"
+           id="parallax-blip">
+        <!--script type="text/javascript">$("#parallax-instructions").hide();</script-->
+    </embed>
+  <p>
+   <strong>
+   This browser does not have a Java Plug-in. <a href="http://java.sun.com/products/plugin/downloads/index.html" title="Download Java Plug-in">Get the latest Java Plug-in here.</a></strong>
+  </p>
+  <!--[if !IE]> -->
+    </object>
+  <!--<![endif]-->
+  </object>
+  <!--[if !IE]> -->
+  </object>
+  <!--<![endif]-->
+ </div>
+ <script type="text/javascript">
+/*   alert("hi");
+   if ( $("#parallax-blip").is(":visible") ) {
+     $("#parallax-instructions").hide();
+     alert("yo");
+   }*/
+ </script>
+ <p>
+  Source code: <a href="http://www.cs.unm.edu/%7Ejmob/blogger/parallax_applet/parallax.pde">parallax</a> (plain text)
+ </p>
+</div>
+<script src="http://gist.github.com/460454.js?file=parallax.pde"></script>
+<p style="font-style: italic; color: rgb(102, 102, 102);" id="csjam-footnote-1">
+ 1 - Turns out I was probably reading a Qt developer blog. <a href="http://ariya.blogspot.com/2008/11/android-like-parallax-sliding.html">These</a> <a href="http://labs.trolltech.com/blogs/2008/11/03/parallax-sliding/">posts</a> support that conclusion.
+</p>

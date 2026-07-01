@@ -29,7 +29,7 @@
     <style>
       .hljs {
         font-family: "Menlo","Consolas","Roboto Mono","Ubuntu Monospace","Noto Mono","Oxygen Mono","Liberation Mono",monospace,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-        font-size: 16px;
+        font-size: 14px;
       }
       :root {
         --font-size: 17px;
@@ -65,9 +65,11 @@
       }
       pre code {
         padding: 1em !important;
+        font-size: 0.9rem;
       }
       code {
         padding: 0.1rem 0.2rem !important;
+        font-size: 0.9em;
       }
       header {
         display: flex;
@@ -252,6 +254,7 @@
     <nav>
       <a href="{$baseURL}about.html"><i class="fas fa-user"></i> About</a>
       <a href="{$baseURL}tags.html"><i class="fas fa-tags"></i> Tags</a>
+      <a href="{$baseURL}archive.html"><i class="fas fa-box-archive"></i> Archive</a>
       <a href="{$baseURL}atom.xml"><i class="fas fa-rss"></i> Feed</a>
       <a href="https://github.com/silverjam/silverjam.github.io"><i class="fab fa-github"></i> GitHub</a>
     </nav>

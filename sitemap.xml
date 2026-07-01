@@ -5,20 +5,26 @@
         xmlns:cm="http://commonmark.org/xml/1.0">
    <url>
       <loc>https://silverjam.github.io/</loc>
-      <lastmod>2026-06-30</lastmod>
+      <lastmod>2026-07-01</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
    </url>
    <url>
       <loc>https://silverjam.github.io/about.html</loc>
-      <lastmod>2026-06-30</lastmod>
+      <lastmod>2026-07-01</lastmod>
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
       <loc>https://silverjam.github.io/tags.html</loc>
-      <lastmod>2026-06-30</lastmod>
+      <lastmod>2026-07-01</lastmod>
       <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+   </url>
+   <url>
+      <loc>https://silverjam.github.io/archive.html</loc>
+      <lastmod>2026-07-01</lastmod>
+      <changefreq>monthly</changefreq>
       <priority>0.7</priority>
    </url>
    <url>
@@ -54,6 +60,18 @@
    <url>
       <loc>https://silverjam.github.io/posts/2013-05-24-infinite-terminal-logs.html</loc>
       <lastmod>2013-05-24</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+   <url>
+      <loc>https://silverjam.github.io/posts/2010-08-16-naive-swype-impl.html</loc>
+      <lastmod>2010-08-16</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.6</priority>
+   </url>
+   <url>
+      <loc>https://silverjam.github.io/posts/2009-02-08-parallax-scrolling-android.html</loc>
+      <lastmod>2009-02-08</lastmod>
       <changefreq>yearly</changefreq>
       <priority>0.6</priority>
    </url>

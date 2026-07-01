@@ -68,19 +68,19 @@
   </li>
 </xsl:template>
 
-<xsl:template match="/index">
-
+<xsl:template match="/archive">
   <html lang="en">
-
     <xsl:call-template name="head">
-      <xsl:with-param name="title" select='"A blog by Jason Mobarak"' />
+      <xsl:with-param name="title" select='"Archive - A blog by Jason Mobarak"' />
       <xsl:with-param name="baseURL" select="''" />
     </xsl:call-template>
 
     <body>
       <xsl:call-template name="header" />
       <main>
-        <h2>Recent Posts</h2>
+        <h1>Archive</h1>
+        <p><em>A selection of preserved posts from older blogs.</em></p>
+
         <ul>
           <xsl:for-each select="tokenize($files, ';')">
             <xsl:variable name="doc" select="document(.)" />
@@ -97,33 +97,7 @@
               "
             />
 
-            <xsl:if test="not(contains($categories, 'archive')) and not(contains($categories, 'draft')) and not(contains($categories, 'hidden'))">
-              <xsl:call-template name="render-post-item">
-                <xsl:with-param name="doc" select="$doc" />
-                <xsl:with-param name="path" select="." />
-              </xsl:call-template>
-            </xsl:if>
-          </xsl:for-each>
-        </ul>
-
-        <h2>Older posts</h2>
-        <ul>
-          <xsl:for-each select="tokenize($files, ';')">
-            <xsl:variable name="doc" select="document(.)" />
-            <xsl:variable
-              name="categories"
-              select="
-                $doc
-                //cm:table_cell/cm:text[contains(text(),'Metadata')]
-                /../../..
-                //cm:table_cell/cm:text[contains(text(),'Categories')]
-                /..
-                /following-sibling::*
-                /cm:text/text()
-              "
-            />
-
-            <xsl:if test="contains($categories, 'archive') and contains($categories, 'archive-selection') and not(contains($categories, 'hidden'))">
+            <xsl:if test="contains($categories, 'archive') and not(contains($categories, 'hidden'))">
               <xsl:call-template name="render-post-item">
                 <xsl:with-param name="doc" select="$doc" />
                 <xsl:with-param name="path" select="." />

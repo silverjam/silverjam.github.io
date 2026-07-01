@@ -1,0 +1,88 @@
+How does Swype work?  I don't know for sure, but I came up with a fairly simple approximation of Swype's behavior on Android phones.  Which with a little bit of tweaking (maybe some more math and a better set of dictionaries) it could probably get a lot closer to approximating Swype.<br />
+<br />
+<div id="Swype_container">
+<script src="http://www.java.com/js/deployJava.js" type="text/javascript">
+</script><script type="text/javascript">
+          /* <![CDATA[ */
+
+          var attributes = { 
+            code: 'Swype.class',
+            archive: 'http://www.cs.unm.edu/~jmob/blogger/swype_applet/Swype.jar',
+            width: 450, 
+            height: 400,
+            image: 'loading.gif'
+          };
+          var parameters = { };
+          var version = '1.5';
+          //deployJava.runApplet(attributes, parameters, version);
+          deployJava.writeAppletTag(attributes, parameters);
+
+          /* ]]> */
+        
+</script></div>
+<br />
+This is implemented using <a href="http://processing.org/">Proce55ing</a> which will export Proce55ing code to a Java applet (<a href="http://gist.github.com/522307#file_swype.pde">full source</a>&nbsp;listing).<br />
+<br />
+As for how the implementation works, I started with a <i>word set</i>&nbsp;which holds a collection of words and word prefixes. &nbsp;The <i>classify</i>&nbsp;operation serves to tell me if the string I am holding is a <i>complete</i>&nbsp;word, a <i>partial </i>word, an <i>incomplete</i>&nbsp;word, or both.<br />
+<br />
+A returned classification is also able to communicate it's frequency (ranking in <a href="http://en.wiktionary.org/wiki/Wiktionary:Frequency_lists">frequency</a> of usage in common english text). &nbsp;These frequencies were acquired from <a href="http://www.gutenberg.org/etext/3201">Project Gutenburg</a>. &nbsp;The frequency list is a frequency count from <a href="http://en.wikipedia.org/wiki/Usenet">Usenet</a>&nbsp;postings, so it's a bit odd and doesn't include some common words (most notably some connecting words). &nbsp;The other dictionary is a list of the 3000 most common English words.<br />
+<br />
+Keep this in mind when you play with the sample, the dictionaries aren't perfect. &nbsp;The naïve implementation along with the poor dictionaries give the demonstration some&nbsp;peculiarities.<br />
+<br />
+Regargless, the <i>populate</i>&nbsp;operation of the <i>word set</i>&nbsp;loads these words, their frequencies, and all <i>prefixes</i>&nbsp;leading up to the word in a dictionary. &nbsp;For example the word THEY is loaded in as T (stored as incomplete), TH (incomplete), THE (complete &amp; incomplete) and THEY (complete) along with the corresponding word frequencies.<br />
+<br />
+<script src="http://gist.github.com/522307.js?file=Swype-listing-1.pde">
+</script><br />
+Next is all the connecting glue for Proce55ing.  The <i>SwypeState</i>&nbsp;class maintains the <i>keyboard hit collector,</i>&nbsp;the&nbsp;<i>word set</i><i>,&nbsp;</i>and the bits that draw the keyboard and the pen. &nbsp;The <i>keyboard</i>&nbsp;logic and the <i>keyboard</i>&nbsp;<i>hit collector</i>&nbsp;are fairly boring, but suffice to say, they draw the keyboard and accurately collect what keys where <i>hit</i>&nbsp;when drawing over the keyboard.<br />
+<br />
+<script src="http://gist.github.com/522307.js?file=Swype-listing-2.pde">
+</script><br />
+Probably the most interesting part of the implementation is figuring out what words where <i>Swyped</i>. &nbsp;The system&nbsp;passes an event to the <i>key hit collector</i>&nbsp;when a word is finished, this initiates a seach through the <i>word set</i>&nbsp;for potential words. &nbsp;For a given word like "THEY" the actual keys swiped can vary widely.<br />
+<br />
+Here are some examples (these all map to "THEY"):<br />
+<br />
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi9_19WXriDUubL7ntKcsQ0ym6rxI413Ltto2GI-ajBi2LcDjXwr-ZdYYTS66G2y6mXuJ-igXIDPWAd5lVaBFvkMeouxDz7dGD_0s7M9F7B-UkKmM7MVZJc3KOLycpO1m8NFqG1ea_D0mWh/s1600/swype-1.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi9_19WXriDUubL7ntKcsQ0ym6rxI413Ltto2GI-ajBi2LcDjXwr-ZdYYTS66G2y6mXuJ-igXIDPWAd5lVaBFvkMeouxDz7dGD_0s7M9F7B-UkKmM7MVZJc3KOLycpO1m8NFqG1ea_D0mWh/s320/swype-1.png" /></a></div>
+<div style="text-align: center;">
+<span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;">&nbsp;&nbsp;T, Y, H, G, F, E, R, T, Y</span></div>
+<div style="text-align: center;">
+<span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><br />
+</span></div>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjOE1GSk24bvL6esE4dqhAdY_h90QdAlsSFA4AxdOeUTMQY0W7DqKAl9xh5s40kR_UgvtD4yox7HQCmkZsZOktbrE3CEaHxnzf3eVX6Rzw1HxhQoSgOmXz9UhB9aPxjZr5N6OXeSLhJXWgO/s1600/swype-2.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjOE1GSk24bvL6esE4dqhAdY_h90QdAlsSFA4AxdOeUTMQY0W7DqKAl9xh5s40kR_UgvtD4yox7HQCmkZsZOktbrE3CEaHxnzf3eVX6Rzw1HxhQoSgOmXz9UhB9aPxjZr5N6OXeSLhJXWgO/s320/swype-2.png" /></a></div>
+<div style="text-align: center;">
+<span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;">&nbsp;&nbsp;T, G, H, N, C, D, S, E, R, F, C, X, S, W, T, G, V, C, S, E, Y</span></div>
+<div style="text-align: center;">
+<span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><br />
+</span></div>
+<div class="separator" style="clear: both; text-align: center;">
+<a href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjS-uHQXqjPv3lv2MQjw_hXAM0qYRakmvn9jQ85gLu50Q7AMbiETortRFw8_q8KVJHJ3uW_a8NZ3DIQPQoCO2VCH6sQVysl9M6OJy2gWJ5eAl9QFi-JWGhlLuRDgP6HzPv57QoGikOJmi7k/s1600/swype-3.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;"><img border="0" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjS-uHQXqjPv3lv2MQjw_hXAM0qYRakmvn9jQ85gLu50Q7AMbiETortRFw8_q8KVJHJ3uW_a8NZ3DIQPQoCO2VCH6sQVysl9M6OJy2gWJ5eAl9QFi-JWGhlLuRDgP6HzPv57QoGikOJmi7k/s320/swype-3.png" /></a></div>
+<div style="text-align: center;">
+<span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;">&nbsp;&nbsp;T, Y, H, J, K, K, J, H, G, F, D, S, A, Q, W, E, R, T, Y</span></div>
+<div style="text-align: left;">
+<span class="Apple-style-span" style="font-family: 'Courier New', Courier, monospace;"><br />
+</span></div>
+<div style="text-align: left;">
+<span class="Apple-style-span" style="font-family: inherit;">So, you have some things that don't really look like words at all. &nbsp;However, the <i>word set</i>&nbsp;loaded with all the word prefixes sorts this out. &nbsp;It does this using a simple search that slowly builds up a set of prefixes that map to partial words, or complete words (which get recorded), while throwing away things that map to nothing. &nbsp;As a new letter is examined from the list of hit keys it is added to each of the previously collected prefixes.</span></div>
+<div style="text-align: left;">
+In this manner words like OR, OUR, OUT that require one vertical swipe can be detected. &nbsp;This word overlap presents another problem though: which word has priority?</div>
+<div style="text-align: left;">
+</div>
+<div style="text-align: left;">
+The first&nbsp;strategy&nbsp;used to resolve overlapping words is a sort based on match length. &nbsp;With the idea that the longest match is probably the word the user was trying to spell. &nbsp;For example, a word like THERE will come up with THE as a <i>complete</i>&nbsp;prefix when THERE was then intended swipe because of the swipe length.</div>
+<div style="text-align: left;">
+</div>
+<div style="text-align: left;">
+The second strategy&nbsp;is where the word frequencies come in to play, they attempt to sort the list of hit words by their frequency. &nbsp;Words with a higher frequency in the English language should bubble to the top.</div>
+<br />
+<script src="http://gist.github.com/522307.js?file=Swype-listing-3.pde">
+</script><br />
+Improvements:<br />
+<ul>
+<li><i>Better dictionaries</i>:&nbsp;Possibly one that lists all forms of a word with the same frequency (e.g. be, being, been).</li>
+<li><i>Fat finger search</i>: extend and trim each swipe path so that less accuracy is needed. &nbsp;That is, a <i>what's around you</i>&nbsp;operation could be added to each key to get <i>many</i>&nbsp;more paths to search that could lead to the desired word.</li>
+<li><i>Spell checking</i>: for people that don't know how to spell, predictive text can be frustrating. &nbsp;A misspelling dictionary could be really using to help with this.</li>
+<li><i>Markov chain</i>: I don't know how&nbsp;effective&nbsp;this would be but since <i>Markov Chains</i>&nbsp;can be used to generate English text it seems like they could be used to select a more likely next word.</li>
+</ul>
+<div>
+The full source code is available at <a href="http://gist.github.com/522307#file_swype.pde">github.com</a>.</div>

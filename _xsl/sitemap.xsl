@@ -37,6 +37,14 @@
         <priority>0.7</priority>
       </url>
 
+      <!-- Archive page -->
+      <url>
+        <loc><xsl:value-of select="$baseURL"/>archive.html</loc>
+        <lastmod><xsl:value-of select="format-date(current-date(), '[Y0001]-[M01]-[D01]')"/></lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+      </url>
+
       <!-- Blog posts -->
       <xsl:for-each select="collection('../_build/?select=*.xml')[not(contains(document-uri(.), 'about.xml'))]">
         <xsl:sort select="//cm:text[parent::cm:table_cell[preceding-sibling::cm:table_cell/cm:text[contains(text(), 'Date')]]]" order="descending"/>

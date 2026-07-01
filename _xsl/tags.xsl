@@ -55,7 +55,7 @@
         <!-- Group categories and display them -->
         <xsl:for-each-group select="$all-categories/category" group-by="@name">
           <xsl:sort select="current-grouping-key()" />
-          <xsl:if test="normalize-space(current-grouping-key()) != ''">
+          <xsl:if test="normalize-space(current-grouping-key()) != '' and current-grouping-key() != 'archive-selection'">
             <xsl:variable name="tag-id" select="translate(current-grouping-key(), ' ', '-')" />
             <h2 id="{$tag-id}">
               <xsl:value-of select="current-grouping-key()" />

@@ -17,7 +17,7 @@ SAXON_VERSION := 9.1.0.8J
 BLOG_URL := https://silverjam.github.io
 
 .PHONY: all
-all: check-comrak-version check-saxon-version html index.html about.html tags.html drafts.html atom.xml sitemap.xml
+all: check-comrak-version check-saxon-version html index.html about.html archive.html tags.html drafts.html atom.xml sitemap.xml
 
 .PHONY: install-comrak
 install-comrak:
@@ -79,6 +79,9 @@ index.html: $(POSTS_XML) _xsl/head.xsl _xsl/index.xsl
 about.html: _build/about.xml _xsl/head.xsl _xsl/root-post.xsl _build/CommonMark.dtd
 	saxonb-xslt -xsl:_xsl/root-post.xsl -s:_build/about.xml -o:about.html
 
+archive.html: $(POSTS_XML) _xsl/head.xsl _xsl/archive.xsl
+	echo "<archive/>" | saxonb-xslt -s:- -o:archive.html -xsl:_xsl/archive.xsl "files=$(POSTS_INDEX)"
+
 tags.html: $(POSTS_XML) _xsl/head.xsl _xsl/tags.xsl
 	echo "<tags/>" | saxonb-xslt -s:- -o:tags.html -xsl:_xsl/tags.xsl "files=$(POSTS_INDEX)"
 
@@ -120,7 +123,7 @@ serve-logs:
 serve-restart: serve-stop serve
 
 .PHONY: snapshot
-snapshot: html index.html about.html tags.html
+snapshot: html index.html about.html archive.html tags.html
 	@echo "Creating page snapshots using Docker + Chromium..."
 	@docker run --rm \
 		-v $(PWD):/workspace \
@@ -142,6 +145,16 @@ snapshot: html index.html about.html tags.html
 		--window-size=1200,800 \
 		--screenshot=_snapshots/about.png \
 		file:///workspace/about.html
+	@docker run --rm \
+		-v $(PWD):/workspace \
+		-w /workspace \
+		zenika/alpine-chrome:latest \
+		--no-sandbox \
+		--headless \
+		--disable-gpu \
+		--window-size=1200,800 \
+		--screenshot=_snapshots/archive.png \
+		file:///workspace/archive.html
 	@docker run --rm \
 		-v $(PWD):/workspace \
 		-w /workspace \
